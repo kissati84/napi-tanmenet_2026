@@ -119,12 +119,9 @@ body {
 .nav-belso {
   max-width: 920px; margin: 0 auto;
   padding: 14px 24px;
-  display: flex; gap: 6px;
-  overflow-x: auto;
-  scrollbar-width: thin;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  justify-content: flex-start;
 }
-.nav-belso::-webkit-scrollbar { height: 4px; }
-.nav-belso::-webkit-scrollbar-thumb { background: var(--arany); border-radius: 2px; }
 
 .nav-gomb {
   border: 1px solid var(--vonal);
