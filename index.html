@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Napi tanmenet — Közigazgatási alapvizsga 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --kremes: #faf6ed;
+  --kremes-melyebb: #f3ebd9;
+  --pergamen: #ede2c8;
+  --tinta: #1a1f2e;
+  --tinta-vilagos: #4a4f5e;
+  --tinta-halvany: #7a7f8e;
+  --arany: #b8923a;
+  --arany-vilagos: #d4b366;
+  --arany-melyebb: #8a6a1a;
+  --vonal: #c9b88a;
+}
+
+body {
+  font-family: 'EB Garamond', Georgia, serif;
+  background: var(--kremes);
+  color: var(--tinta);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(184, 146, 58, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(58, 90, 122, 0.04) 0%, transparent 50%);
+}
+
+/* === FEJLÉC === */
+.fejlec {
+  background: linear-gradient(180deg, #1a1f2e 0%, #2a2f3e 100%);
+  color: var(--kremes);
+  padding: 48px 32px 56px;
+  position: relative;
+  overflow: hidden;
+}
+.fejlec::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--arany-melyebb), var(--arany), var(--arany-melyebb));
+}
+.fejlec::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--arany);
+  opacity: 0.4;
+}
+.fejlec-belso { max-width: 920px; margin: 0 auto; }
+.fejlec-kategoria {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--arany-vilagos);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.fejlec h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px;
+  font-weight: 500;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+.fejlec h1 em {
+  font-style: italic;
+  color: var(--arany-vilagos);
+  font-weight: 400;
+}
+.fejlec-alcim {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  color: #c5beac;
+  font-style: italic;
+  margin-bottom: 28px;
+}
+.fejlec-stat {
+  display: flex; gap: 32px; flex-wrap: wrap;
+  padding-top: 20px;
+  border-top: 1px solid rgba(184, 146, 58, 0.25);
+}
+.stat-elem { font-family: 'Inter', sans-serif; }
+.stat-szam {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--arany-vilagos);
+  line-height: 1;
+}
+.stat-felirat {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #9b9484;
+  margin-top: 4px;
+}
+
+/* === NAVIGÁCIÓ === */
+.nav-wrapper {
+  background: var(--kremes-melyebb);
+  border-bottom: 1px solid var(--vonal);
+  position: sticky; top: 0; z-index: 30;
+  box-shadow: 0 4px 20px rgba(26, 31, 46, 0.06);
+}
+.nav-belso {
+  max-width: 920px; margin: 0 auto;
+  padding: 14px 24px;
+  display: flex; gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.nav-belso::-webkit-scrollbar { height: 4px; }
+.nav-belso::-webkit-scrollbar-thumb { background: var(--arany); border-radius: 2px; }
+
+.nav-gomb {
+  border: 1px solid var(--vonal);
+  background: var(--kremes);
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--tinta-vilagos);
+  padding: 8px 14px;
+  border-radius: 22px;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+  letter-spacing: 0.3px;
+}
+.nav-gomb:hover {
+  background: var(--pergamen);
+  border-color: var(--arany);
+  color: var(--tinta);
+}
+.nav-gomb.on {
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: var(--kremes);
+  box-shadow: 0 2px 8px rgba(26, 31, 46, 0.2);
+}
+.nav-gomb.on::before {
+  content: '◆';
+  margin-right: 5px;
+  color: var(--arany-vilagos);
+}
+
+/* === FŐ TARTALOM === */
+.fo {
+  max-width: 920px; margin: 0 auto;
+  padding: 32px 24px 60px;
+}
+
+/* === HETI FEJLÉC === */
+.het-fejlec {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  margin: 36px 0 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--vonal);
+  position: relative;
+}
+.het-fejlec::before {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0;
+  width: 60px;
+  height: 2px;
+  background: var(--arany);
+}
+.het-szam-nagy {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px;
+  font-weight: 500;
+  color: var(--arany);
+  line-height: 0.9;
+  font-style: italic;
+}
+.het-info { flex: 1; padding-top: 10px; }
+.het-cim {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  color: var(--tinta);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.het-datum {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--tinta-halvany);
+}
+
+/* === NAP KÁRTYA === */
+.nap {
+  background: #ffffff;
+  border: 1px solid var(--vonal);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.nap:hover {
+  box-shadow: 0 6px 20px rgba(26, 31, 46, 0.08);
+  transform: translateY(-1px);
+}
+.nap.nyitva { box-shadow: 0 8px 28px rgba(26, 31, 46, 0.1); }
+.nap::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--szin, var(--arany));
+}
+
+.nap-fej {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 20px 16px 22px;
+  cursor: default;
+}
+.nap-fej.kattintható { cursor: pointer; }
+.nap-fej.kattintható:hover .nap-tema { color: var(--szin, var(--tinta)); }
+
+.nap-datum-blokk {
+  flex-shrink: 0;
+  text-align: center;
+  width: 64px;
+  padding: 6px 0;
+  border-right: 1px solid var(--pergamen);
+  padding-right: 14px;
+}
+.nap-honap {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--tinta-halvany);
+  margin-bottom: 2px;
+}
+.nap-szam {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--szin, var(--tinta));
+  line-height: 1;
+}
+.nap-honap-nev {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--tinta-halvany);
+  margin-top: 3px;
+}
+
+.nap-info {
+  flex: 1;
+  min-width: 0;
+}
+.nap-tipus-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.tipus-pill {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: var(--szin-vil, var(--pergamen));
+  color: var(--szin, var(--arany-melyebb));
+  border: 1px solid var(--szin-bor, var(--vonal));
+}
+.nap-stat {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  color: var(--tinta-halvany);
+  letter-spacing: 0.5px;
+}
+.nap-tema {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--tinta);
+  line-height: 1.35;
+  transition: color 0.2s;
+}
+
+.nap-nyil {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--vonal);
+  border-radius: 50%;
+  color: var(--tinta-vilagos);
+  font-size: 11px;
+  transition: all 0.3s;
+}
+.nap.nyitva .nap-nyil {
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: var(--kremes);
+  transform: rotate(180deg);
+}
+
+/* === KIBONTOTT TARTALOM === */
+.nap-body {
+  display: none;
+  border-top: 1px solid var(--pergamen);
+  background: linear-gradient(180deg, #fdfaf3 0%, #ffffff 100%);
+}
+
+.tetel {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--pergamen);
+}
+.tetel:last-child { border-bottom: none; }
+
+.tetel-fej {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--vonal);
+}
+.tetel-kod {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 4px 10px;
+  background: var(--szin, var(--tinta));
+  color: #fff;
+  border-radius: 3px;
+}
+.tetel-cim {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--szin, var(--tinta));
+  flex: 1;
+  line-height: 1.3;
+}
+
+/* === KÉRDÉSEK === */
+.kerdes-csoport {
+  margin-bottom: 14px;
+}
+.kerdes-csoport:last-child { margin-bottom: 0; }
+
+.csoport-cim {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--csop-szin);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.csoport-cim::before {
+  content: '';
+  width: 16px; height: 1px;
+  background: var(--csop-szin);
+}
+.csoport-cim::after {
+  content: '';
+  flex: 1; height: 1px;
+  background: var(--csop-szin);
+  opacity: 0.2;
+}
+
+.kerdes {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.kerdes-jelolo {
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+  padding-top: 1px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--csop-szin);
+}
+.kerdes-szoveg {
+  color: var(--tinta);
+  font-family: 'EB Garamond', serif;
+}
+.kerdes.k15 .kerdes-szoveg {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* Csoport színváltozók */
+.k15-csop { --csop-szin: var(--szin); }
+.k10-csop { --csop-szin: var(--szin); opacity: 0.95; }
+.k5-csop { --csop-szin: var(--szin-vilagos, var(--szin)); }
+
+/* === SPECIÁLIS NAPOK === */
+.nap.szombat::before { background: var(--arany); }
+.nap.szombat .nap-szam { color: var(--arany-melyebb); }
+.nap.unnep::before { background: #b85a3a; }
+.nap.vizsga {
+  background: linear-gradient(135deg, #1a1f2e 0%, #2a2f3e 100%);
+  color: var(--kremes);
+}
+.nap.vizsga::before { background: var(--arany); }
+.nap.vizsga .nap-honap,
+.nap.vizsga .nap-honap-nev,
+.nap.vizsga .nap-stat { color: #9b9484; }
+.nap.vizsga .nap-szam { color: var(--arany-vilagos); }
+.nap.vizsga .nap-tema { color: var(--kremes); font-style: italic; font-size: 20px; }
+.nap.vizsga .tipus-pill {
+  background: var(--arany);
+  color: var(--tinta);
+  border-color: var(--arany);
+}
+
+/* === MODUL SZÍNEK === */
+.m1 { --szin: #2c4a6b; --szin-vilagos: #5a7a9b; --szin-vil: #e8eef5; --szin-bor: #b8c6d6; }
+.m2 { --szin: #3a6a4a; --szin-vilagos: #6a9a7a; --szin-vil: #e8f1ea; --szin-bor: #b8ceb8; }
+.m3 { --szin: #8a5a2a; --szin-vilagos: #b8923a; --szin-vil: #f5edd8; --szin-bor: #d6c490; }
+.m4 { --szin: #5a3a6b; --szin-vilagos: #8a6a9b; --szin-vil: #eee5f0; --szin-bor: #c8b5d0; }
+.m5 { --szin: #2a3a6b; --szin-vilagos: #5a6a9b; --szin-vil: #e6eaf5; --szin-bor: #b5bbd6; }
+.m0 { --szin: #5a5a4a; --szin-vilagos: #8a8a7a; --szin-vil: #ededdf; --szin-bor: #c8c5b5; }
+
+@media (max-width: 640px) {
+  .fejlec { padding: 32px 20px 40px; }
+  .fejlec h1 { font-size: 28px; }
+  .fejlec-stat { gap: 18px; }
+  .stat-szam { font-size: 22px; }
+  .fo { padding: 20px 16px 40px; }
+  .het-szam-nagy { font-size: 44px; }
+  .het-cim { font-size: 18px; }
+  .nap-fej { padding: 14px 14px 14px 18px; gap: 12px; }
+  .nap-datum-blokk { width: 50px; padding-right: 10px; }
+  .nap-szam { font-size: 22px; }
+  .nap-tema { font-size: 15px; }
+  .tetel { padding: 14px 16px; }
+  .tetel-cim { font-size: 15px; }
+}
+</style>
+</head>
+<body>
+
+<header class="fejlec">
+  <div class="fejlec-belso">
+    <div class="fejlec-kategoria">Felkészülési Tanmenet · MMXXVI</div>
+    <h1>Közigazgatási <em>alapvizsga</em></h1>
+    <div class="fejlec-alcim">Napi tanmenet · június 1. — október 15.</div>
+    <div class="fejlec-stat">
+      <div class="stat-elem">
+        <div class="stat-szam">5</div>
+        <div class="stat-felirat">Modul</div>
+      </div>
+      <div class="stat-elem">
+        <div class="stat-szam">66</div>
+        <div class="stat-felirat">Tétel</div>
+      </div>
+      <div class="stat-elem">
+        <div class="stat-szam">303</div>
+        <div class="stat-felirat">Kérdés</div>
+      </div>
+      <div class="stat-elem">
+        <div class="stat-szam">20</div>
+        <div class="stat-felirat">Hét</div>
+      </div>
+      <div class="stat-elem">
+        <div class="stat-szam" style="font-style:italic">okt. 15.</div>
+        <div class="stat-felirat">Vizsga</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-wrapper">
+  <div class="nav-belso" id="navBar"></div>
+</nav>
+
+<main class="fo" id="fo"></main>
+
+<script>
+
+var T={
+"I/1":{m:1,c:"Magyar alkotmányfejlődés (2010-ig)",
+ k15:["Mutassa be vázlatosan a magyar alkotmányfejlődést (2010-ig)!"],
+ k10:["1.","Ismertesse az alkotmány fogalmát és csoportosítását (történeti vs. kartális, merev vs. rugalmas)!","4.","Milyen új tárgykörökkel bővült az Alaptörvény az Alkotmányhoz képest?","5.","Mutassa be az Alaptörvény módosításait (11 módosítás)!","6.","Ismertesse a Nemzeti Hitvallást és jelentőségét!","7.","Vázlatosan ismertesse az Alaptörvény Alapvetés (A–U cikkek) tartalmát!"],
+ k5:["1.","Mutassa be az Alaptörvény megalkotásának folyamatát!","3.","Sorolja fel az Alaptörvény szerkezeti egységeit helyes sorrendben!","4.","Nevezze meg a hatályos magyar alkotmányt és mutasson rá alkotmányi vonásaira!","5.","Ismertesse a költségvetési gazdálkodás főbb elveit (Alaptörvény N) cikk)!"]},
+"I/2":{m:1,c:"Alapvető jogok csoportosítása",
+ k15:["Ismertesse, milyen szempontok alapján csoportosíthatóak az alapvető jogok, és végezze el azok csoportosítását!"],
+ k10:["8.","Ismertesse az alapvető jogok korlátozásának tartalmi kritériumait!","10.","Ismertesse az élethez való jog és az emberi méltóság viszonyát!","11.","Ismertesse az emberi méltóságot mint anyajogot!","12.","Mutassa be a véleménynyilvánítás szabadásának alkotmányos korlátait!","13.","Mutassa be a közérdekű adatok megismerésére vonatkozó szabályokat!","14.","Mutassa be az Alaptörvény szociális jogokkal kapcsolatos rendelkezéseit!","15.","Mutassa be az egészséges környezethez való jog alkotmányos szabályozásának változását!"],
+ k5:["7.","Ismertesse az alapvető jogok eredetére vonatkozó elméleteket!","10.","Ismertesse az állam és a vallási közösségek viszonyát az Alaptörvény alapján!","11.","Határozza meg a spontán gyűlés és sürgős gyülekezés fogalmát!","12.","Ismertesse az egyesülési jog részjogosítványait!","13.","Sorolja fel az információs önrendelkezési jog legalább 5 alapelvét!","14.","Mutassa be az adóztatás korlátaira és a közteherviselésre vonatkozó alkotmányos szabályokat!"]},
+"I/3":{m:1,c:"Az állam kötelezettségei az alapjogok biztosításával összefüggésben",
+ k15:["Mutassa be, hogy az államot az alapvető jogok biztosításával összefüggésben milyen kötelezettségek terhelik!"],
+ k10:["3.","Sorolja fel az alkotmányosság elveit és fejtse ki, mit értünk jogállamiság alatt!"],
+ k5:["8.","Ki(k)et terhel az alapjogok biztosításának kötelezettsége és ki(k) a jogosult(ak)?","9.","Mutassa be az alapvető jogok korlátozásának formai kritériumait!"]},
+"I/4":{m:1,c:"Házasság és a család alkotmányjogi fogalma",k15:["Ismertesse a házasság és a család alkotmányjogi fogalmát!"],k10:[],k5:[]},
+"I/5":{m:1,c:"Diszkriminációtilalom és az esélyegyenlőség biztosításának konfliktusa",k15:["Mutassa be a diszkriminációtilalom és az esélyegyenlőség biztosításának konfliktusát!"],k10:[],k5:[]},
+"I/6":{m:1,c:"Az Országgyűlés működése; törvényjavaslatok tárgyalása",
+ k15:["Ismertesse az Országgyűlés működésének főbb szabályait és a törvényjavaslatok tárgyalását!"],
+ k10:["16.","Ismertesse az Országgyűlés legfontosabb funkcióit, feladat- és hatásköreit!"],
+ k5:["6.","Ismertesse az egyes állami szervek közpénzügyekkel kapcsolatos legfontosabb funkcióit!"]},
+"I/7":{m:1,c:"A köztársasági elnök feladat- és hatáskörei; ellenjegyzés",k15:["Ismertesse a köztársasági elnök feladat- és hatásköreit! Mit jelent az ellenjegyzés?"],k10:[],k5:[]},
+"I/8":{m:1,c:"Köztársasági elnöki és miniszterelnöki tisztség megszűnése",k15:["Sorolja fel a köztársasági elnöki és a miniszterelnöki tisztség megszűnésének eseteit!"],k10:[],k5:[]},
+"I/9":{m:1,c:"Miniszterelnöki kormányzás; Kormány megalakulása és megszűnése",
+ k15:["Határozza meg a miniszterelnöki kormányzás fogalmát! Ismertesse a Kormány megalakulására és megszűnésére vonatkozó szabályokat!"],
+ k10:["2.","Határozza meg általánosságban a szakpolitikai feladatot ellátó miniszterek feladatait!"],
+ k5:["21.","Soroljon fel legalább 5, a Kormány működését közvetlenül segítő államigazgatási szervet!","22.","Sorolja fel a miniszter munkáját segítő minisztériumi vezetőket!"]},
+"I/10":{m:1,c:"Az Alkotmánybíróság alkotmányos funkciója és hatáskörei",k15:["Határozza meg az Alkotmánybíróság alkotmányos funkcióját és ismertesse hatásköreit!"],k10:[],k5:[]},
+"I/11":{m:1,c:"Magyarország bírósági szervezete; fő feladat- és hatáskörök",k15:["Mutassa be Magyarország bírósági szervezetét és a bíróságok fő feladat- és hatásköreit!"],k10:[],k5:[]},
+"I/12":{m:1,c:"Az ügyészség feladatkörei a büntető eljárás során",k15:["Ismertesse az ügyészség feladatköreit a büntető eljárás során!"],k10:[],k5:[]},
+"I/13":{m:1,c:"Helyi önkormányzatok autonómiájának korlátai",
+ k15:["Fejtse ki, mennyiben korlátozott a helyi önkormányzatok autonómiája!"],
+ k10:["17.","Határozza meg, hogy mely állami szerveknek mi a funkciója az önkormányzatok törvényes működésének biztosításában!","18.","Mutassa be a helyi önkormányzatok és más szervek kapcsolatrendszerét!"],
+ k5:["2.","Ismertesse, hogy milyen hatásköröket biztosít az Alaptörvény a helyi önkormányzatoknak! (legalább 5)","24.","Sorolja fel az Mötv. szerinti települési és területi önkormányzatokat!"]},
+"I/14":{m:1,c:"Közigazgatás funkciói – igazgatástudomány és jogtudomány",
+ k15:["Hasonlítsa össze, hogyan határozza meg a közigazgatás funkcióit az igazgatástudomány (POSDCORB) és a jogtudomány!"],
+ k10:["19.","Hasonlítsa össze a közigazgatás két nagy alrendszerének szervezeti jogi szabályozását!","20.","Jellemezze a kvázi-államigazgatási szerveket!"],
+ k5:["15.","Ismertesse a közszolgáltatások szerepét a közigazgatás fogalmának meghatározásában!","16.","Fejtse ki a közérdekűség jelentőségét a közigazgatásban!","17.","Határolja el: végrehajtó hatalom – közigazgatás – államigazgatás!","18.","Határolja el: kormányzás – közigazgatás!","19.","Határozza meg a közigazgatás szervezeti jog részterületeit!","20.","Határolja el a központi és a területi/helyi államigazgatási szerveket!"]},
+"I/15":{m:1,c:"Kormányzati főhivatal vs. fővárosi/vármegyei kormányhivatal",
+ k15:["Mutassa be, mi a különbség a kormányzati főhivatal, valamint a fővárosi és vármegyei kormányhivatal között!"],
+ k10:[],
+ k5:["23.","Sorolja fel a települési önkormányzat képviselő-testületének szerveit!"]},
+"I/16":{m:1,c:"Helyi önkormányzatok feladatrendszere",
+ k15:["Mutassa be a helyi önkormányzatok által ellátott feladatok rendszerét!"],
+ k10:["9.","Indokolt-e a nemzeti ünnepek alaptörvényi szintre emelése? Sorolja fel az Alaptörvény által nevesített ünnepeket!"],k5:[]},
+"II/1":{m:2,c:"Társadalmi norma sajátosságai; jogi norma jellemzői",
+ k15:["Határozza meg a társadalmi norma általános sajátosságait, és a jogi normák csak rájuk jellemző sajátosságait!"],
+ k10:["2.","Ismertesse a jogi normák szerkezeti elemeit (hipotézis, diszpozíció, szankció)!","3.","Ismertesse a jogforrás fogalmát és fő típusait!","4.","Ismertesse a jogszabályi hierarchiát!"],
+ k5:["1.","Határozza meg a jogszabály fogalmát!","2.","Sorolja fel a különleges jogrend típusait!","3.","Mely szervek alkothatnak rendeletet békeidőben?","4.","Hasonlítsa össze a társadalmi egyeztetés két formáját!"]},
+"II/2":{m:2,c:"Magyarország belső jogforrási rendszerének elemei",
+ k15:["Ismertesse Magyarország belső jogforrási rendszerének elemeit az Alaptörvény és a jogalkotási törvény alapján!"],
+ k10:["5.","Ismertesse az Ogy törvényhozó hatáskörének fő jellegzetességeit!"],k5:[]},
+"II/3":{m:2,c:"Rendeletalkotás főbb szabályai békeidőben",
+ k15:["Ismertesse a rendeletalkotás főbb szabályait békeidőben!"],
+ k10:["6.","Ismertesse a jogszabály érvényességének fogalmát és létrejöttéhez szükséges feltételeket!","7.","Ismertesse a jogszabályok hatályát (időbeli, területi, személyi, tárgyi – vacatio legis)!","9.","Ismertesse a közjogi szervezetszabályozó eszközöket!","10.","Ismertesse a dereguláció fogalmát, fajtáit és a Jat. rendelkezéseit!"],k5:[]},
+"II/4":{m:2,c:"Jogalkotás egyes szakaszainak lényegi tartalma",
+ k15:["Mutassa be a jogalkotás egyes szakaszainak lényegi tartalmát!"],
+ k10:["8.","Ismertesse a jogszabályalkotás alapvető követelményeit (AB + Jat.)!","11.","Ismertesse, mikor kell átmeneti rendelkezéseket alkotni!"],k5:[]},
+"II/5":{m:2,c:"Jogszabály tervezetének megszövegezésére vonatkozó követelmények",
+ k15:["Ismertesse a jogszabály tervezetének megszövegezésére vonatkozó követelményeket!"],k10:[],k5:[]},
+"II/6":{m:2,c:"Ákr. megalkotásának hazai előzményei; közigazgatási eljárásjog fejlődése",
+ k15:["Mutassa be az Ákr. megalkotásának hazai előzményeit és a közigazgatási eljárásjog fejlődésének főbb állomásait!"],
+ k10:["1.","Mutassa be, miért speciális a közigazgatási hatósági eljárás szabályozottsága!"],
+ k5:["5.","Mi az alapelv? Az alapelvek funkciói a hatósági eljárásjogban!","6.","Ismertesse az Ákr. alapelveinek funkcióit!","7.","Sorolja fel az Ákr. által nevesített alapelv csoportokat!","8.","Ismertesse a hivatalbóliság elvéhez kapcsolódó Ákr.-beli szabályokat!","9.","Ismertesse az ügyfélre vonatkozó alapelvek Ákr.-beli rendszerét!"]},
+"II/7":{m:2,c:"Közigazgatási eljárásjog fejlődése – uniós és nemzetközi tendenciák",
+ k15:["Ismertesse a közigazgatási eljárásjog fejlődése tekintetében releváns uniós és nemzetközi tendenciákat!"],k10:[],k5:[]},
+"II/8":{m:2,c:"Ákr. alanyi (szervi és személyi) hatálya",
+ k15:["Ismertesse az Ákr. alanyi (szervi és személyi) hatályát!"],
+ k10:["19.","Mutassa be a hatósági nyilvántartásra vonatkozó szabályokat!","20.","Ismertesse a hatósági bizonyítvány és a hatósági igazolvány szabályait!"],
+ k5:["10.","Mutassa be a hatáskör és az illetékesség fogalmát, egymáshoz való viszonyát!","11.","Határozza meg a hatásköri és illetékességi vitára vonatkozó eljárásrendet!","12.","Ismertesse az ügyintézővel szembeni abszolút kizáró okokat!","15.","Ismertesse az iratbetekintés szabályait a hatósági eljárásban!","16.","Ismertesse a szemle fajtáit a hatósági eljárásban!"]},
+"II/9":{m:2,c:"Kérelem hatósághoz történő benyújtásának szabályai",
+ k15:["Mutassa be a kérelem hatósághoz történő benyújtásának szabályait!"],
+ k10:["18.","Ismertesse a kézbesítési vélelemre és megdöntésére irányadó szabályokat!","23.","Mutassa be a hivatalból induló eljárásokra vonatkozó szabályozást!","24.","Mutassa be a hivatalból induló és kérelemre induló eljárások eltérő szabályait!","25.","Mutassa be a hivatalból induló eljárások esetén az értesítés szabályait!"],
+ k5:["13.","Ismertesse az ügyfél nyilatkozatára vonatkozó szabályokat!","14.","Mi a közokirat és mit jelent a teljes bizonyító erő?","17.","Ismertesse a tolmácsra vonatkozó szabályokat!","21.","Mutassa be az ügyfél adatszolgáltatási kötelezettségét!"]},
+"II/10":{m:2,c:"Automatikus döntéshozatal és sommás eljárás",
+ k15:["Mutassa be az automatikus döntéshozatali eljárás és a sommás eljárás szabályait!"],
+ k10:["12.","Határozza meg a sommás – automatikus – teljes eljárás összefüggéseit!","14.","Mi az alakszerű döntés? Mutassa be részeit és kötelező elemeit!","15.","Ismertesse az egyszerűsített döntés fogalmát és jellemzőit!","16.","Ismertesse a jogszerű hallgatás szabályait!","17.","Ismertesse a döntés közlésének eljárási cselekményét és módozatait!"],
+ k5:["18.","Mutassa be a hatósági szerződés megkötésének feltételeit!","19.","Ismertesse a közhiteles hatósági nyilvántartással összefüggő vélelem szabályait!"]},
+"II/11":{m:2,c:"Általános és speciális ügyintézési határidők",
+ k15:["Ismertesse az általános és a speciális ügyintézési határidőre vonatkozó szabályokat!"],
+ k10:["13.","Ismertesse a határidő számítására vonatkozó szabályokat!","21.","Mutassa be a hatósági ellenőrzésre vonatkozó Ákr.-fejezet jellemzőit!","22.","Ismertesse a hatósági ellenőrzés megindításának és lezárásának szabályait!"],
+ k5:["20.","Ismertesse a hatósági ellenőrzés lezárásának szabályait!"]},
+"II/12":{m:2,c:"Eljárási költség viselése; jogorvoslat és végrehajtás",
+ k15:["Ismertesse az eljárási költség viselésének szabályait!"],
+ k10:["26.","Mutassa be a biztosítási intézkedések szabályait!","27.","Mutassa be a zár alá vétel szabályait!","28.","Mutassa be az Ákr. jogorvoslati rendszerét!","29.","Csoportosítsa az Ákr.-ben nevesített jogorvoslatokat; főbb változások a Ket.-hez képest!","30.","Ismertesse, milyen döntéseket hozhat a közigazgatási bíróság!","31.","Soroljon fel 10 végzést, amely ellen önálló jogorvoslatnak van helye!","32.","Ismertesse a semmisség fogalmát és semmisségi okait!","33.","Ismertesse az eljárási költség előlegezésének szabályait!","34.","Mutassa be a költségmentesség szabályait!","35.","Határozza meg a végrehajtás előfeltételeit!","36.","Mutassa be a Vht. és az Ákr. egymáshoz való viszonyát!","37.","Mutassa be a végrehajtás folyamatát az Ákr. alapján!"],
+ k5:["22.","Mutassa be a közigazgatási per indítására jogosultak körét!","23.","Milyen döntést hozhat a felügyeleti szerv?","24.","A döntés saját hatáskörben történő módosításának és visszavonásának szabályai.","25.","Az eljárási költségviselésről szóló döntésre vonatkozó szabályok."]},
+"III/1":{m:3,c:"Költségvetési Tanács jogállása, főbb feladatkörei",
+ k15:["Mutassa be a Költségvetési Tanács jogállását, főbb feladatköreit és az eljárás főbb mozzanatait!"],k10:[],k5:[]},
+"III/2":{m:3,c:"Nemzeti vagyon körébe tartozó vagyonelemek és kategóriák",
+ k15:["Mutassa be a nemzeti vagyon körébe tartozó vagyonelemeket és kategóriáit!"],
+ k10:["1.","Ismertesse az Alaptörvény nemzeti vagyon fogalmára, céljára és a vagyongazdálkodás alapelveire vonatkozó szabályait!","6.","Mutassa be a nemzeti vagyon rendeltetését és a vagyongazdálkodás feladatait!"],
+ k5:["9.","Határozza meg a forgalomképtelen nemzeti vagyon definícióját!"]},
+"III/3":{m:3,c:"Jogszabályok az állampénzügyi és államháztartási rendszer működéséhez",
+ k15:["Ismertesse, hogy az Alaptörvényen túl milyen jogszabályok garantálják az állampénzügyi rendszer működését!"],
+ k10:["2.","Sorolja fel a költségvetési ciklus fázisait; mutassa be az egyes szakaszokat!","3.","Határozza meg a fizetési mérleg jelentőségét, részeit és egyenleg pozícióit!","4.","Határozza meg a jövedelemcentralizáció és az újraelosztás tartalmát!","15.","Határozza meg az infláció és defláció fogalmát, kezelésük eszközrendszerét!"],
+ k5:["1.","Definiálja a közszféra fogalmát; mutassa be a közjavak szerepét!","2.","Határozza meg a közfeladat fogalmát!","5.","Határozza meg a gazdasági növekedés fogalmát és hatását az államháztartásra!","6.","Határozza meg az államháztartási hiány fogalmát és a deficitfinanszírozás módját!"]},
+"III/4":{m:3,c:"Elkülönített állami pénzalapok; a működő alapok bemutatása",
+ k15:["Fejtse ki az elkülönített állami pénzalapok főbb jellemzőit és mutassa be a működő alapokat!"],
+ k10:["17.","Határozza meg az elkülönített állami pénzalap fogalmát és létrehozásának feltételeit!"],k5:[]},
+"III/5":{m:3,c:"Állami Számvevőszék jogállása, garanciák, főbb feladatai",
+ k15:["Ismertesse az Állami Számvevőszék jogállását, függetlenségi garanciáit és főbb feladatait!"],k10:[],k5:[]},
+"III/6":{m:3,c:"Államháztartási gazdálkodási alapelvek",
+ k15:["Mutassa be a gazdálkodásra vonatkozó legfontosabb államháztartási gazdálkodási alapelveket!"],
+ k10:["16.","Az államháztartási gazdálkodási alapelvek érvényesítésének jogi garanciái!"],
+ k5:["7.","Definiálja a felhasználási kötöttség alapelvét!","8.","Mit jelent a közbeszerzési kötelezettség elve?"]},
+"III/7":{m:3,c:"Költségvetési szervek irányítása és felügyelete",
+ k15:["Vázolja fel a költségvetési szervek irányítására, felügyeletére vonatkozó főbb szabályokat!"],
+ k10:["10.","Határozza meg a vállalkozási tevékenység fogalmát és szabályait költségvetési szervnél!","11.","Ismertesse az államháztartási kontrollok rendszerét!","12.","Mutassa be a kormányzati ellenőrzés rendszerét és a KEHI jogkörét!","13.","Ismertesse a belső kontrollrendszer célját és a belső ellenőrzés függetlenségét!","14.","A költségvetési szerv alapításának feltételei, alapítása és nyilvántartása!","18.","Az önkormányzatok belső ellenőrzésére vonatkozó főbb szabályok!"],
+ k5:["3.","Határozza meg a költségvetési szerv fogalmát!","12.","A teljesítésigazolás lényege.","13.","A ktgvetési szervek nyilvántartásával kapcsolatos rendelkezések.","14.","A Magyar Államkincstár szerepe a kormányzati ellenőrzési rendszerben."]},
+"III/8":{m:3,c:"Helyi önkormányzatok bevételei",
+ k15:["Mutassa be a helyi önkormányzatok bevételeit!"],
+ k10:["5.","Csoportosítsa a közhatalmi bevételeket; írjon példákat!","9.","A stabilitási törvény önkormányzati adósságot keletkeztető ügylet engedélyezésére vonatkozó szabályai!"],
+ k5:["4.","Milyen gazdálkodási jogokat biztosít az Alaptörvény a helyi önkormányzatoknak?","10.","Sorolja fel a helyi önkormányzat saját bevételeinek körét!","11.","Az önkormányzatok vállalkozási szabadsága és korlátai."]},
+"III/9":{m:3,c:"Államháztartási kiadások csoportosítása funkcióik szerint",
+ k15:["Csoportosítsa az államháztartási kiadásokat funkcióik szerint!"],
+ k10:["7.","Mutassa be a központi költségvetés főbb kiadásait!","8.","Mutassa be a központi költségvetési tartalékokat!"],k5:[]},
+"IV/1":{m:4,c:"Max Weber munkássága és bürokrácia-modellje",
+ k15:["Mutassa be Max Weber munkásságát és jelentőségét a közigazgatásszervezés szempontjából!"],k10:[],k5:[]},
+"IV/2":{m:4,c:"Emberközpontú irányzatok képviselői (Mayo, Maslow, McGregor, Lewin)",
+ k15:["Sorolja fel az emberközpontú irányzatok képviselőit és mutassa be legfontosabb megállapításaikat!"],
+ k10:["1.","Mutassa be a változás szereplőit és jellemezze azokat!"],
+ k5:["8.","A csoport fogalma és a csoportfejlődés lépései.","9.","A csoport méretére vonatkozó megfontolások és a jellemző csoportszerepek."]},
+"IV/3":{m:4,c:"Autokratikus, laissez-faire és demokratikus vezetési stílusok",
+ k15:["Mutassa be az autokratikus, a laissez-faire és a demokratikus vezetési stílusokat! Milyen helyzetekben lehetnek sikeresek?"],k10:[],k5:[]},
+"IV/4":{m:4,c:"Döntésközpontú vezetési stílusok – Lewin vagy Likert modellje",
+ k15:["Határozza meg a vezetési stílus fogalmát és ismertesse a döntésközpontú vezetési stílusokat Lewin vagy Likert modellje alapján!"],
+ k10:["6.","Mire ad választ a SWOT analízis és mikor alkalmazható sikerrel?"],k5:[]},
+"IV/5":{m:4,c:"Személyiségközpontú vezetési stílusok; szituáció szerinti választás",
+ k15:["Ismertesse a személyiségközpontú vezetési stílusokat és mutasson példát a szituációhoz illő választásra!"],
+ k10:[],
+ k5:["4.","A stratégiai tervezés lényege; a stratégiai terv fontosabb elemei.","5.","A teljesítménymenedzsment konzisztens folyamatszabályozásának elemei.","7.","Milyen tényezők befolyásolják a teljesítményt?"]},
+"IV/6":{m:4,c:"Vezetés mint döntés; döntéstípusok és delegálás",
+ k15:["Mutassa be a vezetés mint döntés perspektíváját! Térjen ki a döntéstípusokra és a delegálásra!"],k10:[],k5:[]},
+"IV/7":{m:4,c:"Négy vezetési funkció egy közigazgatási munkakörben",
+ k15:["Egy tetszőleges közigazgatási munkakör esetében jellemezze a munkakör tartalmát a négy vezetési funkció mentén!"],
+ k10:["2.","Ismertesse az ügymenetvizsgálat menetét!"],k5:[]},
+"IV/8":{m:4,c:"Ellenőrzési tevékenység; tárgy és típusok",
+ k15:["Mutassa be az ellenőrzési tevékenységet, kitérve az ellenőrzés tárgyára és típusaira!"],k10:[],k5:[]},
+"IV/9":{m:4,c:"Vezetés mint koordináció; koordinációs eszközök",
+ k15:["Ismertesse a vezetés mint koordináció perspektíváját és a koordinációs eszközöket!"],
+ k10:["10.","Mely tényezők érvényre juttatásától válik az emberierőforrás-gazdálkodás stratégiai alapúvá?"],
+ k5:["6.","Mutassa be részletesen a kompenzáció és a javadalmazás fogalmát!"]},
+"IV/10":{m:4,c:"E-közigazgatási szolgáltatások szintjei; két hazai példa",
+ k15:["Mutassa be az e-közigazgatási szolgáltatások szintjeit és két hazai példát a modell alapján!"],
+ k10:["3.","Sorolja fel az e-szolgáltatások öt szintjét és jellemezze azokat!","4.","Mutassa be az elektronikus közigazgatás előnyeit és hátrányait!","5.","Az e-kormányzat fogalma, főbb összetevői és előnyei."],k5:[]},
+"IV/11":{m:4,c:"Projekt fogalma, szakaszai, projektciklus",
+ k15:["Határozza meg a projekt fogalmát, szakaszait és a projektciklus egyes lépéseit!"],
+ k10:[],
+ k5:["1.","Határozza meg a projektmenedzsment logikai keretmátrix (LFA) fogalmát!"]},
+"IV/12":{m:4,c:"Szervezeti változás; a változás fogadtatásának esetei",
+ k15:["Határozza meg a szervezeti változás fogalmát! Hogyan fogadhatják a szervezet tagjai a változásokat?"],k10:[],k5:[]},
+"IV/13":{m:4,c:"Munkanap-fényképezés menete",
+ k15:["Mutassa be a munkanap-fényképezés menetét!"],k10:[],k5:[]},
+"IV/14":{m:4,c:"Csoportokkal kapcsolatos kérdések",
+ k15:["Válaszolja meg röviden a csoportokkal kapcsolatos kérdéseket!"],
+ k10:[],
+ k5:["2.","A minőségmenedzsment önértékelési modelljei; két konkrét modell.","3.","A kollektív szellemi alkotótechnikák lényege; két módszer megnevezése."]},
+"IV/15":{m:4,c:"Brainstorming módszere, menete, előnyök és hátrányok",
+ k15:["Ismertesse a brainstorming módszerét és menetét, valamint előnyeit és hátrányait!"],k10:[],k5:[]},
+"IV/16":{m:4,c:"Nominál csoportok módszer; lényeg, előnyök és hátrányok",
+ k15:["Mutassa be a nominál csoportok módszer lényegét, előnyeit és hátrányait!"],k10:[],k5:[]},
+"IV/17":{m:4,c:"Közigazgatási létszámgazdálkodás és kiválasztás",
+ k15:["Mutassa be a közigazgatási létszámgazdálkodás és kiválasztás főbb eszközeit!"],
+ k10:["7.","Mutassa be az interjúkészítés szakaszait!","17.","A Kit. kötött álláshely-alapú létszámgazdálkodása; álláshely fogalma és típusai.","18.","A személyügyi központ által lefolytatott pályázati eljárás lépései."],
+ k5:["10.","A személyügyi központ kompetenciafelmérései.","11.","Magyar Közigazgatási Ösztöndíj program előnyei.","12.","A Kit. szerinti általános kinevezési feltételek.","13.","Az álláshely betöltésének szakmai feltételei."]},
+"IV/18":{m:4,c:"Emberi erőforrás-áramlás négy alapmodellje",
+ k15:["Mutassa be részletesen az emberi erőforrás-áramlás négy alapmodelljét!"],
+ k10:["11.","Munkaköralapú (nyílt) rendszermegoldás.","12.","Karrieralapú (zárt) rendszermegoldás + hazai sajátosságok.","13.","Kompetenciaalapú munkavégzési rendszermegoldás."],
+ k5:["8.","Az emberierőforrás-gazdálkodás fejlődéstörténeti 5 szakasza."]},
+"IV/19":{m:4,c:"Közszolgálati életpálya-menedzsment eszközei",
+ k15:["A közszolgálati életpálya-menedzsment eszközei a munkaerőhiány és -többlet kezelésére."],
+ k10:["14.","A közszolgálatból való tervezett kiáramlás jogi eszköztára.","15.","A felmentési védelem két fajtája a Kit. alapján.","16.","Munkavégzéshez kötődő (on-the-job) fejlesztések.","19.","Távmunka és otthoni munkavégzés fogalma, jellemzői, feltételei.","20.","Felmentési okok a munkáltatói mérlegelés körében."],
+ k5:["9.","Kinevezés-módosítás esetei, amikor a kormánytisztviselő felmentést kérhet.","14.","A Kit. felmentési időre vonatkozó szabályai."]},
+"V/1":{m:5,c:"Lisszaboni Szerződés elfogadásának okai és változásai",
+ k15:["Mutassa be a Lisszaboni Szerződés elfogadásának okait és változásait!"],
+ k10:["1.","Az 'üres székek politikája' és a luxemburgi kompromisszum.","2.","Kormányköziség és szupranacionalizmus.","3.","A Római Szerződések aláírásának okai és eredményei.","4.","A belső piac Fehér Könyve és az Egységes Európai Okmány.","5.","Az EU aktuális válságterületei.","19.","A szerződések felülvizsgálati eljárásainak legfontosabb típusai."],
+ k5:["2.","Az 1973-as (északi) bővítési kör.","3.","A mediterrán bővítési kör (1981, 1986).","4.","Az EU 1995-ös bővítési köre.","28.","Mit jelent a 'Big Bang' bővítés (2004)?"]},
+"V/2":{m:5,c:"Uniós jog elsődleges forrásai és jellemzői",
+ k15:["Mutassa be az uniós jog elsődleges forrásait és jellemzőit!"],
+ k10:["6.","Az uniós jog másodlagos forrásainak rendszere.","7.","Az uniós jog és a tagállami belső jogrendszerek viszonya.","8.","Az uniós jog és a nemzetközi jog viszonya."],
+ k5:["5.","Az uniós acquis fogalma.","6.","Az uniós jogharmonizáció fogalma és célja.","33.","Az EU jogi személyisége."]},
+"V/3":{m:5,c:"Uniós alapjogvédelem indokoltsága, kialakulása és elemei",
+ k15:["Ismertesse az uniós alapjogvédelem indokoltságát, kialakulását és elemeit!"],
+ k10:["10.","Az EU Alapjogi Charta jogi természete, struktúrája és alkalmazási köre.","11.","Az EU és az Emberi Jogok Európai Egyezménye kapcsolata."],
+ k5:["1.","A koppenhágai kritériumok.","8.","Az EUSZ 7. cikke szerinti eljárás az értékeket sértő tagállamokkal szemben."]},
+"V/4":{m:5,c:"Az EU intézményei és funkcióik",
+ k15:["Ismertesse az EU intézményeit, funkcióit, valamint hogy mely intézmények viselik a kormányköziség vagy szupranacionalizmus jegyeit!"],
+ k10:["9.","Az EU demokratikus működésének alapelvei.","12.","Az Európai Tanács és a Tanács összehasonlítása.","14.","Az EP politikai elszámoltathatósági jogosítványai a Bizottsággal szemben.","15.","Az EU Bíróságának szerepe; szervezeti felépítés, bírák kiválasztása.","16.","Az EU Bíróságának eljárástípusai; előzetes döntéshozatal részletesen.","17.","A Gazdasági és Szociális Bizottság és a Régiók Bizottsága összehasonlítása.","18.","Az EU Ügynökségeinek definíciója, típusai és funkciói."],
+ k5:["9.","Az Európai Bizottság szerepe az Unió külkapcsolataiban.","10.","A Bizottság szerepe 'Szerződések őreként' és 'integráció motorjaként'.","14.","A Bizottság delegált döntéshozatali szerepköre (komitológia).","15.","Intézményi döntéshozatal: Európai Tanács, Tanács, EP, Bizottság."]},
+"V/5":{m:5,c:"Uniós jogalkotás folyamata; tagállami parlamentek szerepe",
+ k15:["Ismertesse az uniós jogalkotás folyamatát, valamint az uniós intézmények és tagállami parlamentek szerepét!"],
+ k10:[],
+ k5:["7.","Az uniós polgári kezdeményezés.","11.","A petíciós jog gyakorlásának feltételei.","27.","A tagállami parlamentek 'sárgalapos eljárása' és magyar érintettségű ügyek."]},
+"V/6":{m:5,c:"Uniós többéves pénzügyi keret",
+ k15:["Ismertesse az uniós többéves pénzügyi keret fogalmát, jelentőségét és gyakorlati megvalósulását!"],
+ k10:["20.","Az EU költségvetési és pénzügyi alapelvei.","21.","Az uniós közpénzügyi ellenőrzés intézményrendszere.","26.","A monetáris politika 'koncentrikus körei'; euró bevezetés; túlzott deficit.","27.","A tagállami gazdaságpolitikák uniós koordinációjának céljai és eszközei."],
+ k5:["12.","Az EKB feladat- és hatáskörei.","16.","A közpénzügyek fenntarthatósága és átláthatósága.","17.","Az EU saját forrásai.","19.","A gazdasági integráció fokozatai."]},
+"V/7":{m:5,c:"Hatáskör-átruházás elve; uniós hatáskörök rendszere",
+ k15:["Ismertesse a hatáskör-átruházás elvét és az uniós hatáskörök rendszerét!"],
+ k10:["23.","EU belső és külső hatáskörök kapcsolata; EUMSZ 352. cikk; beleértett hatáskörök."],
+ k5:["18.","A szubszidiaritás és arányosság elve.","21.","Az EU adózási hatáskörei."]},
+"V/8":{m:5,c:"EU regionális politikák rendszere",
+ k15:["Mutassa be az EU regionális politikáinak rendszerét!"],
+ k10:["22.","Az EUMSZ közbeszerzési szabályai.","24.","A közös agrárpolitika reformfolyamata."],
+ k5:["22.","A transzeurópai hálózatok három szektora.","23.","Az EU kezdeményezései oktatás, szakképzés, ifjúság és sport területén."]},
+"V/9":{m:5,c:"EU közös kül- és biztonságpolitika (KKBP)",
+ k15:["Ismertesse az EU közös kül- és biztonságpolitikáját!"],
+ k10:["25.","A szabadságon, biztonságon és jog érvényesülésén alapuló térség.","29.","Az EU2020 stratégia energiapolitikai elképzelései.","30.","Az EU környezetvédelmi politikájának célkitűzései és eszközei.","31.","Az EU közös kereskedelempolitikája a Lisszaboni Szerződés után.","32.","A nemzetközi fejlesztési együttműködés jelentősége."],
+ k5:["20.","Mit jelent a kabotázs tilalmának eltörlése?","24.","Az EU polgári védelmi mechanizmusa.","25.","Mikor köthet az EU nemzetközi megállapodásokat?","26.","Az EU humanitárius segítségnyújtási tevékenysége.","28.","Az EU fogyasztóvédelmi jogalkotása."]},
+"V/10":{m:5,c:"Uniós és magyar közigazgatás kapcsolata",
+ k15:["Mutassa be az uniós és magyar közigazgatás kapcsolatát!"],
+ k10:["34.","Magyarország és az EU kapcsolata az 1960-as évektől a csatlakozásig.","35.","Az Európai Koordinációs Tárcaközi Bizottság struktúrája és feladatai.","36.","A Bizottság magyar tagjainak pozíciója a csatlakozástól.","37.","A tagállami parlamentek szerepmodelljei; az Ogy szerepe a magyar Európa-politikában."],
+ k5:["34.","Magyarország és az EK/EU kapcsolata az 1960-as évektől a csatlakozásig."]}
+};
+
+var NAPOK=[
+ {h:1,d:"jún. 1. (H)",m:1,t:["I/1"],tip:"tan"},
+ {h:1,d:"jún. 2. (K)",m:1,t:["I/2"],tip:"tan"},
+ {h:1,d:"jún. 3. (Sze)",m:1,t:["I/3","I/4","I/5"],tip:"tan"},
+ {h:1,d:"jún. 4. (Cs)",m:1,t:["I/6","I/7","I/8"],tip:"tan"},
+ {h:1,d:"jún. 5. (P)",m:1,t:["I/9","I/10","I/11"],tip:"tan"},
+ {h:1,d:"jún. 6. (Szo)",m:1,t:[],tip:"ism",tema:"Ismétlés — 1. hét anyaga (vázlatok alapján visszakérdezés)"},
+ {h:2,d:"jún. 8. (H)",m:1,t:["I/12","I/13"],tip:"tan"},
+ {h:2,d:"jún. 9. (K)",m:1,t:["I/14"],tip:"tan"},
+ {h:2,d:"jún. 10. (Sze)",m:1,t:["I/15","I/16"],tip:"tan"},
+ {h:2,d:"jún. 11. (Cs)",m:1,t:[],tip:"vaz",tema:"I. modul — vázlatok megírása, összes tétel áttekintése"},
+ {h:2,d:"jún. 12. (P)",m:1,t:["I/1","I/2","I/3","I/4","I/5","I/6","I/7","I/8"],tip:"on",tema:"I. modul — hangos önellenőrzés T1–T8"},
+ {h:2,d:"jún. 13. (Szo)",m:1,t:[],tip:"ism",tema:"Ismétlés — 2. hét + 1. hét leggyengébb tételei"},
+ {h:3,d:"jún. 15. (H)",m:1,t:["I/9","I/10","I/11","I/12","I/13","I/14","I/15","I/16"],tip:"on",tema:"I. modul — hangos önellenőrzés T9–T16"},
+ {h:3,d:"jún. 16. (K)",m:1,t:[],tip:"vaz",tema:"I. modul — 10p kérdések összefoglalása vázlatból"},
+ {h:3,d:"jún. 17. (Sze)",m:1,t:[],tip:"vaz",tema:"I. modul — 5p kérdések begyakorlása"},
+ {h:3,d:"jún. 18. (Cs)",m:1,t:[],tip:"pot",tema:"I. modul — gyenge pontok pótlása"},
+ {h:3,d:"jún. 19. (P)",m:1,t:[],tip:"on",tema:"I. modul TELJES önellenőrzés — fejből minden tétel"},
+ {h:3,d:"jún. 20. (Szo)",m:1,t:[],tip:"ism",tema:"Ismétlés — I. modul összes tétele vázlatok alapján"},
+ {h:4,d:"jún. 22. (H)",m:2,t:["II/1","II/2"],tip:"tan"},
+ {h:4,d:"jún. 23. (K)",m:2,t:["II/3","II/4"],tip:"tan"},
+ {h:4,d:"jún. 24. (Sze)",m:2,t:["II/5","II/6"],tip:"tan"},
+ {h:4,d:"jún. 25. (Cs)",m:2,t:["II/7","II/8"],tip:"tan"},
+ {h:4,d:"jún. 26. (P)",m:2,t:["II/9"],tip:"tan"},
+ {h:4,d:"jún. 27. (Szo)",m:2,t:[],tip:"ism",tema:"Ismétlés — 4. hét + 1-2 I. modulos tétel felidézése"},
+ {h:5,d:"jún. 29. (H)",m:2,t:["II/10"],tip:"tan"},
+ {h:5,d:"jún. 30. (K)",m:2,t:["II/11"],tip:"tan"},
+ {h:5,d:"júl. 1. (Sze)",m:2,t:["II/12"],tip:"tan"},
+ {h:5,d:"júl. 2. (Cs)",m:2,t:[],tip:"vaz",tema:"II. modul — vázlatok megírása + nehéz tételek mélyítése"},
+ {h:5,d:"júl. 3. (P)",m:2,t:["II/1","II/2","II/3","II/4","II/5","II/6"],tip:"on",tema:"II. modul — hangos önellenőrzés T1–T6"},
+ {h:5,d:"júl. 4. (Szo)",m:2,t:[],tip:"ism",tema:"Ismétlés — 5. hét + 1 I. modulos tétel"},
+ {h:6,d:"júl. 6. (H)",m:2,t:["II/7","II/8","II/9","II/10","II/11","II/12"],tip:"on",tema:"II. modul — hangos önellenőrzés T7–T12"},
+ {h:6,d:"júl. 7. (K)",m:2,t:[],tip:"vaz",tema:"II. modul — 10p kérdések összefoglalása"},
+ {h:6,d:"júl. 8. (Sze)",m:2,t:[],tip:"vaz",tema:"II. modul — 5p kérdések begyakorlása"},
+ {h:6,d:"júl. 9. (Cs)",m:2,t:[],tip:"pot",tema:"II. modul — gyenge pontok pótlása"},
+ {h:6,d:"júl. 10. (P)",m:2,t:[],tip:"on",tema:"II. modul TELJES önellenőrzés"},
+ {h:6,d:"júl. 11. (Szo)",m:2,t:[],tip:"ism",tema:"Ismétlés — I. és II. modul keresztismétlés"},
+ {h:7,d:"júl. 13. (H)",m:3,t:["III/1","III/2"],tip:"tan"},
+ {h:7,d:"júl. 14. (K)",m:3,t:["III/3"],tip:"tan"},
+ {h:7,d:"júl. 15. (Sze)",m:3,t:["III/4","III/5"],tip:"tan"},
+ {h:7,d:"júl. 16. (Cs)",m:3,t:["III/6","III/7"],tip:"tan"},
+ {h:7,d:"júl. 17. (P)",m:3,t:["III/8","III/9"],tip:"tan"},
+ {h:7,d:"júl. 18. (Szo)",m:3,t:[],tip:"ism",tema:"Ismétlés — 7. hét + 1 korábbi modul tétele"},
+ {h:8,d:"júl. 20. (H)",m:3,t:[],tip:"vaz",tema:"III. modul — vázlatok megírása + nehéz témák"},
+ {h:8,d:"júl. 21. (K)",m:3,t:["III/1","III/2","III/3","III/4","III/5"],tip:"on",tema:"III. modul — hangos önellenőrzés T1–T5"},
+ {h:8,d:"júl. 22. (Sze)",m:3,t:["III/6","III/7","III/8","III/9"],tip:"on",tema:"III. modul — hangos önellenőrzés T6–T9"},
+ {h:8,d:"júl. 23. (Cs)",m:3,t:[],tip:"vaz",tema:"III. modul — 10p és 5p kérdések begyakorlása"},
+ {h:8,d:"júl. 24. (P)",m:3,t:[],tip:"on",tema:"III. modul TELJES önellenőrzés"},
+ {h:8,d:"júl. 25. (Szo)",m:3,t:[],tip:"ism",tema:"Ismétlés — I., II., III. modul összefoglalás"},
+ {h:9,d:"júl. 27. (H)",m:3,t:["I/2","I/14"],tip:"pot",tema:"I. modul legnehezebb tételek újra (T2, T14)"},
+ {h:9,d:"júl. 28. (K)",m:3,t:["II/12"],tip:"pot",tema:"II. modul legnehezebb tétel újra (T12 jogorvoslat)"},
+ {h:9,d:"júl. 29. (Sze)",m:3,t:["III/3","III/7"],tip:"pot",tema:"III. modul legnehezebb tételek újra (T3, T7)"},
+ {h:9,d:"júl. 30. (Cs)",m:3,t:[],tip:"on",tema:"I–III. modul keresztellenőrzés — fejből"},
+ {h:9,d:"aug. 1. (P)",m:3,t:[],tip:"pot",tema:"Összefoglaló vázlatok ellenőrzése, hiányok pótlása"},
+ {h:9,d:"aug. 2. (Szo)",m:3,t:[],tip:"ism",tema:"Ismétlés — gyenge pontok célzott ismétlése"},
+ {h:10,d:"aug. 3. (H)",m:4,t:["IV/1"],tip:"tan"},
+ {h:10,d:"aug. 4. (K)",m:4,t:["IV/2"],tip:"tan"},
+ {h:10,d:"aug. 5. (Sze)",m:4,t:["IV/3","IV/4"],tip:"tan"},
+ {h:10,d:"aug. 6. (Cs)",m:4,t:["IV/5","IV/6"],tip:"tan"},
+ {h:10,d:"aug. 7. (P)",m:4,t:["IV/7","IV/8"],tip:"tan"},
+ {h:10,d:"aug. 8. (Szo)",m:4,t:[],tip:"ism",tema:"Ismétlés — 10. hét anyaga"},
+ {h:11,d:"aug. 10. (H)",m:4,t:["IV/9","IV/10"],tip:"tan"},
+ {h:11,d:"aug. 11. (K)",m:4,t:["IV/11","IV/12"],tip:"tan"},
+ {h:11,d:"aug. 12. (Sze)",m:4,t:["IV/13","IV/14","IV/15","IV/16"],tip:"tan"},
+ {h:11,d:"aug. 13. (Cs)",m:4,t:["IV/17"],tip:"tan"},
+ {h:11,d:"aug. 14. (P)",m:4,t:["IV/18","IV/19"],tip:"tan"},
+ {h:11,d:"aug. 15. (Szo)",m:4,t:[],tip:"ism",tema:"Ismétlés — 11. hét anyaga"},
+ {h:12,d:"aug. 17. (H)",m:4,t:[],tip:"vaz",tema:"IV. modul — vázlatok megírása T1–T10"},
+ {h:12,d:"aug. 18. (K)",m:4,t:[],tip:"vaz",tema:"IV. modul — vázlatok megírása T11–T19"},
+ {h:12,d:"aug. 19. (Sze)",m:4,t:["IV/1","IV/2","IV/3","IV/4","IV/5","IV/6","IV/7","IV/8","IV/9","IV/10"],tip:"on",tema:"IV. modul — hangos önellenőrzés T1–T10"},
+ {h:12,d:"aug. 20. (Cs)",m:4,t:[],tip:"un",tema:"aug. 20. — NEMZETI ÜNNEP — Pihenő"},
+ {h:12,d:"aug. 21. (P)",m:4,t:["IV/11","IV/12","IV/13","IV/14","IV/15","IV/16","IV/17","IV/18","IV/19"],tip:"on",tema:"IV. modul — hangos önellenőrzés T11–T19"},
+ {h:12,d:"aug. 22. (Szo)",m:4,t:[],tip:"ism",tema:"Ismétlés — IV. modul összefoglalás"},
+ {h:13,d:"aug. 24. (H)",m:4,t:[],tip:"vaz",tema:"IV. modul — 10p kérdések (HR-fejezet mélyítése)"},
+ {h:13,d:"aug. 25. (K)",m:4,t:[],tip:"vaz",tema:"IV. modul — 5p kérdések begyakorlása"},
+ {h:13,d:"aug. 26. (Sze)",m:4,t:[],tip:"pot",tema:"IV. modul — gyenge pontok pótlása"},
+ {h:13,d:"aug. 27. (Cs)",m:4,t:[],tip:"on",tema:"IV. modul TELJES önellenőrzés"},
+ {h:13,d:"aug. 28. (P)",m:4,t:[],tip:"pot",tema:"I–IV. modul összefoglaló áttekintés"},
+ {h:13,d:"aug. 29. (Szo)",m:4,t:[],tip:"ism",tema:"Ismétlés — I–IV. modul gyenge pontok"},
+ {h:14,d:"aug. 31. (H)",m:5,t:["V/1"],tip:"tan"},
+ {h:14,d:"szept. 1. (K)",m:5,t:["V/2"],tip:"tan"},
+ {h:14,d:"szept. 2. (Sze)",m:5,t:["V/3","V/4"],tip:"tan"},
+ {h:14,d:"szept. 3. (Cs)",m:5,t:["V/5","V/6"],tip:"tan"},
+ {h:14,d:"szept. 4. (P)",m:5,t:["V/7","V/8"],tip:"tan"},
+ {h:14,d:"szept. 5. (Szo)",m:5,t:[],tip:"ism",tema:"Ismétlés — 14. hét anyaga"},
+ {h:15,d:"szept. 7. (H)",m:5,t:["V/9"],tip:"tan"},
+ {h:15,d:"szept. 8. (K)",m:5,t:["V/10"],tip:"tan"},
+ {h:15,d:"szept. 9. (Sze)",m:5,t:[],tip:"vaz",tema:"V. modul — vázlatok megírása T1–T5"},
+ {h:15,d:"szept. 10. (Cs)",m:5,t:[],tip:"vaz",tema:"V. modul — vázlatok megírása T6–T10"},
+ {h:15,d:"szept. 11. (P)",m:5,t:["V/1","V/2","V/3","V/4","V/5"],tip:"on",tema:"V. modul — hangos önellenőrzés T1–T5"},
+ {h:15,d:"szept. 12. (Szo)",m:5,t:[],tip:"ism",tema:"Ismétlés — 15. hét + korábbi modulokból"},
+ {h:16,d:"szept. 14. (H)",m:5,t:["V/6","V/7","V/8","V/9","V/10"],tip:"on",tema:"V. modul — hangos önellenőrzés T6–T10"},
+ {h:16,d:"szept. 15. (K)",m:5,t:[],tip:"vaz",tema:"V. modul — 10p kérdések összefoglalása"},
+ {h:16,d:"szept. 16. (Sze)",m:5,t:[],tip:"vaz",tema:"V. modul — 5p kérdések begyakorlása"},
+ {h:16,d:"szept. 17. (Cs)",m:5,t:[],tip:"pot",tema:"V. modul — gyenge pontok pótlása"},
+ {h:16,d:"szept. 18. (P)",m:5,t:[],tip:"on",tema:"V. modul TELJES önellenőrzés"},
+ {h:16,d:"szept. 19. (Szo)",m:5,t:[],tip:"ism",tema:"Ismétlés — V. modul + korábbi tételek"},
+ {h:17,d:"szept. 21. (H)",m:0,t:[],tip:"ism",tema:"ISMÉTLÉS — I. modul T1–T8 visszakérdezés"},
+ {h:17,d:"szept. 22. (K)",m:0,t:[],tip:"ism",tema:"ISMÉTLÉS — I. modul T9–T16 visszakérdezés"},
+ {h:17,d:"szept. 23. (Sze)",m:0,t:[],tip:"ism",tema:"ISMÉTLÉS — II. modul T1–T6 visszakérdezés"},
+ {h:17,d:"szept. 24. (Cs)",m:0,t:[],tip:"ism",tema:"ISMÉTLÉS — II. modul T7–T12 visszakérdezés"},
+ {h:17,d:"szept. 25. (P)",m:0,t:[],tip:"pot",tema:"Gyenge pontok azonosítása I–II. modulban; pótlás"},
+ {h:17,d:"szept. 26. (Szo)",m:0,t:[],tip:"ism",tema:"Ismétlés — leggyengébb tételek célzott ismétlése"},
+ {h:18,d:"szept. 28. (H)",m:0,t:[],tip:"ism",tema:"ISMÉTLÉS — III. modul T1–T9 visszakérdezés"},
+ {h:18,d:"szept. 29. (K)",m:0,t:[],tip:"ism",tema:"ISMÉTLÉS — IV. modul T1–T10 visszakérdezés"},
+ {h:18,d:"szept. 30. (Sze)",m:0,t:[],tip:"ism",tema:"ISMÉTLÉS — IV. modul T11–T19 visszakérdezés"},
+ {h:18,d:"okt. 1. (Cs)",m:0,t:[],tip:"pot",tema:"Gyenge pontok pótlása III–IV. modulban"},
+ {h:18,d:"okt. 2. (P)",m:0,t:[],tip:"vaz",tema:"Tételvázlatok ellenőrzése — III–IV. modul"},
+ {h:18,d:"okt. 3. (Szo)",m:0,t:[],tip:"ism",tema:"Ismétlés — leggyengébb tételek célzott ismétlése"},
+ {h:19,d:"okt. 5. (H)",m:0,t:[],tip:"ism",tema:"ISMÉTLÉS — V. modul T1–T5 visszakérdezés"},
+ {h:19,d:"okt. 6. (K)",m:0,t:[],tip:"ism",tema:"ISMÉTLÉS — V. modul T6–T10 visszakérdezés"},
+ {h:19,d:"okt. 7. (Sze)",m:0,t:[],tip:"pot",tema:"Gyenge pontok pótlása V. modulban"},
+ {h:19,d:"okt. 8. (Cs)",m:0,t:[],tip:"pot",tema:"Minden modulból 1-1 legnehezebb tétel felelevenítése"},
+ {h:19,d:"okt. 9. (P)",m:0,t:[],tip:"vaz",tema:"Vizsgastratégia áttekintése — szerkezet, kulcsfogalmak"},
+ {h:19,d:"okt. 10. (Szo)",m:0,t:[],tip:"ism",tema:"Ismétlés — teljes anyag kulcsfogalmainak gyors átfutása"},
+ {h:20,d:"okt. 12. (H)",m:0,t:[],tip:"pot",tema:"ZÁRÓ — Összes modul kulcsfogalmainak rövid áttekintése"},
+ {h:20,d:"okt. 13. (K)",m:0,t:[],tip:"vaz",tema:"ZÁRÓ — Tételvázlatok utolsó gyors átolvasása"},
+ {h:20,d:"okt. 14. (Sze)",m:0,t:[],tip:"pih",tema:"ZÁRÓ — Könnyű ismétlés, korai lefekvés"},
+ {h:20,d:"okt. 15. (Cs)",m:0,t:[],tip:"viz",tema:"ÍRÁSBELI VIZSGA — Sok sikert!"}
+];
+
+var TN={
+  tan:"Új anyag", ism:"Ismétlés", on:"Önellenőrzés",
+  vaz:"Vázlat", pot:"Pótlás", pih:"Pihenő",
+  un:"Ünnep", viz:"Vizsga"
+};
+
+var MNEV={0:"Ismétlés",1:"I. modul",2:"II. modul",3:"III. modul",4:"IV. modul",5:"V. modul"};
+
+// Csoportosítás hetek szerint
+var hetek={};
+NAPOK.forEach(function(n){
+  if(!hetek[n.h]) hetek[n.h]=[];
+  hetek[n.h].push(n);
+});
+var hl=Object.keys(hetek).map(Number).sort(function(a,b){return a-b;});
+
+// Navigációs gombok
+var nav=document.getElementById("navBar");
+var fo=document.getElementById("fo");
+
+hl.forEach(function(h){
+  var btn=document.createElement("button");
+  btn.className="nav-gomb";
+  btn.id="b"+h;
+  btn.textContent=h+". hét";
+  btn.onclick=function(){show(h);};
+  nav.appendChild(btn);
+});
+
+function show(h){
+  document.querySelectorAll(".nav-gomb").forEach(function(b){b.classList.remove("on");});
+  document.getElementById("b"+h).classList.add("on");
+  fo.innerHTML="";
+  var ns=hetek[h];
+
+  // Heti fejléc
+  var d1=ns[0].d.split("(")[0].trim();
+  var dl=ns[ns.length-1].d.split("(")[0].trim();
+  var mset={};
+  ns.forEach(function(n){ if(n.m>0) mset[n.m]=1; });
+  var mlbl=Object.keys(mset).map(function(m){return MNEV[m];}).join(" + ")||"Összefoglaló ismétlés";
+
+  var hf=document.createElement("div");
+  hf.className="het-fejlec";
+  hf.innerHTML='<div class="het-szam-nagy">'+h+'.</div>'+
+    '<div class="het-info">'+
+      '<div class="het-cim">'+mlbl+'</div>'+
+      '<div class="het-datum">'+d1+' — '+dl+' · '+ns.length+' nap</div>'+
+    '</div>';
+  fo.appendChild(hf);
+
+  // Napok
+  ns.forEach(function(nap){
+    var nk=0;
+    nap.t.forEach(function(k){
+      var te=T[k]; if(te) nk+=te.k15.length+te.k10.length+te.k5.length;
+    });
+
+    var isSzo=nap.d.indexOf("Szo")>-1;
+    var isUn=nap.tip==="un";
+    var isViz=nap.tip==="viz";
+    var isPih=nap.tip==="pih";
+
+    var napDiv=document.createElement("article");
+    napDiv.className="nap m"+nap.m;
+    if(isSzo) napDiv.classList.add("szombat");
+    if(isUn||isPih) napDiv.classList.add("unnep");
+    if(isViz) napDiv.classList.add("vizsga");
+
+    // Téma
+    var tema=nap.tema;
+    if(!tema && nap.t.length>0){
+      tema=nap.t.map(function(k){
+        var te=T[k]; return te?(k+" — "+te.c):k;
+      }).join(" · ");
+    }
+    if(!tema) tema=TN[nap.tip];
+
+    // Datum parts
+    var dParts=nap.d.match(/^([a-zé]+)\.\s*(\d+)\.\s*\(([A-Za-zóöőúüű]+)\)/i);
+    var honap=dParts?dParts[1]:"";
+    var dnap=dParts?dParts[2]:"";
+    var hnap=dParts?dParts[3]:"";
+
+    var statTxt;
+    if(nap.t.length>0){
+      statTxt=nap.t.length+" tétel · "+nk+" kérdés";
+    } else {
+      statTxt=TN[nap.tip];
+    }
+
+    var fej=document.createElement("div");
+    fej.className="nap-fej"+(nap.t.length>0?" kattintható":"");
+    fej.innerHTML=
+      '<div class="nap-datum-blokk">'+
+        '<div class="nap-honap">'+honap+'</div>'+
+        '<div class="nap-szam">'+dnap+'</div>'+
+        '<div class="nap-honap-nev">'+hnap+'</div>'+
+      '</div>'+
+      '<div class="nap-info">'+
+        '<div class="nap-tipus-row">'+
+          '<span class="tipus-pill">'+TN[nap.tip]+'</span>'+
+          '<span class="nap-stat">'+statTxt+'</span>'+
+        '</div>'+
+        '<div class="nap-tema">'+tema+'</div>'+
+      '</div>'+
+      (nap.t.length>0?'<div class="nap-nyil">▼</div>':'');
+
+    var body=document.createElement("div");
+    body.className="nap-body";
+
+    if(nap.t.length>0){
+      fej.onclick=function(){
+        var open=body.style.display==="block";
+        body.style.display=open?"none":"block";
+        if(open) napDiv.classList.remove("nyitva");
+        else napDiv.classList.add("nyitva");
+      };
+
+      nap.t.forEach(function(k){
+        var te=T[k]; if(!te) return;
+        var tDiv=document.createElement("div");
+        tDiv.className="tetel";
+        var html='<div class="tetel-fej">'+
+          '<span class="tetel-kod">'+k+'</span>'+
+          '<span class="tetel-cim">'+te.c+'</span>'+
+        '</div>';
+
+        // 15p
+        if(te.k15.length>0){
+          html+='<div class="kerdes-csoport k15-csop"><div class="csoport-cim">15 pontos · Fő tétel</div>';
+          te.k15.forEach(function(q){
+            html+='<div class="kerdes k15"><span class="kerdes-jelolo">15p</span><span class="kerdes-szoveg">'+q+'</span></div>';
+          });
+          html+='</div>';
+        }
+        // 10p
+        if(te.k10.length>0){
+          html+='<div class="kerdes-csoport k10-csop"><div class="csoport-cim">10 pontos kérdések</div>';
+          for(var i=0;i<te.k10.length;i+=2){
+            html+='<div class="kerdes"><span class="kerdes-jelolo">10·'+te.k10[i]+'</span><span class="kerdes-szoveg">'+te.k10[i+1]+'</span></div>';
+          }
+          html+='</div>';
+        }
+        // 5p
+        if(te.k5.length>0){
+          html+='<div class="kerdes-csoport k5-csop"><div class="csoport-cim">5 pontos kérdések</div>';
+          for(var i=0;i<te.k5.length;i+=2){
+            html+='<div class="kerdes"><span class="kerdes-jelolo">5·'+te.k5[i]+'</span><span class="kerdes-szoveg">'+te.k5[i+1]+'</span></div>';
+          }
+          html+='</div>';
+        }
+
+        tDiv.innerHTML=html;
+        body.appendChild(tDiv);
+      });
+    }
+
+    napDiv.appendChild(fej);
+    napDiv.appendChild(body);
+    fo.appendChild(napDiv);
+  });
+
+  fo.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+show(1);
+</script>
+</body>
+</html>
