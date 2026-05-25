@@ -118,9 +118,80 @@ body {
 }
 .nav-belso {
   max-width: 920px; margin: 0 auto;
-  padding: 14px 24px;
+  padding: 14px 24px 10px;
   display: flex; flex-wrap: wrap; gap: 6px;
   justify-content: flex-start;
+}
+.nap-nav {
+  background: var(--kremes);
+  border-top: 1px dashed var(--vonal);
+  padding: 10px 24px 12px;
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex; flex-wrap: wrap; gap: 5px;
+}
+.nap-nav-cim {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--tinta-halvany);
+  width: 100%;
+  margin-bottom: 4px;
+}
+.nap-gomb {
+  border: 1px solid var(--vonal);
+  background: #fff;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--tinta-vilagos);
+  padding: 5px 9px;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.nap-gomb:hover {
+  border-color: var(--gomb-szin, var(--arany));
+  background: var(--gomb-bg, var(--pergamen));
+  color: var(--tinta);
+  transform: translateY(-1px);
+}
+.nap-gomb-pont {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gomb-szin, var(--arany));
+  flex-shrink: 0;
+}
+.nap-gomb.szombat { --gomb-szin: #b8923a; --gomb-bg: #f9f1d8; }
+.nap-gomb.unnep { --gomb-szin: #b85a3a; --gomb-bg: #f5e0d8; }
+.nap-gomb.vizsga {
+  --gomb-szin: var(--arany);
+  background: var(--tinta);
+  color: var(--kremes);
+  font-weight: 600;
+  border-color: var(--tinta);
+}
+.nap-gomb.vizsga:hover { background: var(--tinta); color: var(--arany-vilagos); }
+.nap-gomb-mod1 { --gomb-szin: #2c4a6b; --gomb-bg: #e8eef5; }
+.nap-gomb-mod2 { --gomb-szin: #3a6a4a; --gomb-bg: #e8f1ea; }
+.nap-gomb-mod3 { --gomb-szin: #8a5a2a; --gomb-bg: #f5edd8; }
+.nap-gomb-mod4 { --gomb-szin: #5a3a6b; --gomb-bg: #eee5f0; }
+.nap-gomb-mod5 { --gomb-szin: #2a3a6b; --gomb-bg: #e6eaf5; }
+.nap-gomb-mod0 { --gomb-szin: #5a5a4a; --gomb-bg: #ededdf; }
+
+/* Highlight ha megnyitva */
+.nap.highlighted {
+  animation: villan 1.4s ease;
+}
+@keyframes villan {
+  0% { box-shadow: 0 0 0 3px var(--arany); }
+  100% { box-shadow: 0 6px 20px rgba(26, 31, 46, 0.08); }
 }
 
 .nav-gomb {
@@ -278,6 +349,14 @@ body {
   margin-bottom: 4px;
   flex-wrap: wrap;
 }
+.nap-hetnev {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--szin, var(--arany-melyebb));
+}
 .tipus-pill {
   font-family: 'Inter', sans-serif;
   font-size: 9px;
@@ -303,7 +382,9 @@ body {
   color: var(--tinta);
   line-height: 1.35;
   transition: color 0.2s;
+  margin-bottom: 8px;
 }
+
 
 .nap-nyil {
   flex-shrink: 0;
@@ -503,6 +584,7 @@ body {
 
 <nav class="nav-wrapper">
   <div class="nav-belso" id="navBar"></div>
+  <div class="nap-nav" id="napNav"></div>
 </nav>
 
 <main class="fo" id="fo"></main>
@@ -878,6 +960,28 @@ function show(h){
   fo.innerHTML="";
   var ns=hetek[h];
 
+  // Napi al-navigáció építése
+  var napNav=document.getElementById("napNav");
+  napNav.innerHTML='<div class="nap-nav-cim">'+h+'. hét napjai</div>';
+  ns.forEach(function(nap,idx){
+    var ng=document.createElement("button");
+    ng.className="nap-gomb nap-gomb-mod"+nap.m;
+    var isSzo=nap.d.indexOf("Szo")>-1;
+    var isUn=nap.tip==="un"||nap.tip==="pih";
+    var isViz=nap.tip==="viz";
+    if(isSzo) ng.classList.add("szombat");
+    if(isUn) ng.classList.add("unnep");
+    if(isViz) ng.classList.add("vizsga");
+    var dParts=nap.d.match(/^([a-záéíóöőúüű]+)\.\s*(\d+)\.\s*\(([A-Za-zóöőúüű]+)\)/i);
+    var rovidMap={"H":"Hétfő","K":"Kedd","Sze":"Szerda","Cs":"Csütörtök","P":"Péntek","Szo":"Szombat"};
+    var hnap=dParts?(rovidMap[dParts[3]]||dParts[3]):"";
+    var teljes=dParts?(hnap+" · "+dParts[1]+". "+dParts[2]+"."):nap.d;
+    ng.innerHTML='<span class="nap-gomb-pont"></span><span>'+teljes+'</span>';
+    ng.onclick=function(){ugrasNapra(h,idx);};
+    napNav.appendChild(ng);
+  });
+
+
   // Heti fejléc
   var d1=ns[0].d.split("(")[0].trim();
   var dl=ns[ns.length-1].d.split("(")[0].trim();
@@ -912,17 +1016,20 @@ function show(h){
     if(isUn||isPih) napDiv.classList.add("unnep");
     if(isViz) napDiv.classList.add("vizsga");
 
-    // Téma
+    // Téma — rövid címet kreálunk a tételekhez
     var tema=nap.tema;
     if(!tema && nap.t.length>0){
-      tema=nap.t.map(function(k){
-        var te=T[k]; return te?(k+" — "+te.c):k;
-      }).join(" · ");
+      if(nap.t.length===1){
+        var te=T[nap.t[0]];
+        tema=te?te.c:nap.t[0];
+      } else {
+        tema=nap.t.length+" tétel — "+MNEV[nap.m];
+      }
     }
     if(!tema) tema=TN[nap.tip];
 
     // Datum parts
-    var dParts=nap.d.match(/^([a-zé]+)\.\s*(\d+)\.\s*\(([A-Za-zóöőúüű]+)\)/i);
+    var dParts=nap.d.match(/^([a-záéíóöőúüű]+)\.\s*(\d+)\.\s*\(([A-Za-zóöőúüű]+)\)/i);
     var honap=dParts?dParts[1]:"";
     var dnap=dParts?dParts[2]:"";
     var hnap=dParts?dParts[3]:"";
@@ -934,6 +1041,10 @@ function show(h){
       statTxt=TN[nap.tip];
     }
 
+    // Teljes napnév kiszámítása
+    var teljesNapMap={"H":"Hétfő","K":"Kedd","Sze":"Szerda","Cs":"Csütörtök","P":"Péntek","Szo":"Szombat","V":"Vasárnap"};
+    var teljesNap=teljesNapMap[hnap]||hnap;
+
     var fej=document.createElement("div");
     fej.className="nap-fej"+(nap.t.length>0?" kattintható":"");
     fej.innerHTML=
@@ -944,6 +1055,7 @@ function show(h){
       '</div>'+
       '<div class="nap-info">'+
         '<div class="nap-tipus-row">'+
+          '<span class="nap-hetnev">'+teljesNap+'</span>'+
           '<span class="tipus-pill">'+TN[nap.tip]+'</span>'+
           '<span class="nap-stat">'+statTxt+'</span>'+
         '</div>'+
@@ -1007,6 +1119,25 @@ function show(h){
   });
 
   fo.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function ugrasNapra(h,idx){
+  show(h);
+  setTimeout(function(){
+    var napok=document.querySelectorAll("#fo .nap");
+    if(napok[idx]){
+      napok[idx].scrollIntoView({behavior:"smooth",block:"center"});
+      napok[idx].classList.add("highlighted");
+      // Automatikus kibontás
+      var body=napok[idx].querySelector(".nap-body");
+      var fej=napok[idx].querySelector(".nap-fej.kattintható");
+      if(body&&fej&&body.style.display!=="block"){
+        body.style.display="block";
+        napok[idx].classList.add("nyitva");
+      }
+      setTimeout(function(){napok[idx].classList.remove("highlighted");},1400);
+    }
+  },100);
 }
 
 show(1);
