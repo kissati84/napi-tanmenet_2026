@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Napi tanmenet 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f5f3ee;font-size:13px}
+.fejlec{background:linear-gradient(135deg,#1a2a4a,#2c3e6b);color:#fff;padding:18px 20px;border-bottom:4px solid #c9a227}
+.fejlec h1{font-size:17px;margin-bottom:3px}
+.fejlec p{color:#a8c0e0;font-size:11px;font-family:sans-serif}
+.nav{display:flex;flex-wrap:wrap;background:#fff;border-bottom:2px solid #ddd;padding:6px 10px;gap:4px;position:sticky;top:0;z-index:20;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.nav button{padding:5px 10px;border:1.5px solid #ddd;border-radius:5px;background:#fff;cursor:pointer;font-size:11px;font-family:sans-serif;color:#444}
+.nav button.on{background:#1a2a4a;color:#fff;border-color:#1a2a4a;font-weight:bold}
+.tartalom{padding:14px;max-width:860px;margin:0 auto}
+.het-cim{background:#1a2a4a;color:#fff;border-radius:7px 7px 0 0;padding:9px 14px;font-family:sans-serif;font-size:12px;display:flex;align-items:center;gap:8px;margin-top:10px}
+.het-badge{background:#c9a227;color:#1a2a4a;border-radius:4px;padding:2px 8px;font-size:11px;font-weight:bold;flex-shrink:0}
+.nap-kart{border:1.5px solid #ccc;overflow:hidden;border-top:none}
+.nap-kart:last-child{border-radius:0 0 7px 7px}
+.nap-fejlec{display:flex;align-items:flex-start;gap:8px;padding:8px 12px;cursor:default}
+.nap-fejlec.kattintható{cursor:pointer}
+.nap-datum{font-family:sans-serif;font-size:11px;font-weight:bold;flex-shrink:0;min-width:100px;padding-top:2px}
+.nap-info{flex:1}
+.nap-tema{font-size:12px;font-weight:600;line-height:1.4}
+.nap-stat{font-size:10px;font-family:sans-serif;margin-top:2px;opacity:.7}
+.nap-nyil{font-size:11px;flex-shrink:0;margin-top:3px;width:14px;text-align:center}
+.nap-tartalom{display:none;border-top:1px solid rgba(0,0,0,.1)}
+.tetel-blokk{border-bottom:1px solid rgba(0,0,0,.07)}
+.tetel-blokk:last-child{border-bottom:none}
+.tetel-cim-sor{padding:7px 12px 3px;display:flex;align-items:center;gap:7px}
+.tetel-badge{border-radius:4px;padding:2px 7px;font-size:10px;font-weight:bold;font-family:sans-serif;color:#fff;flex-shrink:0}
+.tetel-cim{font-size:12px;font-weight:600}
+.kerdes-lista{padding:0 12px 8px 12px;display:flex;flex-direction:column;gap:3px}
+.ksor{display:flex;gap:6px;align-items:flex-start;padding:3px 6px;border-radius:4px}
+.kbadge{border-radius:8px;padding:2px 7px;font-size:10px;font-weight:bold;font-family:sans-serif;flex-shrink:0;white-space:nowrap;margin-top:1px}
+.kszoveg{font-size:12px;line-height:1.5}
+.k15bg{background:#fffde7}
+</style>
+</head>
+<body>
+<div class="fejlec">
+  <h1>&#x1F4C5; Napi tanmenet &ndash; K&ouml;zigazgat&aacute;si alapvizsga 2026</h1>
+  <p>V&aacute;lassz hetet fent &bull; Kattints egy napra a k&eacute;rd&eacute;sek megtekint&eacute;s&eacute;hez &bull; J&uacute;n. 1. &ndash; Okt. 15.</p>
+</div>
+<div class="nav" id="navBar"></div>
+<div class="tartalom" id="fo"></div>
+<script>
+var T={
+"I/1":{m:1,c:"Magyar alkotm&aacute;nyfejl&#337;d&eacute;s (2010-ig)",
+ k15:["Mutassa be v&aacute;zlatosan a magyar alkotm&aacute;nyfejl&#337;d&eacute;st (2010-ig)!"],
+ k10:["10p/1. Ismertesse az alkotm&aacute;ny fogalm&aacute;t &eacute;s csoportos&iacute;t&aacute;s&aacute;t (t&ouml;rt&eacute;neti vs. kart&aacute;lis, merev vs. rugalmas)!",
+      "10p/4. Milyen &uacute;j t&aacute;rgyk&ouml;r&ouml;kkel b&#337;v&uuml;lt az Alaptörv&eacute;ny az Alkotm&aacute;nyhoz k&eacute;pest?",
+      "10p/5. Mutassa be az Alaptörv&eacute;ny m&oacute;dos&iacute;t&aacute;sait (11 m&oacute;dos&iacute;t&aacute;s)!",
+      "10p/6. Ismertesse a Nemzeti Hitvall&aacute;st &eacute;s jelent&#337;s&eacute;g&eacute;t!",
+      "10p/7. V&aacute;zlatosan ismertesse az Alaptörv&eacute;ny Alapvet&eacute;s (A&ndash;U cikkek) tartalm&aacute;t!"],
+ k5:["5p/1. Mutassa be az Alaptörv&eacute;ny megalkot&aacute;s&aacute;nak folyamat&aacute;t!",
+     "5p/3. Sorolja fel az Alaptörv&eacute;ny szerkezeti egys&eacute;geit helyes sorrendben!",
+     "5p/4. Nevezze meg a hat&aacute;lyos magyar alkotm&aacute;nyt &eacute;s mutasson r&aacute; alkotm&aacute;nyi von&aacute;saira!",
+     "5p/5. Ismertesse a k&ouml;lts&eacute;gvet&eacute;si gazdálkod&aacute;s f&#337;bb elveit (Alaptörv&eacute;ny N) cikk)!"]},
+"I/2":{m:1,c:"Alapvet&#337; jogok csoportos&iacute;t&aacute;sa",
+ k15:["Ismertesse, milyen szempontok alapj&aacute;n csoportos&iacute;that&oacute;ak az alapvet&#337; jogok, &eacute;s v&eacute;gezze el azok csoportos&iacute;t&aacute;s&aacute;t!"],
+ k10:["10p/8. Ismertesse az alapvet&#337; jogok korl&aacute;toz&aacute;s&aacute;nak tartalmi krit&eacute;riumait (sz&uuml;ks&eacute;gess&eacute;g&ndash;alkalmasság&ndash;ar&aacute;nyoss&aacute;g)!",
+      "10p/10. Ismertesse az &eacute;lethez val&oacute; jog &eacute;s az emberi m&eacute;lt&oacute;s&aacute;g viszony&aacute;t!",
+      "10p/11. Ismertesse az emberi m&eacute;lt&oacute;s&aacute;got mint anyajogot!",
+      "10p/12. Mutassa be a v&eacute;lem&eacute;nynyilv&aacute;n&iacute;t&aacute;s szabad&aacute;s&aacute;nak alkotm&aacute;nyos korl&aacute;tait!",
+      "10p/13. Mutassa be a közérdek&#369; adatok megismer&eacute;s&eacute;re vonatkoz&oacute; szab&aacute;lyokat!",
+      "10p/14. Mutassa be az Alaptörv&eacute;ny szoci&aacute;lis jogokkal kapcsolatos rendelkez&eacute;seit!",
+      "10p/15. Mutassa be az eg&eacute;szs&eacute;ges k&ouml;rnyezethez val&oacute; jog alkotm&aacute;nyos szab&aacute;lyoz&aacute;s&aacute;nak v&aacute;ltoz&aacute;s&aacute;t!"],
+ k5:["5p/7. Ismertesse az alapvet&#337; jogok eredet&eacute;re vonatkoz&oacute; elm&eacute;leteket!",
+     "5p/10. Ismertesse az &aacute;llam &eacute;s a vall&aacute;si k&ouml;z&ouml;ss&eacute;gek viszony&aacute;t az Alaptörv&eacute;ny alapj&aacute;n!",
+     "5p/11. Hat&aacute;rozza meg a spont&aacute;n gy&#369;l&eacute;s &eacute;s s&uuml;rg&#337;s gy&uuml;lekezés fogalm&aacute;t!",
+     "5p/12. Ismertesse az egyes&uuml;l&eacute;si jog r&eacute;szjogos&iacute;ts&aacute;gait!",
+     "5p/13. Sorolja fel az inform&aacute;ci&oacute;s &ouml;nrendelkez&eacute;si jog legal&aacute;bb 5 alapelv&eacute;t!",
+     "5p/14. Mutassa be az ad&oacute;ztat&aacute;s korl&aacute;taira &eacute;s a k&ouml;ztehervisel&eacute;sre vonatkoz&oacute; alkotm&aacute;nyos szab&aacute;lyokat!"]},
+"I/3":{m:1,c:"Az &aacute;llam k&ouml;telezetts&eacute;gei az alapjogok biztos&iacute;t&aacute;s&aacute;val &ouml;sszef&uuml;gg&eacute;sben",
+ k15:["Mutassa be, hogy az &aacute;llamot az alapvet&#337; jogok biztos&iacute;t&aacute;s&aacute;val &ouml;sszef&uuml;gg&eacute;sben milyen k&ouml;telezetts&eacute;gek terhelik!"],
+ k10:["10p/3. Sorolja fel az alkotm&aacute;nyoss&aacute;g elveit &eacute;s fejtse ki, mit &eacute;rt&uuml;nk jogállamiság alatt!"],
+ k5:["5p/8. Ki(k)et terhel az alapjogok biztos&iacute;t&aacute;s&aacute;nak k&ouml;telezetts&eacute;ge &eacute;s ki(k) a jogosult(ak)?",
+     "5p/9. Mutassa be az alapvet&#337; jogok korl&aacute;toz&aacute;s&aacute;nak formai krit&eacute;riumait!"]},
+"I/4":{m:1,c:"H&aacute;zass&aacute;g &eacute;s a csal&aacute;d alkotm&aacute;nyjogi fogalma",
+ k15:["Ismertesse a h&aacute;zass&aacute;g &eacute;s a csal&aacute;d alkotm&aacute;nyjogi fogalm&aacute;t!"],k10:[],k5:[]},
+"I/5":{m:1,c:"Diszkrim&iacute;n&aacute;ci&oacute;tilalom &eacute;s az es&eacute;lyegyenl&#337;s&eacute;g biztos&iacute;t&aacute;s&aacute;nak konfliktusa",
+ k15:["Mutassa be a diszkrim&iacute;n&aacute;ci&oacute;tilalom &eacute;s az es&eacute;lyegyenl&#337;s&eacute;g biztos&iacute;t&aacute;s&aacute;nak konfliktus&aacute;t!"],k10:[],k5:[]},
+"I/6":{m:1,c:"Az Orsz&aacute;ggy&#369;l&eacute;s m&#369;k&ouml;d&eacute;se; t&ouml;rv&eacute;nyjavaslatok t&aacute;rgyalása",
+ k15:["Ismertesse az Orsz&aacute;ggy&#369;l&eacute;s m&#369;k&ouml;d&eacute;s&eacute;nek f&#337;bb szab&aacute;lyait &eacute;s a t&ouml;rv&eacute;nyjavaslatok t&aacute;rgyalás&aacute;t!"],
+ k10:["10p/16. Ismertesse az Orsz&aacute;ggy&#369;l&eacute;s legfontosabb funkcióit, feladat- &eacute;s hat&aacute;sk&ouml;reit!"],
+ k5:["5p/6. Ismertesse az egyes &aacute;llami szervek k&ouml;zp&eacute;nz&uuml;gyekkel kapcsolatos legfontosabb funkcióit!"]},
+"I/7":{m:1,c:"A k&ouml;zt&aacute;rsas&aacute;gi eln&ouml;k feladat- &eacute;s hat&aacute;sk&ouml;rei; ellenjegyz&eacute;s",
+ k15:["Ismertesse a k&ouml;zt&aacute;rsas&aacute;gi eln&ouml;k feladat- &eacute;s hat&aacute;sk&ouml;reit! Mit jelent az ellenjegyz&eacute;s?"],k10:[],k5:[]},
+"I/8":{m:1,c:"K&ouml;zt&aacute;rsas&aacute;gi eln&ouml;ki &eacute;s minisztereln&ouml;ki tiszts&eacute;g megsz&#369;n&eacute;se",
+ k15:["Sorolja fel a k&ouml;zt&aacute;rsas&aacute;gi eln&ouml;ki &eacute;s a minisztereln&ouml;ki tiszts&eacute;g megsz&#369;n&eacute;s&eacute;nek eseteit!"],k10:[],k5:[]},
+"I/9":{m:1,c:"Minisztereln&ouml;ki korm&aacute;nyz&aacute;s; Korm&aacute;ny megalakulása &eacute;s megsz&#369;n&eacute;se",
+ k15:["Hat&aacute;rozza meg a minisztereln&ouml;ki korm&aacute;nyz&aacute;s fogalm&aacute;t! Ismertesse a Korm&aacute;ny megalakulás&aacute;ra &eacute;s megsz&#369;n&eacute;s&eacute;re vonatkoz&oacute; szab&aacute;lyokat!"],
+ k10:["10p/2. Hat&aacute;rozza meg &aacute;ltal&aacute;noss&aacute;gban a szakpolitikai feladatot ell&aacute;t&oacute; miniszterek feladatait!"],
+ k5:["5p/21. Soroljon fel legal&aacute;bb 5, a Korm&aacute;ny m&#369;k&ouml;d&eacute;s&eacute;t k&ouml;zvetlen&uuml;l seg&iacute;t&#337; &aacute;llamigazgat&aacute;si szervet!",
+     "5p/22. Sorolja fel a miniszter munk&aacute;j&aacute;t seg&iacute;t&#337; miniszt&eacute;riumi vezet&#337;ket!"]},
+"I/10":{m:1,c:"Az Alkotm&aacute;nyb&iacute;r&oacute;s&aacute;g alkotm&aacute;nyos funkciója &eacute;s hat&aacute;sk&ouml;rei",
+ k15:["Hat&aacute;rozza meg az Alkotm&aacute;nyb&iacute;r&oacute;s&aacute;g alkotm&aacute;nyos funkcióját &eacute;s ismertesse hat&aacute;sk&ouml;reit!"],k10:[],k5:[]},
+"I/11":{m:1,c:"Magyarorsz&aacute;g b&iacute;r&oacute;s&aacute;gi szervezete; f&#337; feladat- &eacute;s hat&aacute;sk&ouml;r&ouml;k",
+ k15:["Mutassa be Magyarorsz&aacute;g b&iacute;r&oacute;s&aacute;gi szervezet&eacute;t &eacute;s a b&iacute;r&oacute;s&aacute;gok f&#337; feladat- &eacute;s hat&aacute;sk&ouml;reit!"],k10:[],k5:[]},
+"I/12":{m:1,c:"Az &uuml;gy&eacute;szs&eacute;g feladatk&ouml;rei a b&uuml;ntet&#337; elj&aacute;r&aacute;s sor&aacute;n",
+ k15:["Ismertesse az &uuml;gy&eacute;szs&eacute;g feladatk&ouml;reit a b&uuml;ntet&#337; elj&aacute;r&aacute;s sor&aacute;n!"],k10:[],k5:[]},
+"I/13":{m:1,c:"Helyi &ouml;nkorm&aacute;nyzatok auton&oacute;mi&aacute;j&aacute;nak korl&aacute;tai",
+ k15:["Fejtse ki, mennyiben korl&aacute;tozott a helyi &ouml;nkorm&aacute;nyzatok auton&oacute;mi&aacute;ja!"],
+ k10:["10p/17. Hat&aacute;rozza meg, hogy mely &aacute;llami szerveknek mi a funkciója az &ouml;nkorm&aacute;nyzatok t&ouml;rv&eacute;nyes m&#369;k&ouml;d&eacute;s&eacute;nek biztos&iacute;t&aacute;s&aacute;ban!",
+      "10p/18. Mutassa be a helyi &ouml;nkorm&aacute;nyzatok &eacute;s m&aacute;s szervek kapcsolatrendszer&eacute;t!"],
+ k5:["5p/2. Ismertesse, hogy milyen hat&aacute;sk&ouml;r&ouml;ket biztos&iacute;t az Alaptörv&eacute;ny a helyi &ouml;nkorm&aacute;nyzatoknak! (legal&aacute;bb 5)",
+     "5p/24. Sorolja fel az M&ouml;tv. szerinti telep&uuml;l&eacute;si &eacute;s ter&uuml;leti &ouml;nkorm&aacute;nyzatokat!"]},
+"I/14":{m:1,c:"K&ouml;zigazgat&aacute;s funkciói &ndash; igazgat&aacute;studom&aacute;ny &eacute;s jogtudom&aacute;ny",
+ k15:["Hasonl&iacute;tsa &ouml;ssze, hogyan hat&aacute;rozza meg a k&ouml;zigazgat&aacute;s funkcióit az igazgat&aacute;studom&aacute;ny (POSDCORB) &eacute;s a jogtudom&aacute;ny!"],
+ k10:["10p/19. Hasonl&iacute;tsa &ouml;ssze a k&ouml;zigazgat&aacute;s k&eacute;t nagy alrendszer&eacute;nek szervezeti jogi szabályoz&aacute;s&aacute;t!",
+      "10p/20. Jellemezze a kv&aacute;zi-&aacute;llamigazgat&aacute;si szerveket!"],
+ k5:["5p/15. Ismertesse a k&ouml;zszolg&aacute;ltat&aacute;sok szerepét a k&ouml;zigazgat&aacute;s fogalm&aacute;nak meghat&aacute;roz&aacute;s&aacute;ban!",
+     "5p/16. Fejtse ki a k&ouml;z&eacute;rdek&#369;s&eacute;g jelent&#337;s&eacute;g&eacute;t a k&ouml;zigazgat&aacute;sban!",
+     "5p/17. Hat&aacute;rolja el: v&eacute;grehajtó hatalom &ndash; k&ouml;zigazgat&aacute;s &ndash; &aacute;llamigazgat&aacute;s!",
+     "5p/18. Hat&aacute;rolja el: korm&aacute;nyz&aacute;s &ndash; k&ouml;zigazgat&aacute;s!",
+     "5p/19. Hat&aacute;rozza meg a k&ouml;zigazgat&aacute;s szervezeti jog r&eacute;szter&uuml;leteit!",
+     "5p/20. Hat&aacute;rolja el a k&ouml;zponti &eacute;s a ter&uuml;leti/helyi &aacute;llamigazgat&aacute;si szerveket!"]},
+"I/15":{m:1,c:"Korm&aacute;nyzati f&#337;hivatal vs. f&#337;v&aacute;rosi/v&aacute;rmegyei korm&aacute;nyhivatal",
+ k15:["Mutassa be, mi a k&uuml;l&ouml;nbs&eacute;g a korm&aacute;nyzati f&#337;hivatal, valamint a f&#337;v&aacute;rosi &eacute;s v&aacute;rmegyei korm&aacute;nyhivatal k&ouml;z&ouml;tt!"],
+ k10:[],
+ k5:["5p/23. Sorolja fel a telep&uuml;l&eacute;si &ouml;nkorm&aacute;nyzat k&eacute;pvisel&#337;-testület&eacute;nek szerveit!"]},
+"I/16":{m:1,c:"Helyi &ouml;nkorm&aacute;nyzatok feladatrendszere",
+ k15:["Mutassa be a helyi &ouml;nkorm&aacute;nyzatok &aacute;ltal ell&aacute;tott feladatok rendszer&eacute;t!"],
+ k10:["10p/9. Ind&oacute;kolt-e a nemzeti &uuml;nnepek alaptörv&eacute;nyi szintre emel&eacute;se? Sorolja fel az Alaptörv&eacute;ny &aacute;ltal neves&iacute;tett &uuml;nnepeket!"],
+ k5:[]},
+"II/1":{m:2,c:"T&aacute;rsadalmi norma sajátoss&aacute;gai; jogi norma jellemz&#337;i",
+ k15:["Hat&aacute;rozza meg a t&aacute;rsadalmi norma &aacute;ltal&aacute;nos sajátoss&aacute;gait! Hat&aacute;rozza meg a jogi norm&aacute;k csak r&aacute;juk jellemz&#337; sajátoss&aacute;gait!"],
+ k10:["10p/2. Ismertesse a jogi norm&aacute;k szerkezeti elemeit (hip&oacute;tézis, diszpoz&iacute;ció, szankció)!",
+      "10p/3. Ismertesse a jogforr&aacute;s fogalm&aacute;t &eacute;s f&#337; t&iacute;pusait!",
+      "10p/4. Ismertesse a jogszab&aacute;lyi hierarchi&aacute;t!"],
+ k5:["5p/1. Hat&aacute;rozza meg a jogszab&aacute;ly fogalm&aacute;t!",
+     "5p/2. Sorolja fel a k&uuml;l&ouml;nleges jogrend t&iacute;pusait; melyik szerv milyen jogi norm&aacute;t alkothat!",
+     "5p/3. Sorolja fel, hogy mely szervek alkothatnak rendeletet b&eacute;k&eacute;id&#337;ben!",
+     "5p/4. Hasonl&iacute;tsa &ouml;ssze a t&aacute;rsadalmi egyeztet&eacute;s k&eacute;t form&aacute;j&aacute;t!"]},
+"II/2":{m:2,c:"Magyarorsz&aacute;g bels&#337; jogforr&aacute;si rendszer&eacute;nek elemei",
+ k15:["Ismertesse Magyarorsz&aacute;g bels&#337; jogforr&aacute;si rendszer&eacute;nek elemeit az Alaptörv&eacute;ny &eacute;s a jogalkot&aacute;si t&ouml;rv&eacute;ny alapj&aacute;n!"],
+ k10:["10p/5. Ismertesse az Ogy t&ouml;rv&eacute;nyhozó hat&aacute;sk&ouml;r&eacute;nek f&#337; jellegzetess&eacute;geit!"],k5:[]},
+"II/3":{m:2,c:"Rendeletalkot&aacute;s f&#337;bb szab&aacute;lyai b&eacute;k&eacute;id&#337;ben",
+ k15:["Ismertesse a rendeletalkot&aacute;s f&#337;bb szab&aacute;lyait b&eacute;k&eacute;id&#337;ben!"],
+ k10:["10p/6. Ismertesse a jogszab&aacute;ly &eacute;rv&eacute;nyess&eacute;g&eacute;nek fogalm&aacute;t &eacute;s l&eacute;trej&ouml;tt&eacute;hez sz&uuml;ks&eacute;ges felt&eacute;teleket!",
+      "10p/7. Ismertesse a jogszab&aacute;lyok hat&aacute;ly&aacute;t (id&#337;beli, ter&uuml;leti, szem&eacute;lyi, t&aacute;rgyi &ndash; vacatio legis)!",
+      "10p/9. Ismertesse a k&ouml;zjogi szervezetszab&aacute;lyoz&oacute; eszk&ouml;z&ouml;ket!",
+      "10p/10. Ismertesse a dereg&aacute;l&aacute;ció fogalm&aacute;t, fajt&aacute;it &eacute;s a Jat. rendelkez&eacute;seit!"],k5:[]},
+"II/4":{m:2,c:"Jogalkot&aacute;s egyes szakaszainak l&eacute;nyegi tartalma",
+ k15:["Mutassa be a jogalkot&aacute;s egyes szakaszainak l&eacute;nyegi tartalm&aacute;t!"],
+ k10:["10p/8. Ismertesse a jogszab&aacute;lyalkot&aacute;s alapvet&#337; k&ouml;vetelm&eacute;nyeit (AB + Jat.)!",
+      "10p/11. Ismertesse, mikor kell &aacute;tmeneti rendelkez&eacute;seket alkotni!"],k5:[]},
+"II/5":{m:2,c:"Jogszab&aacute;ly tervezet&eacute;nek megszövegez&eacute;s&eacute;re vonatkoz&oacute; k&ouml;vetelm&eacute;nyek",
+ k15:["Ismertesse a jogszab&aacute;ly tervezet&eacute;nek megszövegez&eacute;s&eacute;re vonatkoz&oacute; &aacute;ltal&aacute;nos k&ouml;vetelm&eacute;nyeket!"],k10:[],k5:[]},
+"II/6":{m:2,c:"&Aacute;kr. megalkot&aacute;s&aacute;nak hazai el&#337;zm&eacute;nyei; k&ouml;zigazgat&aacute;si elj&aacute;r&aacute;sjog fejl&#337;d&eacute;se",
+ k15:["Mutassa be az &Aacute;kr. megalkot&aacute;s&aacute;nak hazai el&#337;zm&eacute;nyeit &eacute;s a k&ouml;zigazgat&aacute;si elj&aacute;r&aacute;sjog fejl&#337;d&eacute;s&eacute;nek f&#337;bb &aacute;llom&aacute;sait!"],
+ k10:["10p/1. Mutassa be, mi&eacute;rt speci&aacute;lis a k&ouml;zigazgat&aacute;si hat&oacute;s&aacute;gi elj&aacute;r&aacute;s szabályozotts&aacute;ga!"],
+ k5:["5p/5. Mi az alapelv? Az alapelvek funkciói a hat&oacute;s&aacute;gi elj&aacute;r&aacute;sjogban!",
+     "5p/6. Ismertesse az &Aacute;kr. alapelveinek funkcióit!",
+     "5p/7. Sorolja fel az &Aacute;kr. &aacute;ltal neves&iacute;tett alapelv csoportokat!",
+     "5p/8. Ismertesse a hivatal&oacute;liság elv&eacute;hez kapcsol&oacute;d&oacute; &Aacute;kr.-beli szab&aacute;lyokat!",
+     "5p/9. Ismertesse az &uuml;gyf&eacute;lre vonatkoz&oacute; alapelvek &Aacute;kr.-beli rendszer&eacute;t!"]},
+"II/7":{m:2,c:"K&ouml;zigazgat&aacute;si elj&aacute;r&aacute;sjog fejl&#337;d&eacute;se &ndash; uni&oacute;s &eacute;s nemzetk&ouml;zi tendenci&aacute;k",
+ k15:["Ismertesse a k&ouml;zigazgat&aacute;si elj&aacute;r&aacute;sjog fejl&#337;d&eacute;se tekintet&eacute;ben relev&aacute;ns uni&oacute;s &eacute;s nemzetk&ouml;zi tendenci&aacute;kat!"],k10:[],k5:[]},
+"II/8":{m:2,c:"&Aacute;kr. alanyi (szervi &eacute;s szem&eacute;lyi) hat&aacute;lya",
+ k15:["Ismertesse az &Aacute;kr. alanyi (szervi &eacute;s szem&eacute;lyi) hat&aacute;ly&aacute;t!"],
+ k10:["10p/19. Mutassa be a hat&oacute;s&aacute;gi nyilv&aacute;ntart&aacute;sra vonatkoz&oacute; szab&aacute;lyokat!",
+      "10p/20. Ismertesse a hat&oacute;s&aacute;gi bizony&iacute;tv&aacute;ny &eacute;s a hat&oacute;s&aacute;gi igazolv&aacute;ny szab&aacute;lyait!"],
+ k5:["5p/10. Mutassa be a hat&aacute;sk&ouml;r &eacute;s az illet&eacute;kess&eacute;g fogalm&aacute;t, egym&aacute;shoz val&oacute; viszony&aacute;t!",
+     "5p/11. Hat&aacute;rozza meg a hat&aacute;sk&ouml;ri &eacute;s illet&eacute;kess&eacute;gi vit&aacute;ra vonatkoz&oacute; elj&aacute;r&aacute;srendet!",
+     "5p/12. Ismertesse az &uuml;gyint&eacute;z&#337;vel szembeni abszol&uacute;t kiz&aacute;r&oacute; okokat!",
+     "5p/15. Ismertesse az iratbetekint&eacute;s szab&aacute;lyait a hat&oacute;s&aacute;gi elj&aacute;r&aacute;sban!",
+     "5p/16. Ismertesse a szemle fajt&aacute;it a hat&oacute;s&aacute;gi elj&aacute;r&aacute;sban!"]},
+"II/9":{m:2,c:"K&eacute;relem hat&oacute;s&aacute;ghoz t&ouml;rt&eacute;n&#337; beny&uacute;jt&aacute;s&aacute;nak szab&aacute;lyai",
+ k15:["Mutassa be a k&eacute;relem hat&oacute;s&aacute;ghoz t&ouml;rt&eacute;n&#337; beny&uacute;jt&aacute;s&aacute;nak szab&aacute;lyait!"],
+ k10:["10p/18. Ismertesse a k&eacute;zbes&iacute;t&eacute;si v&eacute;lelemre &eacute;s megd&ouml;nt&eacute;s&eacute;re ir&aacute;nyad&oacute; szab&aacute;lyokat!",
+      "10p/23. Mutassa be a hivatal&oacute;l indul&oacute; elj&aacute;r&aacute;sokra vonatkoz&oacute; szabályoz&aacute;st!",
+      "10p/24. Mutassa be a hivatal&oacute;l indul&oacute; &eacute;s k&eacute;relemre indul&oacute; elj&aacute;r&aacute;sok elté&#337; szab&aacute;lyait!",
+      "10p/25. Mutassa be a hivatal&oacute;l indul&oacute; elj&aacute;r&aacute;sok eset&eacute;n az &eacute;rtes&iacute;t&eacute;s szab&aacute;lyait!"],
+ k5:["5p/13. Ismertesse az &uuml;gyf&eacute;l nyilatkozat&aacute;ra vonatkoz&oacute; szab&aacute;lyokat!",
+     "5p/14. Ismertesse, mi a k&ouml;zokirat &eacute;s mit jelent a teljes bizony&iacute;t&oacute; er&#337;!",
+     "5p/17. Ismertesse a tolm&aacute;csra vonatkoz&oacute; szab&aacute;lyokat!",
+     "5p/21. Mutassa be az &uuml;gyf&eacute;l adatszolg&aacute;ltat&aacute;si k&ouml;telezetts&eacute;g&eacute;t!"]},
+"II/10":{m:2,c:"Automatikus d&ouml;nt&eacute;shozatal &eacute;s somm&aacute;s elj&aacute;r&aacute;s",
+ k15:["Mutassa be az automatikus d&ouml;nt&eacute;shozatali elj&aacute;r&aacute;s &eacute;s a somm&aacute;s elj&aacute;r&aacute;s szab&aacute;lyait!"],
+ k10:["10p/12. Hat&aacute;rozza meg a somm&aacute;s &ndash; automatikus &ndash; teljes elj&aacute;r&aacute;s &ouml;sszef&uuml;gg&eacute;seit!",
+      "10p/14. Mi az alakszer&#369; d&ouml;nt&eacute;s? Mutassa be r&eacute;szeit &eacute;s k&ouml;telez&#337; elemeit!",
+      "10p/15. Ismertesse az egyszer&#369;s&iacute;tett d&ouml;nt&eacute;s fogalm&aacute;t &eacute;s jellemz&#337;it!",
+      "10p/16. Ismertesse a jogszer&#369; hallgat&aacute;s szab&aacute;lyait!",
+      "10p/17. Ismertesse a d&ouml;nt&eacute;s k&ouml;zl&eacute;s&eacute;nek elj&aacute;r&aacute;si cselekm&eacute;ny&eacute;t &eacute;s m&oacute;dozatait!"],
+ k5:["5p/18. Mutassa be a hat&oacute;s&aacute;gi szerz&#337;d&eacute;s megk&ouml;t&eacute;s&eacute;nek felt&eacute;teleit!",
+     "5p/19. Ismertesse a k&ouml;zhiteles hat&oacute;s&aacute;gi nyilv&aacute;ntart&aacute;ssal &ouml;sszef&uuml;gg&#337; v&eacute;lelem szab&aacute;lyait!"]},
+"II/11":{m:2,c:"&Aacute;ltal&aacute;nos &eacute;s speci&aacute;lis &uuml;gyint&eacute;z&eacute;si hat&aacute;rid&#337;kre vonatkoz&oacute; szab&aacute;lyok",
+ k15:["Ismertesse az &aacute;ltal&aacute;nos &eacute;s a speci&aacute;lis &uuml;gyint&eacute;z&eacute;si hat&aacute;rid&#337;re vonatkoz&oacute; szab&aacute;lyokat!"],
+ k10:["10p/13. Ismertesse a hat&aacute;rid&#337; sz&aacute;m&iacute;t&aacute;s&aacute;ra vonatkoz&oacute; szab&aacute;lyokat!",
+      "10p/21. Mutassa be a hat&oacute;s&aacute;gi ellen&#337;rz&eacute;sre vonatkoz&oacute; &Aacute;kr.-fejezet jellemz&#337;it!",
+      "10p/22. Ismertesse a hat&oacute;s&aacute;gi ellen&#337;rz&eacute;s megind&iacute;t&aacute;s&aacute;nak &eacute;s lez&aacute;r&aacute;s&aacute;nak szab&aacute;lyait!"],
+ k5:["5p/20. Ismertesse a hat&oacute;s&aacute;gi ellen&#337;rz&eacute;s lez&aacute;r&aacute;s&aacute;nak szab&aacute;lyait!"]},
+"II/12":{m:2,c:"Elj&aacute;r&aacute;si k&ouml;lts&eacute;g visel&eacute;se; jogorvoslat &eacute;s v&eacute;grehajt&aacute;s",
+ k15:["Ismertesse az elj&aacute;r&aacute;si k&ouml;lts&eacute;g visel&eacute;s&eacute;nek szab&aacute;lyait!"],
+ k10:["10p/26. Mutassa be a biztos&iacute;t&aacute;si int&eacute;zked&eacute;sek szab&aacute;lyait!",
+      "10p/27. Mutassa be a z&aacute;r al&aacute; v&eacute;tel szab&aacute;lyait!",
+      "10p/28. Mutassa be az &Aacute;kr. jogorvoslati rendszer&eacute;t!",
+      "10p/29. Csoportos&iacute;tsa az &Aacute;kr.-ben neves&iacute;tett jogorvoslatokat; mutassa be a f&#337; v&aacute;ltoz&aacute;sokat a Ket.-hez k&eacute;pest!",
+      "10p/30. Ismertesse, milyen d&ouml;nt&eacute;seket hozhat a k&ouml;zigazgat&aacute;si b&iacute;r&oacute;s&aacute;g!",
+      "10p/31. Soroljon fel 10 v&eacute;gz&eacute;st, amely ellen &ouml;n&aacute;ll&oacute; jogorvoslatnak van helye!",
+      "10p/32. Ismertesse a semmiss&eacute;g fogalm&aacute;t &eacute;s semmiss&eacute;gi okait!",
+      "10p/33. Ismertesse az elj&aacute;r&aacute;si k&ouml;lts&eacute;g el&#337;legez&eacute;s&eacute;nek szab&aacute;lyait!",
+      "10p/34. Mutassa be a k&ouml;lts&eacute;gmentess&eacute;g szab&aacute;lyait!",
+      "10p/35. Hat&aacute;rozza meg a v&eacute;grehajt&aacute;s el&#337;felt&eacute;teleit!",
+      "10p/36. Mutassa be a Vht. &eacute;s az &Aacute;kr. egym&aacute;shoz val&oacute; viszony&aacute;t!",
+      "10p/37. Mutassa be a v&eacute;grehajt&aacute;s folyamat&aacute;t az &Aacute;kr. alapj&aacute;n!"],
+ k5:["5p/22. Mutassa be a k&ouml;zigazgat&aacute;si per ind&iacute;t&aacute;s&aacute;ra jogosultak k&ouml;r&eacute;t!",
+     "5p/23. Mutassa be, milyen d&ouml;nt&eacute;st hozhat a fel&uuml;gyeleti szerv!",
+     "5p/24. Ismertesse a d&ouml;nt&eacute;s saj&aacute;t hat&aacute;sk&ouml;rben t&ouml;rt&eacute;n&#337; m&oacute;dos&iacute;t&aacute;s&aacute;nak &eacute;s visszavon&aacute;s&aacute;nak szab&aacute;lyait!",
+     "5p/25. Mutassa be az elj&aacute;r&aacute;si k&ouml;lts&eacute;gvisel&eacute;sr&#337;l sz&oacute;l&oacute; d&ouml;nt&eacute;sre vonatkoz&oacute; szab&aacute;lyokat!"]},
+"III/1":{m:3,c:"K&ouml;lts&eacute;gvet&eacute;si Tan&aacute;cs jog&aacute;ll&aacute;sa, f&#337;bb feladatk&ouml;rei",
+ k15:["Mutassa be a K&ouml;lts&eacute;gvet&eacute;si Tan&aacute;cs jog&aacute;ll&aacute;s&aacute;t, f&#337;bb feladatk&ouml;reit &eacute;s az elj&aacute;r&aacute;s f&#337;bb mozzanatait!"],k10:[],k5:[]},
+"III/2":{m:3,c:"Nemzeti vagyon k&ouml;r&eacute;be tartoz&oacute; vagyonelemek &eacute;s kateg&oacute;ri&aacute;k",
+ k15:["Mutassa be a nemzeti vagyon k&ouml;r&eacute;be tartoz&oacute; vagyonelemeket &eacute;s kateg&oacute;ri&aacute;it!"],
+ k10:["10p/1. Ismertesse az Alaptörv&eacute;ny nemzeti vagyon fogalm&aacute;ra, c&eacute;lj&aacute;ra &eacute;s a vagyongazd&aacute;lkod&aacute;s alapelveire vonatkoz&oacute; szab&aacute;lyait!",
+      "10p/6. Mutassa be a nemzeti vagyon rendeltets&eacute;s&eacute;t; sorolja fel a vagyongazd&aacute;lkod&aacute;s feladatait!"],
+ k5:["5p/9. Hat&aacute;rozza meg a forgalomk&eacute;ptelen nemzeti vagyon defin&iacute;ci&oacute;j&aacute;t!"]},
+"III/3":{m:3,c:"Jogszab&aacute;lyok az &aacute;llamp&eacute;nz&uuml;gyi &eacute;s &aacute;llamh&aacute;ztart&aacute;si rendszer m&#369;k&ouml;d&eacute;s&eacute;hez",
+ k15:["Ismertesse, hogy az Alaptörv&eacute;nyen t&uacute;l milyen jogszab&aacute;lyok garант&aacute;lj&aacute;k az &aacute;llamp&eacute;nz&uuml;gyi rendszer m&#369;k&ouml;d&eacute;s&eacute;t!"],
+ k10:["10p/2. Sorolja fel a k&ouml;lts&eacute;gvet&eacute;si ciklus f&aacute;zisait; mutassa be az egyes szakaszokat!",
+      "10p/3. Hat&aacute;rozza meg a fizet&eacute;si m&eacute;rleg jelent&#337;s&eacute;g&eacute;t, r&eacute;szeit &eacute;s egyenleg pozici&oacute;it!",
+      "10p/4. Hat&aacute;rozza meg a j&ouml;vedelemcentraliz&aacute;ció &eacute;s az &uacute;jraeloszm&aacute;s tartalm&aacute;t, jelent&#337;s&eacute;g&eacute;t!",
+      "10p/15. Hat&aacute;rozza meg az infl&aacute;ció &eacute;s a defl&aacute;ció fogalm&aacute;t, kezel&eacute;s&uuml;k eszk&ouml;zrendszer&eacute;t!"],
+ k5:["5p/1. Defini&aacute;lja a k&ouml;zsz&eacute;fra fogalm&aacute;t; mutassa be a k&ouml;zjavak szerepét!",
+     "5p/2. Hat&aacute;rozza meg a k&ouml;zfeladat fogalm&aacute;t!",
+     "5p/5. Hat&aacute;rozza meg a gazdas&aacute;gi n&ouml;veked&eacute;s fogalm&aacute;t, mutat&oacute;j&aacute;t &eacute;s hat&aacute;s&aacute;t az &aacute;llamh&aacute;ztart&aacute;sra!",
+     "5p/6. Hat&aacute;rozza meg az &aacute;llamh&aacute;ztart&aacute;si hi&aacute;ny fogalm&aacute;t &eacute;s a deficitfinanszroz&aacute;s m&oacute;dj&aacute;t!"]},
+"III/4":{m:3,c:"Elk&uuml;l&ouml;n&iacute;tett &aacute;llami p&eacute;nzalapok; a m&#369;k&ouml;d&#337; alapok bemutat&aacute;sa",
+ k15:["Fejtse ki az elk&uuml;l&ouml;n&iacute;tett &aacute;llami p&eacute;nzalapok f&#337;bb jellemz&#337;it! Mutassa be a m&#369;k&ouml;d&#337; elk&uuml;l&ouml;n&iacute;tett p&eacute;nzalapokat!"],
+ k10:["10p/17. Hat&aacute;rozza meg az elk&uuml;l&ouml;n&iacute;tett &aacute;llami p&eacute;nzalap fogalm&aacute;t &eacute;s l&eacute;trehoz&aacute;s&aacute;nak t&ouml;rv&eacute;nyi felt&eacute;teleit!"],k5:[]},
+"III/5":{m:3,c:"&Aacute;llami Sz&aacute;mvev&#337;sz&eacute;k jog&aacute;ll&aacute;sa, garanciák, f&#337;bb feladatai",
+ k15:["Ismertesse az &Aacute;llami Sz&aacute;mvev&#337;sz&eacute;k jog&aacute;ll&aacute;s&aacute;t, f&uuml;ggetlens&eacute;g&eacute;re vonatkoz&oacute; garanciákat &eacute;s f&#337;bb feladatait!"],k10:[],k5:[]},
+"III/6":{m:3,c:"Gazdálkodásra vonatkoz&oacute; legfontosabb &aacute;llamh&aacute;ztart&aacute;si alapelvek",
+ k15:["Mutassa be a gazdálkodásra vonatkoz&oacute; legfontosabb &aacute;llamh&aacute;ztart&aacute;si gazdálkodási alapelveket!"],
+ k10:["10p/16. Hat&aacute;rozza meg az &aacute;llamh&aacute;ztart&aacute;si gazdálkodási alapelvek &eacute;rv&eacute;nyes&iacute;t&eacute;s&eacute;nek jogi garanciáit!"],
+ k5:["5p/7. Defini&aacute;lja a felhaszn&aacute;l&aacute;si k&ouml;t&ouml;tts&eacute;g alapelv&eacute;t!",
+     "5p/8. Fejtse ki, mit jelent a k&ouml;zbeszérz&eacute;si k&ouml;telezetts&eacute;g elve!"]},
+"III/7":{m:3,c:"K&ouml;lts&eacute;gvet&eacute;si szervek ir&aacute;ny&iacute;t&aacute;sa &eacute;s fel&uuml;gyelete",
+ k15:["V&aacute;zolja fel a k&ouml;lts&eacute;gvet&eacute;si szervek ir&aacute;ny&iacute;t&aacute;s&aacute;ra, fel&uuml;gyelet&eacute;re vonatkoz&oacute; f&#337;bb szab&aacute;lyokat!"],
+ k10:["10p/10. Hat&aacute;rozza meg a v&aacute;llalkoz&aacute;si tev&eacute;kenys&eacute;g fogalm&aacute;t; milyen szab&aacute;lyok szerint v&eacute;gezhet v&aacute;llalkoz&aacute;si tev&eacute;kenys&eacute;get a ktgvet&eacute;si szerv!",
+      "10p/11. Ismertesse az &aacute;llamh&aacute;ztart&aacute;si kontrollok rendszer&eacute;t!",
+      "10p/12. Mutassa be a korm&aacute;nyzati ellen&#337;rz&eacute;s rendszer&eacute;t; ismertesse a KEHI ellen&#337;rz&eacute;si jogk&ouml;r&eacute;t!",
+      "10p/13. Ismertesse a bels&#337; kontrollrendszer c&eacute;lj&aacute;t; a bels&#337; ellen&#337;rz&eacute;s fogalm&aacute;t &eacute;s f&uuml;ggetlens&eacute;g&eacute;t!",
+      "10p/14. Ismertesse a k&ouml;lts&eacute;gvet&eacute;si szerv alap&iacute;t&aacute;s&aacute;nak felt&eacute;teleit, alap&iacute;t&aacute;s&aacute;t, nyilv&aacute;ntart&aacute;s&aacute;t!",
+      "10p/18. Ismertesse az &ouml;nkorm&aacute;nyzatok bels&#337; ellen&#337;rz&eacute;s&eacute;re vonatkoz&oacute; f&#337;bb szab&aacute;lyokat!"],
+ k5:["5p/3. Hat&aacute;rozza meg a k&ouml;lts&eacute;gvet&eacute;si szerv fogalm&aacute;t!",
+     "5p/12. Ismertesse a teljes&iacute;t&eacute;sigazol&aacute;s l&eacute;nyeg&eacute;t!",
+     "5p/13. Ismertesse a ktgvet&eacute;si szervek nyilv&aacute;ntart&aacute;s&aacute;val kapcsolatos rendelkez&eacute;seket!",
+     "5p/14. Mutassa be a Magyar &Aacute;llamkincst&aacute;r szerepét a korm&aacute;nyzati ellen&#337;rz&eacute;si rendszerben!"]},
+"III/8":{m:3,c:"Helyi &ouml;nkorm&aacute;nyzatok bev&eacute;telei",
+ k15:["Mutassa be a helyi &ouml;nkorm&aacute;nyzatok bev&eacute;teleit!"],
+ k10:["10p/5. Csoportos&iacute;tsa a k&ouml;zhatalmi bev&eacute;teleket! Utaljon a tartalmukra &eacute;s &iacute;rjon mindk&eacute;t csoportra p&eacute;ld&aacute;t!",
+      "10p/9. Mutassa be a stabilit&aacute;si t&ouml;rv&eacute;ny &ouml;nkorm&aacute;nyzati ad&oacute;ss&aacute;got keletkeztet&#337; &uuml;gylet enged&eacute;lyez&eacute;s&eacute;re vonatkoz&oacute; szab&aacute;lyait!"],
+ k5:["5p/4. Fejtse ki, hogy az Alaptörv&eacute;ny milyen gazdálkodási jogokat biztos&iacute;t a helyi &ouml;nkorm&aacute;nyzatoknak!",
+     "5p/10. Sorolja fel a helyi &ouml;nkorm&aacute;nyzat saj&aacute;t bev&eacute;teleinek k&ouml;r&eacute;t!",
+     "5p/11. Ismertesse az &ouml;nkorm&aacute;nyzatok v&aacute;llalkoz&aacute;si szabad&aacute;g&aacute;t &eacute;s korl&aacute;tait!"]},
+"III/9":{m:3,c:"&Aacute;llamh&aacute;ztart&aacute;si kiad&aacute;sok csoportos&iacute;t&aacute;sa funkcióik szerint",
+ k15:["Csoportos&iacute;tsa az &aacute;llamh&aacute;ztart&aacute;si kiad&aacute;sokat funkcióik szerint!"],
+ k10:["10p/7. Mutassa be, melyek a k&ouml;zponti k&ouml;lts&eacute;gvet&eacute;s f&#337;bb kiad&aacute;sai!",
+      "10p/8. Mutassa be a k&ouml;zponti k&ouml;lts&eacute;gvet&eacute;si tartal&eacute;kokat!"],k5:[]},
+"IV/1":{m:4,c:"Max Weber munk&aacute;ss&aacute;ga &eacute;s b&uuml;rokr&aacute;cia-modellje",
+ k15:["Mutassa be a klasszikus vezet&eacute;si iskola k&eacute;pvisel&#337;i k&ouml;z&uuml;l Max Weber munk&aacute;ss&aacute;g&aacute;t &eacute;s jelent&#337;s&eacute;g&eacute;t a k&ouml;zigazgat&aacute;sszervez&eacute;s szempontj&aacute;ból!"],k10:[],k5:[]},
+"IV/2":{m:4,c:"Emberközpont&uacute; ir&aacute;nyzatok k&eacute;pvisel&#337;i (Mayo, Maslow, McGregor, Lewin)",
+ k15:["Sorolja fel a vezet&eacute;s- &eacute;s szervez&eacute;studom&aacute;ny emberközpont&uacute; ir&aacute;nyzatainak k&eacute;pvisel&#337;it &eacute;s mutassa be legfontosabb meg&aacute;llap&iacute;t&aacute;saikat!"],
+ k10:["10p/1. Mutassa be a v&aacute;ltoz&aacute;s szerepl&#337;it &eacute;s jellemezze azokat r&ouml;viden!"],
+ k5:["5p/8. Ismertesse a csoport fogalm&aacute;t &eacute;s a csoportfejl&#337;d&eacute;s l&eacute;p&eacute;seit!",
+     "5p/9. Ismertesse a csoport m&eacute;ret&eacute;re vonatkoz&oacute; megfontol&aacute;sokat &eacute;s a jellemz&#337; csoportszerepeket!"]},
+"IV/3":{m:4,c:"Autokratikus, laissez-faire &eacute;s demokratikus vezet&eacute;si st&iacute;lusok",
+ k15:["Mutassa be az autokratikus, a laissez-faire &eacute;s a demokratikus vezet&eacute;si st&iacute;lusokat! Milyen k&ouml;zigazgat&aacute;si szitu&aacute;ci&oacute;kban lehetnek sikeresek?"],k10:[],k5:[]},
+"IV/4":{m:4,c:"D&ouml;nt&eacute;sk&ouml;zpont&uacute; vezet&eacute;si st&iacute;lusok &ndash; Lewin vagy Likert modellje",
+ k15:["Hat&aacute;rozza meg a vezet&eacute;si st&iacute;lus fogalm&aacute;t &eacute;s ismertesse a d&ouml;nt&eacute;sk&ouml;zpont&uacute; vezet&eacute;si st&iacute;lusokat Lewin vagy Likert modellje alapj&aacute;n!"],
+ k10:["10p/6. Ismertesse, mire ad v&aacute;laszt a SWOT anal&iacute;zis &eacute;s mikor alkalmazható sikerrel!"],k5:[]},
+"IV/5":{m:4,c:"Szem&eacute;lyis&eacute;gközpont&uacute; vezet&eacute;si st&iacute;lusok; szitu&aacute;ci&oacute;nak megfelel&#337; megv&aacute;laszt&aacute;s",
+ k15:["Ismertesse a szem&eacute;lyis&eacute;gközpont&uacute; vezet&eacute;si st&iacute;lusokat &eacute;s mutasson p&eacute;ld&aacute;t a szitu&aacute;ci&oacute;nak megfelel&#337; megv&aacute;laszt&aacute;sra!"],
+ k10:[],
+ k5:["5p/4. Fogalmazza meg a strat&eacute;giai tervez&eacute;s l&eacute;nyeg&eacute;t; nevezze meg a strat&eacute;giai terv fontosabb elemeit!",
+     "5p/5. A teljes&iacute;tm&eacute;nymenedzsment konzisztens folyamatszab&aacute;lyoz&aacute;s&aacute;nak elemei?",
+     "5p/7. Mutassa be, hogy a teljes&iacute;tm&eacute;nyt milyen t&eacute;nyez&#337;k befoly&aacute;solj&aacute;k!"]},
+"IV/6":{m:4,c:"Vezet&eacute;s mint d&ouml;nt&eacute;s; d&ouml;nt&eacute;st&iacute;pusok &eacute;s deleg&aacute;l&aacute;s",
+ k15:["Mutassa be a vezet&eacute;s mint d&ouml;nt&eacute;s perspektív&aacute;j&aacute;t! T&eacute;rjen ki a d&ouml;nt&eacute;sek t&iacute;pusaira &eacute;s a deleg&aacute;l&aacute;sra!"],k10:[],k5:[]},
+"IV/7":{m:4,c:"N&eacute;gy vezet&eacute;si funkció egy k&ouml;zigazgat&aacute;si munkak&ouml;rben",
+ k15:["Egy tetszőleges k&ouml;zigazgat&aacute;si munkak&ouml;r eset&eacute;ben jellemezze a munkak&ouml;r tartalm&aacute;t a n&eacute;gy vezet&eacute;si funkció ment&eacute;n!"],
+ k10:["10p/2. Ismertesse az &uuml;gymenetvizsgl&aacute;lat men&eacute;t&eacute;t!"],k5:[]},
+"IV/8":{m:4,c:"Ellen&#337;rz&eacute;si tev&eacute;kenys&eacute;g; az ellen&#337;rz&eacute;s t&aacute;rgya &eacute;s t&iacute;pusai",
+ k15:["Mutassa be a vezet&eacute;si funkciók k&ouml;z&uuml;l az ellen&#337;rz&eacute;si tev&eacute;kenys&eacute;get, k&uuml;l&ouml;n kit&eacute;rve az ellen&#337;rz&eacute;s t&aacute;rgy&aacute;ra &eacute;s t&iacute;pusaira!"],k10:[],k5:[]},
+"IV/9":{m:4,c:"Vezet&eacute;s mint koordin&aacute;ció; koordin&aacute;ci&oacute;s eszk&ouml;z&ouml;k",
+ k15:["Ismertesse a vezet&eacute;s mint koordin&aacute;ció perspektív&aacute;j&aacute;t! Nevezze meg &eacute;s jellemezze a koordin&aacute;ci&oacute;s eszk&ouml;z&ouml;ket!"],
+ k10:["10p/10. Hat&aacute;rozza meg, hogy mely t&eacute;nyez&#337;k &eacute;rv&eacute;nyre juttat&aacute;s&aacute;t&oacute;l v&aacute;lik az emberierőforr&aacute;s-gazdálkodás strat&eacute;giai alapúvá!"],
+ k5:["5p/6. Mutassa be r&eacute;szletesen a kompenz&aacute;ció &eacute;s a javadalmaz&aacute;s fogalm&aacute;t!"]},
+"IV/10":{m:4,c:"E-k&ouml;zigazgat&aacute;si szolg&aacute;ltat&aacute;sok szintjei; k&eacute;t hazai p&eacute;lda",
+ k15:["Mutassa be az e-k&ouml;zigazgat&aacute;si szolg&aacute;ltat&aacute;sok szintjeit &eacute;s soroljon be k&eacute;t hazai szolg&aacute;ltat&aacute;st a modell seg&iacute;ts&eacute;g&eacute;vel!"],
+ k10:["10p/3. Sorolja fel az e-szolg&aacute;ltat&aacute;sok &ouml;t szintj&eacute;t &eacute;s jellemezze azokat r&ouml;viden!",
+      "10p/4. Mutassa be az elektronikus k&ouml;zigazgat&aacute;s el&#337;nyeit &eacute;s h&aacute;tr&aacute;nyait!",
+      "10p/5. Hat&aacute;rozza meg r&ouml;viden az e-korm&aacute;nyzat fogalm&aacute;t, f&#337;bb &ouml;sszet&eacute;v&#337;it; nevezzen meg legal&aacute;bb 3 el&#337;ny&eacute;t!"],k5:[]},
+"IV/11":{m:4,c:"Projekt fogalma, szakaszai, projektciklus l&eacute;p&eacute;sei",
+ k15:["Hat&aacute;rozza meg a projekt fogalm&aacute;t, szakaszait &eacute;s a projektciklus egyes l&eacute;p&eacute;seit!"],
+ k10:[],
+ k5:["5p/1. Hat&aacute;rozza meg a projektmenedzsment logikai keretm&aacute;trix (LFA) fogalm&aacute;t!"]},
+"IV/12":{m:4,c:"Szervezeti v&aacute;ltoz&aacute;s fogalma; a v&aacute;ltoz&aacute;s fogadtat&aacute;s&aacute;nak esetei",
+ k15:["Hat&aacute;rozza meg a szervezeti v&aacute;ltoz&aacute;s fogalm&aacute;t! Mutassa be, hogyan fogadhatj&aacute;k a szervezet tagjai a v&aacute;ltoz&aacute;sokat!"],k10:[],k5:[]},
+"IV/13":{m:4,c:"Munkanap-f&eacute;nyk&eacute;pez&eacute;s menete",
+ k15:["Mutassa be a munkanap-f&eacute;nyk&eacute;pez&eacute;s men&eacute;t&eacute;t!"],k10:[],k5:[]},
+"IV/14":{m:4,c:"Csoportokkal kapcsolatos k&eacute;rd&eacute;sek",
+ k15:["V&aacute;laszolja meg r&ouml;viden a csoportokkal kapcsolatos k&eacute;rd&eacute;seket!"],
+ k10:[],
+ k5:["5p/2. Hat&aacute;rozza meg a min&#337;s&eacute;gmenedzsment &ouml;n&eacute;rt&eacute;kel&eacute;si modelljeinek fogalm&aacute;t; nevezzen meg k&eacute;t konkr&eacute;t modellt!",
+     "5p/3. Foglalja &ouml;ssze a kollekt&iacute;v szellemi alkotót&eacute;chnk&aacute;k l&eacute;nyeg&eacute;t; nevezzen meg k&eacute;t m&oacute;dszert!"]},
+"IV/15":{m:4,c:"Brainstorming m&oacute;dszere, menete, el&#337;ny&ouml;k &eacute;s h&aacute;tr&aacute;nyok",
+ k15:["Ismertesse a brainstorming m&oacute;dszer&eacute;t &eacute;s ment&eacute;t, valamint a m&oacute;dszer alkalmaz&aacute;s&aacute;nak el&#337;nyeit &eacute;s h&aacute;tr&aacute;nyait!"],k10:[],k5:[]},
+"IV/16":{m:4,c:"Nom&iacute;n&aacute;l csoportok m&oacute;dszer; l&eacute;nyeg, el&#337;ny&ouml;k &eacute;s h&aacute;tr&aacute;nyok",
+ k15:["Mutassa be a nom&iacute;n&aacute;l csoportok m&oacute;dszer l&eacute;nyeg&eacute;t, valamint ismertesse el&#337;nyeit &eacute;s h&aacute;tr&aacute;nyait!"],k10:[],k5:[]},
+"IV/17":{m:4,c:"K&ouml;zigazgat&aacute;si l&eacute;tsz&aacute;mgazd&aacute;lkod&aacute;s &eacute;s kiv&aacute;laszt&aacute;s f&#337;bb eszk&ouml;zei",
+ k15:["Mutassa be a k&ouml;zigazgat&aacute;si l&eacute;tsz&aacute;mgazd&aacute;lkod&aacute;s &eacute;s kiv&aacute;laszt&aacute;s f&#337;bb eszk&ouml;zeit!"],
+ k10:["10p/7. Mutassa be &eacute;s jellemezze az interj&uacute;k&eacute;sz&iacute;t&eacute;s szakaszait!",
+      "10p/17. A Kit. k&ouml;t&ouml;tt &aacute;ll&aacute;shely-alap&uacute; l&eacute;tsz&aacute;mgazd&aacute;lkod&aacute;sa &ndash; &aacute;ll&aacute;shely fogalma, t&iacute;pusai!",
+      "10p/18. Mutassa be, hogyan folytatja le a szem&eacute;ly&uuml;gyi k&ouml;zpont a p&aacute;ly&aacute;zati elj&aacute;r&aacute;st!"],
+ k5:["5p/10. A szem&eacute;ly&uuml;gyi k&ouml;zpont milyen kompetenciafelmér&eacute;seket v&eacute;gezhet?",
+     "5p/11. Milyen el&#337;ny&ouml;kkel j&aacute;r a Magyar K&ouml;zigazgat&aacute;si &Ouml;szt&ouml;nd&iacute;j programban val&oacute; r&eacute;szv&eacute;tel?",
+     "5p/12. Melyek a Kit. szerinti &aacute;ltal&aacute;nos kineveyz&eacute;si felt&eacute;telek?",
+     "5p/13. Melyek az &aacute;ll&aacute;shely bet&ouml;lt&eacute;s&eacute;nek szakmai felt&eacute;telei?"]},
+"IV/18":{m:4,c:"Emberi er&#337;forr&aacute;s-&aacute;raml&aacute;s n&eacute;gy alapmodellje",
+ k15:["Mutassa be r&eacute;szletesen az emberi er&#337;forr&aacute;s-&aacute;raml&aacute;s n&eacute;gy alapmodelljét!"],
+ k10:["10p/11. Mutassa be a munkak&ouml;ralapú (ny&iacute;lt) rendszermegold&aacute;st!",
+      "10p/12. Mutassa be a karri&eacute;ralapú (z&aacute;rt) rendszermegold&aacute;st + hazai saj&aacute;toss&aacute;gok!",
+      "10p/13. Mutassa be a kompetenciaalapú munkav&eacute;gz&eacute;si rendszermegold&aacute;st!"],
+ k5:["5p/8. Az emberierőforr&aacute;s-gazdálkodás fejl&#337;d&eacute;st&ouml;rt&eacute;neti 5 szakasza (id&#337;szakokkal)!"]},
+"IV/19":{m:4,c:"K&ouml;zszolg&aacute;lati &eacute;letpalya-menedzsment eszk&ouml;zei",
+ k15:["Ismertesse, hogy a k&ouml;zszolg&aacute;lati &eacute;letpalya-menedzsmentnek milyen eszk&ouml;zei vannak a munkaer&#337;hi&aacute;ny, illetve a munkaer&#337;t&ouml;bblet kezel&eacute;s&eacute;re!"],
+ k10:["10p/14. Mutassa be a k&ouml;zszolg&aacute;latból való tervez&eacute;si ki&aacute;raml&aacute;s jogi eszk&ouml;zt&aacute;r&aacute;t!",
+      "10p/15. A felment&eacute;si v&eacute;delem k&eacute;t fajt&aacute;ja a Kit. alapj&aacute;n; mikor &eacute;lnek?",
+      "10p/16. Mutassa be a munkav&eacute;gz&eacute;shez k&ouml;t&#337;d&#337; (on-the-job) fejleszt&eacute;seket!",
+      "10p/19. Mutassa be a t&aacute;vmunka &eacute;s az otthoni munkav&eacute;gz&eacute;s fogalm&aacute;t, jellemz&#337;it, elrendel&eacute;s&uuml;k felt&eacute;teleit!",
+      "10p/20. Milyen felment&eacute;si okok tartoznak a munkáltatói m&eacute;rlegel&eacute;s k&ouml;r&eacute;be?"],
+ k5:["5p/9. Kinevez&eacute;s-m&oacute;dos&iacute;t&aacute;s esetei, amikor a korm&aacute;nytisztvisel&#337; felment&eacute;st k&eacute;rhet?",
+     "5p/14. Ismertesse a Kit. felment&eacute;si id&#337;re vonatkoz&oacute; szab&aacute;lyait!"]},
+"V/1":{m:5,c:"Lisszaboni Szerz&#337;d&eacute;s elfogad&aacute;s&aacute;nak okai &eacute;s v&aacute;ltoz&aacute;sai",
+ k15:["Mutassa be a Lisszaboni Szerz&#337;d&eacute;s elfogad&aacute;s&aacute;nak okait &eacute;s az &aacute;ltala hozott v&aacute;ltoz&aacute;sokat!"],
+ k10:["10p/1. Mutassa be az \"&uuml;res sz&eacute;kek politik&aacute;j&aacute;t\" &eacute;s az azt lez&aacute;r&oacute; luxemburgi kompromisszumot!",
+      "10p/2. Mutassa be, mi a korm&aacute;nyk&ouml;ziség &eacute;s a szupranacionalismus!",
+      "10p/3. Mutassa be a R&oacute;mai Szerz&#337;d&eacute;sek al&aacute;&iacute;r&aacute;s&aacute;nak okait &eacute;s eredm&eacute;nyeit!",
+      "10p/4. Mutassa be a bels&#337; piac Feh&eacute;r K&ouml;nyv&eacute;t &eacute;s az Egys&eacute;ges Eur&oacute;pai Okm&aacute;nyt!",
+      "10p/5. Mutassa be az EU aktu&aacute;lis v&aacute;ls&aacute;gter&uuml;leteit!",
+      "10p/19. Ismertesse a szerz&#337;d&eacute;sek fel&uuml;lvizsg&aacute;lati elj&aacute;r&aacute;sainak legfontosabb t&iacute;pusait!"],
+ k5:["5p/2. Mutassa be az 1973-as (&eacute;szaki) b&#337;v&iacute;t&eacute;si k&ouml;rt!",
+     "5p/3. Mutassa be r&ouml;viden a mediterr&aacute;n b&#337;v&iacute;t&eacute;si k&ouml;rt (1981, 1986)!",
+     "5p/4. Mutassa be az EU 1995-&ouml;s b&#337;v&iacute;t&eacute;si k&ouml;r&eacute;t!",
+     "5p/28. Mit jelent a \"Big Bang\" b&#337;v&iacute;t&eacute;s (2004)?"]},
+"V/2":{m:5,c:"Uni&oacute;s jog els&#337;dleges forr&aacute;sai &eacute;s jellemz&#337;i",
+ k15:["Mutassa be az uni&oacute;s jog els&#337;dleges forr&aacute;sait, ismertesse jellemz&#337;it!"],
+ k10:["10p/6. Ismertesse az uni&oacute;s jog m&aacute;sodlagos forr&aacute;sainak rendszer&eacute;t!",
+      "10p/7. Ismertesse az uni&oacute;s jog &eacute;s a tag&aacute;llami bels&#337; jogrendszerek viszony&aacute;t!",
+      "10p/8. Mutassa be az uni&oacute;s jog &eacute;s a nemzetk&ouml;zi jog viszony&aacute;t!"],
+ k5:["5p/5. Ismertesse az uni&oacute;s acquis fogalm&aacute;t!",
+     "5p/6. Ismertesse az uni&oacute;s jogharmoniz&aacute;ció fogalm&aacute;t &eacute;s c&eacute;lkit&#369;z&eacute;s&eacute;t!",
+     "5p/33. Mutassa be az EU jogi szem&eacute;lyis&eacute;g&eacute;t!"]},
+"V/3":{m:5,c:"Uni&oacute;s alapjogv&eacute;delem indokolts&aacute;ga, kialakul&aacute;sa &eacute;s elemei",
+ k15:["Ismertesse az uni&oacute;s alapjogv&eacute;delem indokoltságát, az alapjogv&eacute;delmi rendszer kialakul&aacute;s&aacute;t &eacute;s elemeit!"],
+ k10:["10p/10. Ismertesse az EU Alapjogi Charta jogi term&eacute;szet&eacute;t, strukt&uacute;r&aacute;j&aacute;t &eacute;s alkalmaz&aacute;si k&ouml;r&eacute;t!",
+      "10p/11. Ismertesse az EU &eacute;s az Emberi Jogok Eur&oacute;pai Egyezm&eacute;nye kapcsolatrendszer&eacute;t!"],
+ k5:["5p/1. Ismertesse a koppenhágai krit&eacute;riumokat!",
+     "5p/8. Ismertesse az EUSZ 7. cikke szerinti elj&aacute;r&aacute;st az &eacute;rt&eacute;keket s&eacute;rt&#337; tag&aacute;llamokkal szemben!"]},
+"V/4":{m:5,c:"Az EU int&eacute;zm&eacute;nyei &eacute;s funkcióik; korm&aacute;nyk&ouml;ziség vs. szupranacionalismus",
+ k15:["Ismertesse az EU int&eacute;zm&eacute;nyeit &eacute;s funkcióikat! Mutassa be, hogy az egyes int&eacute;zm&eacute;nyek ink&aacute;bb a korm&aacute;nyk&ouml;ziség vagy a szupranacionalismus jegyeit viselik!"],
+ k10:["10p/9. Ismertesse az EU demokratikus m&#369;k&ouml;d&eacute;s&eacute;nek alapelveit!",
+      "10p/12. Hasonl&iacute;tsa &ouml;ssze az Eur&oacute;pai Tan&aacute;cs &eacute;s a Tan&aacute;cs szervezeti fel&eacute;p&iacute;t&eacute;s&eacute;t &eacute;s funkcióit!",
+      "10p/14. Ismertesse az Eur&oacute;pai Parlament politikai elszámoltathatósági jogos&iacute;tv&aacute;nyait!",
+      "10p/15. Ismertesse az EU B&iacute;r&oacute;s&aacute;g&aacute;nak szerepét; szervezeti fel&eacute;p&iacute;t&eacute;se, b&iacute;r&aacute;k kiv&aacute;laszt&aacute;sa!",
+      "10p/16. Mutassa be az EU B&iacute;r&oacute;s&aacute;g&aacute;nak elj&aacute;r&aacute;st&iacute;pusait; r&eacute;szletezze az el&#337;zetes d&ouml;nt&eacute;shozatalt!",
+      "10p/17. Hasonl&iacute;tsa &ouml;ssze a Gazdas&aacute;gi &eacute;s Szoic&aacute;lis Bizotts&aacute;got &eacute;s a R&eacute;giók Bizotts&aacute;g&aacute;t!",
+      "10p/18. Mutassa be az EU &Uuml;gyn&ouml;ks&eacute;geinek defin&iacute;ci&oacute;j&aacute;t, t&iacute;pusait &eacute;s funkcióit!"],
+ k5:["5p/9. Mutassa be az Eur&oacute;pai Bizotts&aacute;g szerepét az Uni&oacute; k&uuml;lkapcsolatainak alak&iacute;t&aacute;s&aacute;ban!",
+     "5p/10. Ismertesse az Eur&oacute;pai Bizotts&aacute;g szerepét \"Szerz&#337;d&eacute;sek &ouml;reként\" &eacute;s \"integr&aacute;ció motorjaként\"!",
+     "5p/14. Jellemezze r&ouml;viden az Eur&oacute;pai Bizotts&aacute;g deleg&aacute;lt d&ouml;nt&eacute;shozatali szerepk&ouml;r&eacute;t!",
+     "5p/15. Mutassa be r&ouml;viden az int&eacute;zm&eacute;nyi d&ouml;nt&eacute;shozatalt az Eur&oacute;pai Tan&aacute;csban, Tan&aacute;csban, EP-ben &eacute;s Bizotts&aacute;gban!"]},
+"V/5":{m:5,c:"Uni&oacute;s jogalkot&aacute;s folyamata; tag&aacute;llami parlamentek szerepe",
+ k15:["Ismertesse az uni&oacute;s jogalkot&aacute;s folyamat&aacute;t, valamint az uni&oacute;s int&eacute;zm&eacute;nyek &eacute;s tag&aacute;llami parlamentek szerepét!"],
+ k10:[],
+ k5:["5p/7. Ismertesse az uni&oacute;s polg&aacute;ri kezdem&eacute;nyez&eacute;s int&eacute;zm&eacute;ny&eacute;t!",
+     "5p/11. V&aacute;zolja fel r&ouml;viden a pet&iacute;ci&oacute;s jog gyakorl&aacute;s&aacute;nak felt&eacute;teleit!",
+     "5p/27. Mutassa be a tag&aacute;llami parlamentek \"s&aacute;rgalapos elj&aacute;r&aacute;s&aacute;t\" &eacute;s a magyar &eacute;rintetts&eacute;g&#369; elj&aacute;r&aacute;sokat!"]},
+"V/6":{m:5,c:"Uni&oacute;s t&ouml;bbéves p&eacute;nz&uuml;gyi keret fogalma, jelent&#337;sége, megvalósulása",
+ k15:["Ismertesse az uni&oacute;s t&ouml;bb&eacute;ves p&eacute;nz&uuml;gyi keret fogalm&aacute;t, jelent&#337;s&eacute;g&eacute;t &eacute;s gyakorlati megval&oacute;sul&aacute;s&aacute;t!"],
+ k10:["10p/20. Ismertesse az EU k&ouml;lts&eacute;gvet&eacute;si &eacute;s p&eacute;nz&uuml;gyi alapelveit!",
+      "10p/21. Ismertesse az uni&oacute;s k&ouml;zp&eacute;nz&uuml;gyi ellen&#337;rz&eacute;s int&eacute;zm&eacute;nyrendszer&eacute;t &eacute;s elj&aacute;r&aacute;sait!",
+      "10p/26. Ismertesse a monet&aacute;ris politika \"koncentrikus k&ouml;reit\"; eur&oacute; bevezet&eacute;si k&ouml;telezetts&eacute;g; t&uacute;lzott deficit!",
+      "10p/27. Ismertesse a tag&aacute;llami gazdas&aacute;gpolitik&aacute;k uni&oacute;s koordin&aacute;ci&oacute;j&aacute;nak c&eacute;ljait &eacute;s eszk&ouml;zeit!"],
+ k5:["5p/12. Ismertesse r&ouml;viden az EKB feladat- &eacute;s hat&aacute;sk&ouml;reit!",
+     "5p/16. Ismertesse a k&ouml;zp&eacute;nz&uuml;gyek fenntarthat&oacute;s&aacute;g&aacute;nak &eacute;s &aacute;tl&aacute;that&oacute;s&aacute;g&aacute;nak fogalmait!",
+     "5p/17. Ismertesse az EU saj&aacute;t forr&aacute;sait!",
+     "5p/19. Ismertesse r&ouml;viden a gazdas&aacute;gi integr&aacute;ció fokozatait!"]},
+"V/7":{m:5,c:"Hat&aacute;sk&ouml;r-&aacute;truh&aacute;z&aacute;s elve; uni&oacute;s hat&aacute;sk&ouml;r&ouml;k rendszere",
+ k15:["Ismertesse a hat&aacute;sk&ouml;r-&aacute;truh&aacute;z&aacute;s elv&eacute;t &eacute;s az uni&oacute;s hat&aacute;sk&ouml;r&ouml;k rendszer&eacute;t!"],
+ k10:["10p/23. Ismertesse az EU bels&#337; &eacute;s k&uuml;ls&#337; hat&aacute;sk&ouml;r&ouml;k kapcsolat&aacute;t; EUMSZ 352. cikk; bele&eacute;rtett hat&aacute;sk&ouml;r&ouml;k!"],
+ k5:["5p/18. Ismertesse a szubszidiarit&aacute;s &eacute;s ar&aacute;nyoss&aacute;g elv&eacute;t az uni&oacute;s d&ouml;nt&eacute;shozatalban!",
+     "5p/21. Mutassa be, milyen hat&aacute;sk&ouml;r&ouml;kkel rendelkezik az EU az adóz&aacute;s ter&uuml;let&eacute;n!"]},
+"V/8":{m:5,c:"EU region&aacute;lis politik&aacute;k rendszere",
+ k15:["Mutassa be az EU region&aacute;lis politik&aacute;inak rendszer&eacute;t!"],
+ k10:["10p/22. Ismertesse az EUMSZ k&ouml;zbeszérz&eacute;si szab&aacute;lyait; ir&aacute;nyelvek &eacute;s hazai szabályoz&aacute;s!",
+      "10p/24. Mutassa be a k&ouml;z&ouml;s agr&aacute;rpolitika reformfolyamat&aacute;t!"],
+ k5:["5p/22. Ismertesse a transzeur&oacute;pai h&aacute;l&oacute;zatok h&aacute;rom szektro&aacute;t &eacute;s sz&uuml;ks&eacute;gess&eacute;g&uuml;ket!",
+     "5p/23. Ismertesse az EU kezdem&eacute;nyez&eacute;seit oktat&aacute;s, szakk&eacute;pz&eacute;s, ifj&uacute;s&aacute;g &eacute;s sport ter&uuml;let&eacute;n!"]},
+"V/9":{m:5,c:"EU k&ouml;z&ouml;s k&uuml;l- &eacute;s biztons&aacute;gpolitika (KKBP)",
+ k15:["Ismertesse az EU k&ouml;z&ouml;s k&uuml;l- &eacute;s biztons&aacute;gpolitik&aacute;j&aacute;t!"],
+ k10:["10p/25. Ismertesse a szabads&aacute;gon, biztons&aacute;gon &eacute;s jog &eacute;rv&eacute;nyes&uuml;l&eacute;s&eacute;n alapul&oacute; t&eacute;rs&eacute;get!",
+      "10p/29. Ismertesse az EU2020 strat&eacute;gia energiapolitikai elk&eacute;pzel&eacute;seit!",
+      "10p/30. Ismertesse az EU k&ouml;rnyezetv&eacute;delmi politikájának c&eacute;lkit&#369;z&eacute;seit, alapelveit &eacute;s eszk&ouml;zeit!",
+      "10p/31. Ismertesse az EU k&ouml;z&ouml;s kereskedelempolitik&aacute;j&aacute;t a Lisszaboni Szerz&#337;d&eacute;s ut&aacute;n!",
+      "10p/32. Ismertesse a nemzetk&ouml;zi fejleszt&eacute;si együtm&#369;k&ouml;d&eacute;s jelent&#337;s&eacute;g&eacute;t!"],
+ k5:["5p/20. Mit jelent a kabotázs tilalm&aacute;nak elt&ouml;rl&eacute;se?",
+     "5p/24. Ismertesse az EU polg&aacute;ri v&eacute;delmi mechanizmus&aacute;t!",
+     "5p/25. Milyen esetekben k&ouml;thet az EU nemzetk&ouml;zi meg&aacute;llapod&aacute;sokat?",
+     "5p/26. Mutassa be az EU humanit&aacute;rius seg&iacute;ts&eacute;gnyjt&aacute;ssal &ouml;sszef&uuml;gg&#337; tev&eacute;kenys&eacute;g&eacute;t!",
+     "5p/28. Ismertesse az EU fogyaszt&oacute;v&eacute;delmi jogalkot&aacute;s&aacute;nak f&#337;bb jellemz&#337;it &eacute;s ter&uuml;leteit!"]},
+"V/10":{m:5,c:"Uni&oacute;s &eacute;s a magyar k&ouml;zigazgat&aacute;s kapcsolata",
+ k15:["Mutassa be az uni&oacute;s &eacute;s a magyar k&ouml;zigazgat&aacute;s kapcsolat&aacute;t!"],
+ k10:["10p/34. Mutassa be Magyarorsz&aacute;g &eacute;s az EU kapcsolat&aacute;t az 1960-as &eacute;vekt&#337;l a csatlakoz&aacute;sig!",
+      "10p/35. Mutassa be az Eur&oacute;pai Koordin&aacute;ci&oacute;s T&aacute;rcak&ouml;zi Bizotts&aacute;g strukt&uacute;r&aacute;j&aacute;t &eacute;s feladatait!",
+      "10p/36. Mutassa be a Bizotts&aacute;g magyar tagjainak poz&iacute;ci&oacute;j&aacute;t a csatlakoz&aacute;st&oacute;l napjainkig!",
+      "10p/37. Ismertesse a tag&aacute;llami parlamentek szerepmodellj&eacute;it; az Ogy szerepe a magyar Eur&oacute;pa-politik&aacute;ban!"],
+ k5:["5p/34. Mutassa be Magyarorsz&aacute;g &eacute;s az EK/EU kapcsolat&aacute;t az 1960-as &eacute;vekt&#337;l a csatlakoz&aacute;sig!"]}
+};
+
+var NAPOK=[
+ {h:1,d:"j&uacute;n. 1. (H)",m:1,t:["I/1"],tip:"tanulas"},
+ {h:1,d:"j&uacute;n. 2. (K)",m:1,t:["I/2"],tip:"tanulas"},
+ {h:1,d:"j&uacute;n. 3. (Sze)",m:1,t:["I/3","I/4","I/5"],tip:"tanulas"},
+ {h:1,d:"j&uacute;n. 4. (Cs)",m:1,t:["I/6","I/7","I/8"],tip:"tanulas"},
+ {h:1,d:"j&uacute;n. 5. (P)",m:1,t:["I/9","I/10","I/11"],tip:"tanulas"},
+ {h:1,d:"j&uacute;n. 6. (Szo)",m:1,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; 1. h&eacute;t anyaga (v&aacute;zlatok alap&aacute;n visszak&eacute;rdez&eacute;s)"},
+ {h:2,d:"j&uacute;n. 8. (H)",m:1,t:["I/12","I/13"],tip:"tanulas"},
+ {h:2,d:"j&uacute;n. 9. (K)",m:1,t:["I/14"],tip:"tanulas"},
+ {h:2,d:"j&uacute;n. 10. (Sze)",m:1,t:["I/15","I/16"],tip:"tanulas"},
+ {h:2,d:"j&uacute;n. 11. (Cs)",m:1,t:[],tip:"vazlat",tema:"I. modul: v&aacute;zlatok meg&iacute;r&aacute;sa &ndash; &ouml;sszes t&eacute;tel &aacute;ttekint&eacute;se"},
+ {h:2,d:"j&uacute;n. 12. (P)",m:1,t:["I/1","I/2","I/3","I/4","I/5","I/6","I/7","I/8"],tip:"onellenorzes",tema:"I. modul: hangos &ouml;nellenőrz&eacute;s T1&ndash;T8"},
+ {h:2,d:"j&uacute;n. 13. (Szo)",m:1,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; 2. h&eacute;t + 1. h&eacute;t leggyeng&eacute;bb t&eacute;telei"},
+ {h:3,d:"j&uacute;n. 15. (H)",m:1,t:["I/9","I/10","I/11","I/12","I/13","I/14","I/15","I/16"],tip:"onellenorzes",tema:"I. modul: hangos &ouml;nellenőrz&eacute;s T9&ndash;T16"},
+ {h:3,d:"j&uacute;n. 16. (K)",m:1,t:[],tip:"vazlat",tema:"I. modul: 10p k&eacute;rd&eacute;sek &ouml;sszefoglal&aacute;sa (v&aacute;zlatb&oacute;l)"},
+ {h:3,d:"j&uacute;n. 17. (Sze)",m:1,t:[],tip:"vazlat",tema:"I. modul: 5p k&eacute;rd&eacute;sek begyakorl&aacute;sa"},
+ {h:3,d:"j&uacute;n. 18. (Cs)",m:1,t:[],tip:"potlas",tema:"I. modul: gyenge pontok p&oacute;tl&aacute;sa"},
+ {h:3,d:"j&uacute;n. 19. (P)",m:1,t:[],tip:"onellenorzes",tema:"I. modul TELJES &ouml;nellenőrz&eacute;s &ndash; fejb&#337;l minden t&eacute;tel"},
+ {h:3,d:"j&uacute;n. 20. (Szo)",m:1,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; I. modul &ouml;sszes t&eacute;tele v&aacute;zlatok alap&aacute;n"},
+ {h:4,d:"j&uacute;n. 22. (H)",m:2,t:["II/1","II/2"],tip:"tanulas"},
+ {h:4,d:"j&uacute;n. 23. (K)",m:2,t:["II/3","II/4"],tip:"tanulas"},
+ {h:4,d:"j&uacute;n. 24. (Sze)",m:2,t:["II/5","II/6"],tip:"tanulas"},
+ {h:4,d:"j&uacute;n. 25. (Cs)",m:2,t:["II/7","II/8"],tip:"tanulas"},
+ {h:4,d:"j&uacute;n. 26. (P)",m:2,t:["II/9"],tip:"tanulas"},
+ {h:4,d:"j&uacute;n. 27. (Szo)",m:2,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; 4. h&eacute;t + 1-2 I.modulos t&eacute;tel felid&eacute;z&eacute;se"},
+ {h:5,d:"j&uacute;n. 29. (H)",m:2,t:["II/10"],tip:"tanulas"},
+ {h:5,d:"j&uacute;n. 30. (K)",m:2,t:["II/11"],tip:"tanulas"},
+ {h:5,d:"j&uacute;l. 1. (Sze)",m:2,t:["II/12"],tip:"tanulas"},
+ {h:5,d:"j&uacute;l. 2. (Cs)",m:2,t:[],tip:"vazlat",tema:"II. modul: v&aacute;zlatok meg&iacute;r&aacute;sa + neh&eacute;z t&eacute;telek m&eacute;ly&iacute;t&eacute;se"},
+ {h:5,d:"j&uacute;l. 3. (P)",m:2,t:["II/1","II/2","II/3","II/4","II/5","II/6"],tip:"onellenorzes",tema:"II. modul: hangos &ouml;nellenőrz&eacute;s T1&ndash;T6"},
+ {h:5,d:"j&uacute;l. 4. (Szo)",m:2,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; 5. h&eacute;t + 1 I.modulos t&eacute;tel"},
+ {h:6,d:"j&uacute;l. 6. (H)",m:2,t:["II/7","II/8","II/9","II/10","II/11","II/12"],tip:"onellenorzes",tema:"II. modul: hangos &ouml;nellenőrz&eacute;s T7&ndash;T12"},
+ {h:6,d:"j&uacute;l. 7. (K)",m:2,t:[],tip:"vazlat",tema:"II. modul: 10p k&eacute;rd&eacute;sek &ouml;sszefoglal&aacute;sa"},
+ {h:6,d:"j&uacute;l. 8. (Sze)",m:2,t:[],tip:"vazlat",tema:"II. modul: 5p k&eacute;rd&eacute;sek begyakorl&aacute;sa"},
+ {h:6,d:"j&uacute;l. 9. (Cs)",m:2,t:[],tip:"potlas",tema:"II. modul: gyenge pontok p&oacute;tl&aacute;sa"},
+ {h:6,d:"j&uacute;l. 10. (P)",m:2,t:[],tip:"onellenorzes",tema:"II. modul TELJES &ouml;nellenőrz&eacute;s"},
+ {h:6,d:"j&uacute;l. 11. (Szo)",m:2,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; I.+II. modul keresztism&eacute;tl&eacute;s"},
+ {h:7,d:"j&uacute;l. 13. (H)",m:3,t:["III/1","III/2"],tip:"tanulas"},
+ {h:7,d:"j&uacute;l. 14. (K)",m:3,t:["III/3"],tip:"tanulas"},
+ {h:7,d:"j&uacute;l. 15. (Sze)",m:3,t:["III/4","III/5"],tip:"tanulas"},
+ {h:7,d:"j&uacute;l. 16. (Cs)",m:3,t:["III/6","III/7"],tip:"tanulas"},
+ {h:7,d:"j&uacute;l. 17. (P)",m:3,t:["III/8","III/9"],tip:"tanulas"},
+ {h:7,d:"j&uacute;l. 18. (Szo)",m:3,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; 7. h&eacute;t + 1 kor&aacute;bbi modul t&eacute;tele"},
+ {h:8,d:"j&uacute;l. 20. (H)",m:3,t:[],tip:"vazlat",tema:"III. modul: v&aacute;zlatok meg&iacute;r&aacute;sa + neh&eacute;z t&eacute;m&aacute;k"},
+ {h:8,d:"j&uacute;l. 21. (K)",m:3,t:["III/1","III/2","III/3","III/4","III/5"],tip:"onellenorzes",tema:"III. modul: hangos &ouml;nellenőrz&eacute;s T1&ndash;T5"},
+ {h:8,d:"j&uacute;l. 22. (Sze)",m:3,t:["III/6","III/7","III/8","III/9"],tip:"onellenorzes",tema:"III. modul: hangos &ouml;nellenőrz&eacute;s T6&ndash;T9"},
+ {h:8,d:"j&uacute;l. 23. (Cs)",m:3,t:[],tip:"vazlat",tema:"III. modul: 10p &eacute;s 5p k&eacute;rd&eacute;sek begyakorl&aacute;sa"},
+ {h:8,d:"j&uacute;l. 24. (P)",m:3,t:[],tip:"onellenorzes",tema:"III. modul TELJES &ouml;nellenőrz&eacute;s"},
+ {h:8,d:"j&uacute;l. 25. (Szo)",m:3,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; I.+II.+III. modul &ouml;sszefoglal&aacute;s"},
+ {h:9,d:"j&uacute;l. 27. (H)",m:3,t:["I/2","I/14"],tip:"potlas",tema:"I. modul legnehez. t&eacute;telek &uacute;jra (T2, T14)"},
+ {h:9,d:"j&uacute;l. 28. (K)",m:3,t:["II/12"],tip:"potlas",tema:"II. modul legnehez. t&eacute;tel &uacute;jra (T12 jogorvoslat)"},
+ {h:9,d:"j&uacute;l. 29. (Sze)",m:3,t:["III/3","III/7"],tip:"potlas",tema:"III. modul legnehez. t&eacute;telek &uacute;jra (T3, T7)"},
+ {h:9,d:"j&uacute;l. 30. (Cs)",m:3,t:[],tip:"onellenorzes",tema:"I&ndash;III. modul keresztellenőrz&eacute;s &ndash; fejb&#337;l"},
+ {h:9,d:"aug. 1. (P)",m:3,t:[],tip:"potlas",tema:"&Ouml;sszefoglal&oacute; v&aacute;zlatok ellen&#337;rz&eacute;se, hi&aacute;nyok p&oacute;tl&aacute;sa"},
+ {h:9,d:"aug. 2. (Szo)",m:3,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; gyenge pontok c&eacute;lzott ism&eacute;tl&eacute;se"},
+ {h:10,d:"aug. 3. (H)",m:4,t:["IV/1"],tip:"tanulas"},
+ {h:10,d:"aug. 4. (K)",m:4,t:["IV/2"],tip:"tanulas"},
+ {h:10,d:"aug. 5. (Sze)",m:4,t:["IV/3","IV/4"],tip:"tanulas"},
+ {h:10,d:"aug. 6. (Cs)",m:4,t:["IV/5","IV/6"],tip:"tanulas"},
+ {h:10,d:"aug. 7. (P)",m:4,t:["IV/7","IV/8"],tip:"tanulas"},
+ {h:10,d:"aug. 8. (Szo)",m:4,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; 10. h&eacute;t anyaga + 1 kor&aacute;bbi t&eacute;tel"},
+ {h:11,d:"aug. 10. (H)",m:4,t:["IV/9","IV/10"],tip:"tanulas"},
+ {h:11,d:"aug. 11. (K)",m:4,t:["IV/11","IV/12"],tip:"tanulas"},
+ {h:11,d:"aug. 12. (Sze)",m:4,t:["IV/13","IV/14","IV/15","IV/16"],tip:"tanulas"},
+ {h:11,d:"aug. 13. (Cs)",m:4,t:["IV/17"],tip:"tanulas"},
+ {h:11,d:"aug. 14. (P)",m:4,t:["IV/18","IV/19"],tip:"tanulas"},
+ {h:11,d:"aug. 15. (Szo)",m:4,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; 11. h&eacute;t + 1 kor&aacute;bbi t&eacute;tel"},
+ {h:12,d:"aug. 17. (H)",m:4,t:[],tip:"vazlat",tema:"IV. modul: v&aacute;zlatok meg&iacute;r&aacute;sa &ndash; T1&ndash;T10"},
+ {h:12,d:"aug. 18. (K)",m:4,t:[],tip:"vazlat",tema:"IV. modul: v&aacute;zlatok meg&iacute;r&aacute;sa &ndash; T11&ndash;T19"},
+ {h:12,d:"aug. 19. (Sze)",m:4,t:["IV/1","IV/2","IV/3","IV/4","IV/5","IV/6","IV/7","IV/8","IV/9","IV/10"],tip:"onellenorzes",tema:"IV. modul: hangos &ouml;nellenőrz&eacute;s T1&ndash;T10"},
+ {h:12,d:"aug. 20. (Cs)",m:4,t:[],tip:"unnep",tema:"aug. 20. &ndash; NEMZETI &Uuml;NNEP &#127881; Piheny&#337;!"},
+ {h:12,d:"aug. 21. (P)",m:4,t:["IV/11","IV/12","IV/13","IV/14","IV/15","IV/16","IV/17","IV/18","IV/19"],tip:"onellenorzes",tema:"IV. modul: hangos &ouml;nellenőrz&eacute;s T11&ndash;T19"},
+ {h:12,d:"aug. 22. (Szo)",m:4,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; IV. modul &ouml;sszefoglal&aacute;s"},
+ {h:13,d:"aug. 24. (H)",m:4,t:[],tip:"vazlat",tema:"IV. modul: 10p k&eacute;rd&eacute;sek (HR-fejezet m&eacute;ly&iacute;t&eacute;se)"},
+ {h:13,d:"aug. 25. (K)",m:4,t:[],tip:"vazlat",tema:"IV. modul: 5p k&eacute;rd&eacute;sek begyakorl&aacute;sa"},
+ {h:13,d:"aug. 26. (Sze)",m:4,t:[],tip:"potlas",tema:"IV. modul: gyenge pontok p&oacute;tl&aacute;sa"},
+ {h:13,d:"aug. 27. (Cs)",m:4,t:[],tip:"onellenorzes",tema:"IV. modul TELJES &ouml;nellenőrz&eacute;s"},
+ {h:13,d:"aug. 28. (P)",m:4,t:[],tip:"potlas",tema:"I&ndash;IV. modul &ouml;sszefoglal&oacute; &aacute;ttekint&eacute;s"},
+ {h:13,d:"aug. 29. (Szo)",m:4,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; I&ndash;IV. modul gyenge pontok"},
+ {h:14,d:"aug. 31. (H)",m:5,t:["V/1"],tip:"tanulas"},
+ {h:14,d:"szept. 1. (K)",m:5,t:["V/2"],tip:"tanulas"},
+ {h:14,d:"szept. 2. (Sze)",m:5,t:["V/3","V/4"],tip:"tanulas"},
+ {h:14,d:"szept. 3. (Cs)",m:5,t:["V/5","V/6"],tip:"tanulas"},
+ {h:14,d:"szept. 4. (P)",m:5,t:["V/7","V/8"],tip:"tanulas"},
+ {h:14,d:"szept. 5. (Szo)",m:5,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; 14. h&eacute;t + 1 kor&aacute;bbi t&eacute;tel"},
+ {h:15,d:"szept. 7. (H)",m:5,t:["V/9"],tip:"tanulas"},
+ {h:15,d:"szept. 8. (K)",m:5,t:["V/10"],tip:"tanulas"},
+ {h:15,d:"szept. 9. (Sze)",m:5,t:[],tip:"vazlat",tema:"V. modul: v&aacute;zlatok meg&iacute;r&aacute;sa T1&ndash;T5"},
+ {h:15,d:"szept. 10. (Cs)",m:5,t:[],tip:"vazlat",tema:"V. modul: v&aacute;zlatok meg&iacute;r&aacute;sa T6&ndash;T10"},
+ {h:15,d:"szept. 11. (P)",m:5,t:["V/1","V/2","V/3","V/4","V/5"],tip:"onellenorzes",tema:"V. modul: hangos &ouml;nellenőrz&eacute;s T1&ndash;T5"},
+ {h:15,d:"szept. 12. (Szo)",m:5,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; 15. h&eacute;t + 1-1 kor&aacute;bbi modul t&eacute;tele"},
+ {h:16,d:"szept. 14. (H)",m:5,t:["V/6","V/7","V/8","V/9","V/10"],tip:"onellenorzes",tema:"V. modul: hangos &ouml;nellenőrz&eacute;s T6&ndash;T10"},
+ {h:16,d:"szept. 15. (K)",m:5,t:[],tip:"vazlat",tema:"V. modul: 10p k&eacute;rd&eacute;sek &ouml;sszefoglal&aacute;sa"},
+ {h:16,d:"szept. 16. (Sze)",m:5,t:[],tip:"vazlat",tema:"V. modul: 5p k&eacute;rd&eacute;sek begyakorl&aacute;sa"},
+ {h:16,d:"szept. 17. (Cs)",m:5,t:[],tip:"potlas",tema:"V. modul: gyenge pontok p&oacute;tl&aacute;sa"},
+ {h:16,d:"szept. 18. (P)",m:5,t:[],tip:"onellenorzes",tema:"V. modul TELJES &ouml;nellenőrz&eacute;s"},
+ {h:16,d:"szept. 19. (Szo)",m:5,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; V. modul &ouml;sszefoglal&aacute;s + kor&aacute;bbi t&eacute;telek"},
+ {h:17,d:"szept. 21. (H)",m:0,t:[],tip:"ismetles",tema:"ISM&Eacute;TL&Eacute;S &ndash; I. modul T1&ndash;T8 v&aacute;zlatb&oacute;l visszak&eacute;rdez&eacute;s"},
+ {h:17,d:"szept. 22. (K)",m:0,t:[],tip:"ismetles",tema:"ISM&Eacute;TL&Eacute;S &ndash; I. modul T9&ndash;T16 visszak&eacute;rdez&eacute;s"},
+ {h:17,d:"szept. 23. (Sze)",m:0,t:[],tip:"ismetles",tema:"ISM&Eacute;TL&Eacute;S &ndash; II. modul T1&ndash;T6 visszak&eacute;rdez&eacute;s"},
+ {h:17,d:"szept. 24. (Cs)",m:0,t:[],tip:"ismetles",tema:"ISM&Eacute;TL&Eacute;S &ndash; II. modul T7&ndash;T12 visszak&eacute;rdez&eacute;s"},
+ {h:17,d:"szept. 25. (P)",m:0,t:[],tip:"potlas",tema:"Gyenge pontok azonos&iacute;t&aacute;sa I&ndash;II. modulban; p&oacute;tl&aacute;s"},
+ {h:17,d:"szept. 26. (Szo)",m:0,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; leggyeng&eacute;bb t&eacute;telek c&eacute;lzott ism&eacute;tl&eacute;se"},
+ {h:18,d:"szept. 28. (H)",m:0,t:[],tip:"ismetles",tema:"ISM&Eacute;TL&Eacute;S &ndash; III. modul T1&ndash;T9 visszak&eacute;rdez&eacute;s"},
+ {h:18,d:"szept. 29. (K)",m:0,t:[],tip:"ismetles",tema:"ISM&Eacute;TL&Eacute;S &ndash; IV. modul T1&ndash;T10 visszak&eacute;rdez&eacute;s"},
+ {h:18,d:"szept. 30. (Sze)",m:0,t:[],tip:"ismetles",tema:"ISM&Eacute;TL&Eacute;S &ndash; IV. modul T11&ndash;T19 visszak&eacute;rdez&eacute;s"},
+ {h:18,d:"okt. 1. (Cs)",m:0,t:[],tip:"potlas",tema:"Gyenge pontok azonos&iacute;t&aacute;sa III&ndash;IV. modulban; p&oacute;tl&aacute;s"},
+ {h:18,d:"okt. 2. (P)",m:0,t:[],tip:"vazlat",tema:"T&eacute;telv&aacute;zlatok ellen&#337;rz&eacute;se &ndash; III&ndash;IV. modul"},
+ {h:18,d:"okt. 3. (Szo)",m:0,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; leggyeng&eacute;bb t&eacute;telek c&eacute;lzott ism&eacute;tl&eacute;se"},
+ {h:19,d:"okt. 5. (H)",m:0,t:[],tip:"ismetles",tema:"ISM&Eacute;TL&Eacute;S &ndash; V. modul T1&ndash;T5 visszak&eacute;rdez&eacute;s"},
+ {h:19,d:"okt. 6. (K)",m:0,t:[],tip:"ismetles",tema:"ISM&Eacute;TL&Eacute;S &ndash; V. modul T6&ndash;T10 visszak&eacute;rdez&eacute;s"},
+ {h:19,d:"okt. 7. (Sze)",m:0,t:[],tip:"potlas",tema:"Gyenge pontok p&oacute;tl&aacute;sa V. modulban"},
+ {h:19,d:"okt. 8. (Cs)",m:0,t:[],tip:"potlas",tema:"Minden modulb&oacute;l 1-1 legnehez. t&eacute;tel felelevenítése"},
+ {h:19,d:"okt. 9. (P)",m:0,t:[],tip:"vazlat",tema:"Vizsgatrat&eacute;gia &aacute;ttekint&eacute;se &ndash; szerkezet, kulcsfogalmak"},
+ {h:19,d:"okt. 10. (Szo)",m:0,t:[],tip:"ismetles",tema:"Ism&eacute;tl&eacute;s &ndash; teljes anyag kulcsfogalmainak gyors &aacute;tfut&aacute;sa"},
+ {h:20,d:"okt. 12. (H)",m:0,t:[],tip:"potlas",tema:"Z&Aacute;R&Oacute; &ndash; &Ouml;sszes modul kulcsfogalmainak r&ouml;vid &aacute;ttekint&eacute;se"},
+ {h:20,d:"okt. 13. (K)",m:0,t:[],tip:"vazlat",tema:"Z&Aacute;R&Oacute; &ndash; T&eacute;telv&aacute;zlatok utols&oacute; gyors &aacute;tolvas&aacute;sa"},
+ {h:20,d:"okt. 14. (Sze)",m:0,t:[],tip:"piheno",tema:"Z&Aacute;R&Oacute; &ndash; K&ouml;nny&#369; ism&eacute;tl&eacute;s, korai lefekv&eacute;s! &#128564;"},
+ {h:20,d:"okt. 15. (Cs)",m:0,t:[],tip:"vizsga",tema:"&#127942; &Iacute;R&Aacute;SBELI VIZSGA &ndash; Sok sikert!"}
+];
+
+var MC={1:"#1a4a6b",2:"#2d6a4f",3:"#6b3a1a",4:"#4a1a6b",5:"#1a3a6b",0:"#444"};
+var BC={1:"#2980b9",2:"#27ae60",3:"#d68910",4:"#8e44ad",5:"#1a56db",0:"#888"};
+var BG={1:"#e8f4fd",2:"#e8f7ef",3:"#fdf3e8",4:"#f4e8fd",5:"#e8eeff",0:"#f0f0f0"};
+var P10={1:"#2980b9",2:"#27ae60",3:"#d68910",4:"#8e44ad",5:"#1a56db",0:"#888"};
+var P5={1:"#5b9ecf",2:"#52a87a",3:"#c07722",4:"#7a40a0",5:"#4b72cc",0:"#aaa"};
+var TN={tanulas:"&#x1F4D6; &Uacute;j anyag",ismetles:"&#x1F504; Ism&eacute;tl&eacute;s",onellenorzes:"&#x2753; &Ouml;nellenőrz&eacute;s",vazlat:"&#x1F4DD; V&aacute;zlat",potlas:"&#x1F527; P&oacute;tl&aacute;s",piheno:"&#x1F634; Pihenő",unnep:"&#x1F389; &Uuml;nnep",vizsga:"&#x1F3C6; VIZSGA"};
+
+// Csoportosítás hetek szerint
+var hetek={};
+NAPOK.forEach(function(n){if(!hetek[n.h])hetek[n.h]=[];hetek[n.h].push(n);});
+var hl=Object.keys(hetek).map(Number).sort(function(a,b){return a-b;});
+
+var nav=document.getElementById("navBar");
+var fo=document.getElementById("fo");
+
+hl.forEach(function(h){
+  var btn=document.createElement("button");
+  var ns=hetek[h];
+  var d1=ns[0].d.split("(")[0].trim();
+  var dl=ns[ns.length-1].d.split("(")[0].trim();
+  btn.innerHTML=h+". h&eacute;t &bull; "+d1+"&ndash;"+dl;
+  btn.id="b"+h;
+  btn.onclick=function(){show(h);};
+  nav.appendChild(btn);
+});
+
+function show(h){
+  document.querySelectorAll(".nav button").forEach(function(b){b.classList.remove("on");});
+  document.getElementById("b"+h).classList.add("on");
+  fo.innerHTML="";
+  var ns=hetek[h];
+  
+  // Heti fejléc
+  var hf=document.createElement("div");
+  hf.className="het-cim";
+  var mset={};ns.forEach(function(n){if(n.m>0)mset[n.m]=1;});
+  var ml=Object.keys(mset).map(function(m){return["","I.","II.","III.","IV.","V."][m]+" modul";}).join(" + ")||"Ism&eacute;tl&eacute;s";
+  hf.innerHTML='<span class="het-badge">'+h+'. h&eacute;t</span><span>'+ns[0].d.split("(")[0].trim()+'&nbsp;&ndash;&nbsp;'+ns[ns.length-1].d.split("(")[0].trim()+'</span><span style="margin-left:auto;font-size:11px;opacity:.8">'+ml+'</span>';
+  fo.appendChild(hf);
+
+  ns.forEach(function(nap){
+    var dk=MC[nap.m]||"#444";
+    var bc=BC[nap.m]||"#888";
+    var bg=BG[nap.m]||"#f0f0f0";
+    var isSzo=nap.d.indexOf("Szo")>-1;
+    var isSpec=["piheno","unnep","vizsga"].indexOf(nap.tip)>-1;
+    if(isSzo){bc="#e6c014";bg="#fffbea";dk="#7a6000";}
+    if(isSpec){bc="#e88";bg="#fef0f0";dk="#c0392b";}
+
+    // Téma generálás ha nincs explicit
+    var tema=nap.tema;
+    if(!tema&&nap.t.length>0){
+      tema=nap.t.map(function(k){return k+" &ndash; "+(T[k]?T[k].c:k);}).join(" &middot; ");
+    }
+    if(!tema) tema=TN[nap.tip]||"";
+
+    // Kérdésszám
+    var nk=0;
+    nap.t.forEach(function(k){var te=T[k];if(te)nk+=te.k15.length+te.k10.length+te.k5.length;});
+
+    var kart=document.createElement("div");
+    kart.className="nap-kart";
+    kart.style.borderColor=bc;
+    kart.style.background=bg;
+
+    var fej=document.createElement("div");
+    fej.className="nap-fejlec"+(nap.t.length>0?" kattintható":"");
+    var statStr=nap.t.length>0?(nap.t.length+" t&eacute;tel &middot; "+nk+" k&eacute;rd&eacute;s"):TN[nap.tip];
+    fej.innerHTML='<div class="nap-datum" style="color:'+dk+'">'+nap.d+'</div>'
+      +'<div class="nap-info"><div class="nap-tema" style="color:'+dk+'">'+tema+'</div>'
+      +'<div class="nap-stat">'+statStr+'</div></div>'
+      +(nap.t.length>0?'<div class="nap-nyil" style="color:'+bc+'">&#9660;</div>':'');
+
+    var tart=document.createElement("div");
+    tart.className="nap-tartalom";
+
+    if(nap.t.length>0){
+      fej.onclick=function(){
+        var open=tart.style.display==="block";
+        tart.style.display=open?"none":"block";
+        var ny=fej.querySelector(".nap-nyil");
+        if(ny)ny.innerHTML=open?"&#9660;":"&#9650;";
+      };
+      nap.t.forEach(function(k){
+        var te=T[k];if(!te)return;
+        var tb=document.createElement("div");
+        tb.className="tetel-blokk";
+        var tf=document.createElement("div");
+        tf.className="tetel-cim-sor";
+        tf.innerHTML='<span class="tetel-badge" style="background:'+MC[nap.m]+'">'+k+'</span><span class="tetel-cim" style="color:'+MC[nap.m]+'">'+te.c+'</span>';
+        tb.appendChild(tf);
+        var kl=document.createElement("div");
+        kl.className="kerdes-lista";
+        te.k15.forEach(function(q){
+          var s=document.createElement("div");s.className="ksor k15bg";
+          s.innerHTML='<span class="kbadge" style="background:'+MC[nap.m]+';color:#fff">15p</span><span class="kszoveg" style="font-weight:600">'+q+'</span>';
+          kl.appendChild(s);
+        });
+        te.k10.forEach(function(q){
+          var s=document.createElement("div");s.className="ksor";
+          s.innerHTML='<span class="kbadge" style="background:'+P10[nap.m]+';color:#fff">10p</span><span class="kszoveg">'+q+'</span>';
+          kl.appendChild(s);
+        });
+        te.k5.forEach(function(q){
+          var s=document.createElement("div");s.className="ksor";
+          s.innerHTML='<span class="kbadge" style="background:'+P5[nap.m]+';color:#fff">5p</span><span class="kszoveg">'+q+'</span>';
+          kl.appendChild(s);
+        });
+        tb.appendChild(kl);
+        tart.appendChild(tb);
+      });
+    }
+    kart.appendChild(fej);kart.appendChild(tart);fo.appendChild(kart);
+  });
+  fo.scrollIntoView({behavior:"smooth"});
+}
+show(1);
+</script>
+</body>
+</html>
