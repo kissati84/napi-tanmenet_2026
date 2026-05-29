@@ -545,6 +545,94 @@ body {
 .m5 { --szin: #2a3a6b; --szin-vilagos: #5a6a9b; --szin-vil: #e6eaf5; --szin-bor: #b5bbd6; }
 .m0 { --szin: #5a5a4a; --szin-vilagos: #8a8a7a; --szin-vil: #ededdf; --szin-bor: #c8c5b5; }
 
+/* ═══════════════ TANULÁSI TIPP ═══════════════ */
+.tipp-panel {
+  background: linear-gradient(180deg, #fdfaf3 0%, #ffffff 100%);
+  border: 1px solid var(--vonal);
+  border-left: 4px solid var(--arany);
+  border-radius: 3px;
+  margin: 4px 0 16px;
+  overflow: hidden;
+}
+.tipp-fej {
+  padding: 11px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  user-select: none;
+  background: rgba(184, 146, 58, 0.06);
+}
+.tipp-fej:hover { background: rgba(184, 146, 58, 0.12); }
+.tipp-fej-cim {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--arany-melyebb);
+  flex: 1;
+}
+.tipp-fej-nyil { color: var(--arany); font-size: 11px; transition: transform 0.2s; }
+.tipp-panel.nyitva .tipp-fej-nyil { transform: rotate(180deg); }
+.tipp-body { display: none; padding: 4px 18px 16px; }
+.tipp-panel.nyitva .tipp-body { display: block; }
+.tipp-napi {
+  font-family: 'EB Garamond', serif;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--tinta);
+  background: #ffffff;
+  border: 1px solid var(--pergamen);
+  border-radius: 3px;
+  padding: 11px 14px;
+  margin: 8px 0 14px;
+}
+.tipp-napi strong { color: var(--kek); font-weight: 600; }
+.tipp-szakasz-cim {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--arany-melyebb);
+  margin: 0 0 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.tipp-szakasz-cim::before { content:''; width:12px; height:1px; background: var(--arany); }
+.tipp-lepesek { list-style: none; padding: 0; counter-reset: tl; }
+.tipp-lepesek li {
+  position: relative;
+  padding: 7px 0 7px 42px;
+  border-bottom: 1px dashed var(--pergamen);
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  line-height: 1.5;
+  counter-increment: tl;
+}
+.tipp-lepesek li:last-child { border-bottom: none; }
+.tipp-lepesek li::before {
+  content: counter(tl);
+  position: absolute; left: 0; top: 7px;
+  width: 26px; height: 26px;
+  background: var(--kek); color: var(--kremes);
+  font-family: 'Inter', sans-serif; font-weight: 700; font-size: 12px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.tipp-lepes-cim { font-weight: 600; color: var(--tinta); }
+.tipp-ido {
+  font-family: 'Inter', sans-serif; font-size: 10px;
+  color: var(--arany-melyebb); font-weight: 600;
+  margin-left: 6px;
+}
+.tipp-lab {
+  margin-top: 12px; font-style: italic; font-size: 13px;
+  color: var(--tinta-vilagos);
+  padding: 8px 12px; background: #fdfaf3;
+  border-left: 3px solid var(--arany-vil); border-radius: 0 2px 2px 0;
+}
+
 /* ═══════════════ ÖSSZEFOGLALÓ ═══════════════ */
 .os-bevez {
   background: linear-gradient(135deg, #1a1f2e 0%, #2a2f3e 100%);
@@ -1046,101 +1134,101 @@ var T={
 };
 
 var NAPOK=[
- {h:1,d:"jún. 1. (H)",m:1,t:["I/1"],tip:"tan"},
- {h:1,d:"jún. 2. (K)",m:1,t:["I/2"],tip:"tan",hosszu:1},
- {h:1,d:"jún. 3. (Sze)",m:1,t:["I/3","I/4","I/5"],tip:"tan"},
- {h:1,d:"jún. 4. (Cs)",m:1,t:["I/6","I/7","I/8"],tip:"tan"},
- {h:1,d:"jún. 5. (P)",m:1,t:["I/9","I/10","I/11"],tip:"tan"},
+ {h:1,d:"jún. 1. (H)",m:1,t:["I/1"],tip:"tan",tipp:1,tippmegj:"Egyetlen nagy tétel, <strong>lineáris történet</strong> — a dátumok helyett az ok-okozatot, a „miérteket\" keresd. Fontos: a jegyzet <strong>2010-ig</strong> megy; az Alaptörvény elfogadása (2011) már a 10/5 pontos kérdésekhez tartozik, ne keverd a kettőt."},
+ {h:1,d:"jún. 2. (K)",m:1,t:["I/2"],tip:"tan",hosszu:1,tipp:1,tippmegj:"Ez <strong>hosszú nap</strong>: két párhuzamos osztályozás (időrend + tárgy szerinti). <strong>Válaszd szét őket két lapra</strong>, mert a vizsgán az összekeverés a hibaforrás. Figyelem: <strong>három generáció</strong> van, nem négy! A tárgy szerinti hat csoport cikkszámait „fészkekben\" tanuld (személyi: II–IV., politikai: VIII–IX., XXIII., gazdasági: XII–XIII., L.)."},
+ {h:1,d:"jún. 3. (Sze)",m:1,t:["I/3","I/4","I/5"],tip:"tan",tipp:1,tippmegj:"Három tétel ma — súlyozz a <strong>kérdésszám szerint</strong>: amelyikhez több 10/5 pontos kérdés tartozik, arra szánj többet. Ne mélyülj el mindháromban egyformán."},
+ {h:1,d:"jún. 4. (Cs)",m:1,t:["I/6","I/7","I/8"],tip:"tan",tipp:1,tippmegj:"Három tétel ma — súlyozz a <strong>kérdésszám szerint</strong>: amelyikhez több 10/5 pontos kérdés tartozik, arra szánj többet. Ne mélyülj el mindháromban egyformán."},
+ {h:1,d:"jún. 5. (P)",m:1,t:["I/9","I/10","I/11"],tip:"tan",tipp:1,tippmegj:"Három tétel ma — súlyozz a <strong>kérdésszám szerint</strong>: amelyikhez több 10/5 pontos kérdés tartozik, arra szánj többet. Ne mélyülj el mindháromban egyformán."},
  {h:1,d:"jún. 6. (Szo)",m:1,t:[],tip:"ism",tema:"Ismétlés — 1. hét anyaga · Strukturált összefoglaló a hét tételeiből",osszef:"h1"},
- {h:2,d:"jún. 8. (H)",m:1,t:["I/12","I/13"],tip:"tan"},
- {h:2,d:"jún. 9. (K)",m:1,t:["I/14"],tip:"tan"},
- {h:2,d:"jún. 10. (Sze)",m:1,t:["I/15","I/16"],tip:"tan"},
+ {h:2,d:"jún. 8. (H)",m:1,t:["I/12","I/13"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:2,d:"jún. 9. (K)",m:1,t:["I/14"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
+ {h:2,d:"jún. 10. (Sze)",m:1,t:["I/15","I/16"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
  {h:2,d:"jún. 11. (Cs)",m:1,t:[],tip:"vaz",tema:"I. modul — vázlatok megírása, összes tétel áttekintése"},
- {h:2,d:"jún. 12. (P)",m:1,t:["I/1","I/2","I/3","I/4","I/5","I/6","I/7","I/8"],tip:"on",tema:"I. modul — hangos önellenőrzés T1–T8"},
+ {h:2,d:"jún. 12. (P)",m:1,t:["I/1","I/2","I/3","I/4","I/5","I/6","I/7","I/8"],tip:"on",tema:"I. modul — hangos önellenőrzés T1–T8",tipp:1},
  {h:2,d:"jún. 13. (Szo)",m:1,t:[],tip:"ism",tema:"Ismétlés — 2. hét anyaga · I. modul (folytatás) összefoglaló",osszef:"h2"},
- {h:3,d:"jún. 15. (H)",m:1,t:["I/9","I/10","I/11","I/12","I/13","I/14","I/15","I/16"],tip:"on",tema:"I. modul — hangos önellenőrzés T9–T16"},
+ {h:3,d:"jún. 15. (H)",m:1,t:["I/9","I/10","I/11","I/12","I/13","I/14","I/15","I/16"],tip:"on",tema:"I. modul — hangos önellenőrzés T9–T16",tipp:1},
  {h:3,d:"jún. 16. (K)",m:1,t:[],tip:"vaz",tema:"I. modul — 10p kérdések összefoglalása vázlatból"},
  {h:3,d:"jún. 17. (Sze)",m:1,t:[],tip:"vaz",tema:"I. modul — 5p kérdések begyakorlása"},
  {h:3,d:"jún. 18. (Cs)",m:1,t:[],tip:"pot",tema:"I. modul — gyenge pontok pótlása"},
- {h:3,d:"jún. 19. (P)",m:1,t:[],tip:"on",tema:"I. modul TELJES önellenőrzés — fejből minden tétel"},
+ {h:3,d:"jún. 19. (P)",m:1,t:[],tip:"on",tema:"I. modul TELJES önellenőrzés — fejből minden tétel",tipp:1},
  {h:3,d:"jún. 20. (Szo)",m:1,t:[],tip:"ism",tema:"Ismétlés — I. modul teljes áttekintése · 16 tétel kompakt",osszef:"h3"},
- {h:4,d:"jún. 22. (H)",m:2,t:["II/1","II/2"],tip:"tan"},
- {h:4,d:"jún. 23. (K)",m:2,t:["II/3","II/4"],tip:"tan"},
- {h:4,d:"jún. 24. (Sze)",m:2,t:["II/5","II/6"],tip:"tan"},
- {h:4,d:"jún. 25. (Cs)",m:2,t:["II/7","II/8"],tip:"tan"},
- {h:4,d:"jún. 26. (P)",m:2,t:["II/9"],tip:"tan"},
+ {h:4,d:"jún. 22. (H)",m:2,t:["II/1","II/2"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:4,d:"jún. 23. (K)",m:2,t:["II/3","II/4"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:4,d:"jún. 24. (Sze)",m:2,t:["II/5","II/6"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:4,d:"jún. 25. (Cs)",m:2,t:["II/7","II/8"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:4,d:"jún. 26. (P)",m:2,t:["II/9"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
  {h:4,d:"jún. 27. (Szo)",m:2,t:[],tip:"ism",tema:"Ismétlés — II. modul kezdés · II/1—II/9 összefoglaló",osszef:"h4"},
- {h:5,d:"jún. 29. (H)",m:2,t:["II/10"],tip:"tan"},
- {h:5,d:"jún. 30. (K)",m:2,t:["II/11"],tip:"tan"},
- {h:5,d:"júl. 1. (Sze)",m:2,t:["II/12"],tip:"tan",hosszu:1},
+ {h:5,d:"jún. 29. (H)",m:2,t:["II/10"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
+ {h:5,d:"jún. 30. (K)",m:2,t:["II/11"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
+ {h:5,d:"júl. 1. (Sze)",m:2,t:["II/12"],tip:"tan",hosszu:1,tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
  {h:5,d:"júl. 2. (Cs)",m:2,t:[],tip:"vaz",tema:"II. modul — vázlatok megírása + nehéz tételek mélyítése"},
- {h:5,d:"júl. 3. (P)",m:2,t:["II/1","II/2","II/3","II/4","II/5","II/6"],tip:"on",tema:"II. modul — hangos önellenőrzés T1–T6"},
+ {h:5,d:"júl. 3. (P)",m:2,t:["II/1","II/2","II/3","II/4","II/5","II/6"],tip:"on",tema:"II. modul — hangos önellenőrzés T1–T6",tipp:1},
  {h:5,d:"júl. 4. (Szo)",m:2,t:[],tip:"ism",tema:"Ismétlés — II. modul befejezés · II/10—II/12 összefoglaló",osszef:"h5"},
- {h:6,d:"júl. 6. (H)",m:2,t:["II/7","II/8","II/9","II/10","II/11","II/12"],tip:"on",tema:"II. modul — hangos önellenőrzés T7–T12"},
+ {h:6,d:"júl. 6. (H)",m:2,t:["II/7","II/8","II/9","II/10","II/11","II/12"],tip:"on",tema:"II. modul — hangos önellenőrzés T7–T12",tipp:1},
  {h:6,d:"júl. 7. (K)",m:2,t:[],tip:"vaz",tema:"II. modul — 10p kérdések összefoglalása"},
  {h:6,d:"júl. 8. (Sze)",m:2,t:[],tip:"vaz",tema:"II. modul — 5p kérdések begyakorlása"},
  {h:6,d:"júl. 9. (Cs)",m:2,t:[],tip:"pot",tema:"II. modul — gyenge pontok pótlása"},
- {h:6,d:"júl. 10. (P)",m:2,t:[],tip:"on",tema:"II. modul TELJES önellenőrzés"},
+ {h:6,d:"júl. 10. (P)",m:2,t:[],tip:"on",tema:"II. modul TELJES önellenőrzés",tipp:1},
  {h:6,d:"júl. 11. (Szo)",m:2,t:[],tip:"ism",tema:"Ismétlés — II. modul teljes áttekintése · 12 tétel kompakt",osszef:"h6"},
- {h:7,d:"júl. 13. (H)",m:3,t:["III/1","III/2"],tip:"tan"},
- {h:7,d:"júl. 14. (K)",m:3,t:["III/3"],tip:"tan"},
- {h:7,d:"júl. 15. (Sze)",m:3,t:["III/4","III/5"],tip:"tan"},
- {h:7,d:"júl. 16. (Cs)",m:3,t:["III/6","III/7"],tip:"tan",hosszu:1},
- {h:7,d:"júl. 17. (P)",m:3,t:["III/8","III/9"],tip:"tan"},
+ {h:7,d:"júl. 13. (H)",m:3,t:["III/1","III/2"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:7,d:"júl. 14. (K)",m:3,t:["III/3"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
+ {h:7,d:"júl. 15. (Sze)",m:3,t:["III/4","III/5"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:7,d:"júl. 16. (Cs)",m:3,t:["III/6","III/7"],tip:"tan",hosszu:1,tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:7,d:"júl. 17. (P)",m:3,t:["III/8","III/9"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
  {h:7,d:"júl. 18. (Szo)",m:3,t:[],tip:"ism",tema:"Ismétlés — III. modul · III/1—III/9 összefoglaló",osszef:"h7"},
  {h:8,d:"júl. 20. (H)",m:3,t:[],tip:"vaz",tema:"III. modul — vázlatok megírása + nehéz témák"},
- {h:8,d:"júl. 21. (K)",m:3,t:["III/1","III/2","III/3","III/4","III/5"],tip:"on",tema:"III. modul — hangos önellenőrzés T1–T5"},
- {h:8,d:"júl. 22. (Sze)",m:3,t:["III/6","III/7","III/8","III/9"],tip:"on",tema:"III. modul — hangos önellenőrzés T6–T9"},
+ {h:8,d:"júl. 21. (K)",m:3,t:["III/1","III/2","III/3","III/4","III/5"],tip:"on",tema:"III. modul — hangos önellenőrzés T1–T5",tipp:1},
+ {h:8,d:"júl. 22. (Sze)",m:3,t:["III/6","III/7","III/8","III/9"],tip:"on",tema:"III. modul — hangos önellenőrzés T6–T9",tipp:1},
  {h:8,d:"júl. 23. (Cs)",m:3,t:[],tip:"vaz",tema:"III. modul — 10p és 5p kérdések begyakorlása"},
- {h:8,d:"júl. 24. (P)",m:3,t:[],tip:"on",tema:"III. modul TELJES önellenőrzés"},
+ {h:8,d:"júl. 24. (P)",m:3,t:[],tip:"on",tema:"III. modul TELJES önellenőrzés",tipp:1},
  {h:8,d:"júl. 25. (Szo)",m:3,t:[],tip:"ism",tema:"Ismétlés — III. modul + I—III. keresztkapcsolatok",osszef:"h8"},
  {h:9,d:"júl. 27. (H)",m:3,t:["I/2","I/14"],tip:"pot",tema:"I. modul legnehezebb tételek újra (T2, T14)"},
  {h:9,d:"júl. 28. (K)",m:3,t:["II/12"],tip:"pot",tema:"II. modul legnehezebb tétel újra (T12 jogorvoslat)"},
  {h:9,d:"júl. 29. (Sze)",m:3,t:["III/3","III/7"],tip:"pot",tema:"III. modul legnehezebb tételek újra (T3, T7)"},
- {h:9,d:"júl. 30. (Cs)",m:3,t:[],tip:"on",tema:"I–III. modul keresztellenőrzés — fejből"},
+ {h:9,d:"júl. 30. (Cs)",m:3,t:[],tip:"on",tema:"I–III. modul keresztellenőrzés — fejből",tipp:1},
  {h:9,d:"aug. 1. (P)",m:3,t:[],tip:"pot",tema:"Összefoglaló vázlatok ellenőrzése, hiányok pótlása"},
  {h:9,d:"aug. 2. (Szo)",m:3,t:[],tip:"ism",tema:"Ismétlés — gyenge pontok az I—III. modulban",osszef:"h9"},
- {h:10,d:"aug. 3. (H)",m:4,t:["IV/1"],tip:"tan"},
- {h:10,d:"aug. 4. (K)",m:4,t:["IV/2"],tip:"tan"},
- {h:10,d:"aug. 5. (Sze)",m:4,t:["IV/3","IV/4"],tip:"tan"},
- {h:10,d:"aug. 6. (Cs)",m:4,t:["IV/5","IV/6"],tip:"tan"},
- {h:10,d:"aug. 7. (P)",m:4,t:["IV/7","IV/8"],tip:"tan"},
+ {h:10,d:"aug. 3. (H)",m:4,t:["IV/1"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
+ {h:10,d:"aug. 4. (K)",m:4,t:["IV/2"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
+ {h:10,d:"aug. 5. (Sze)",m:4,t:["IV/3","IV/4"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:10,d:"aug. 6. (Cs)",m:4,t:["IV/5","IV/6"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:10,d:"aug. 7. (P)",m:4,t:["IV/7","IV/8"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
  {h:10,d:"aug. 8. (Szo)",m:4,t:[],tip:"ism",tema:"Ismétlés — IV. modul kezdés · IV/1—IV/8 összefoglaló",osszef:"h10"},
- {h:11,d:"aug. 10. (H)",m:4,t:["IV/9","IV/10"],tip:"tan"},
- {h:11,d:"aug. 11. (K)",m:4,t:["IV/11","IV/12"],tip:"tan"},
- {h:11,d:"aug. 12. (Sze)",m:4,t:["IV/13","IV/14","IV/15","IV/16"],tip:"tan"},
- {h:11,d:"aug. 13. (Cs)",m:4,t:["IV/17"],tip:"tan"},
- {h:11,d:"aug. 14. (P)",m:4,t:["IV/18","IV/19"],tip:"tan",hosszu:1},
+ {h:11,d:"aug. 10. (H)",m:4,t:["IV/9","IV/10"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:11,d:"aug. 11. (K)",m:4,t:["IV/11","IV/12"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:11,d:"aug. 12. (Sze)",m:4,t:["IV/13","IV/14","IV/15","IV/16"],tip:"tan",tipp:1,tippmegj:"Három tétel ma — súlyozz a <strong>kérdésszám szerint</strong>: amelyikhez több 10/5 pontos kérdés tartozik, arra szánj többet. Ne mélyülj el mindháromban egyformán."},
+ {h:11,d:"aug. 13. (Cs)",m:4,t:["IV/17"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
+ {h:11,d:"aug. 14. (P)",m:4,t:["IV/18","IV/19"],tip:"tan",hosszu:1,tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
  {h:11,d:"aug. 15. (Szo)",m:4,t:[],tip:"ism",tema:"Ismétlés — IV. modul befejezés · IV/9—IV/19 összefoglaló",osszef:"h11"},
  {h:12,d:"aug. 17. (H)",m:4,t:[],tip:"vaz",tema:"IV. modul — vázlatok megírása T1–T10"},
  {h:12,d:"aug. 18. (K)",m:4,t:[],tip:"vaz",tema:"IV. modul — vázlatok megírása T11–T19"},
- {h:12,d:"aug. 19. (Sze)",m:4,t:["IV/1","IV/2","IV/3","IV/4","IV/5","IV/6","IV/7","IV/8","IV/9","IV/10"],tip:"on",tema:"IV. modul — hangos önellenőrzés T1–T10"},
+ {h:12,d:"aug. 19. (Sze)",m:4,t:["IV/1","IV/2","IV/3","IV/4","IV/5","IV/6","IV/7","IV/8","IV/9","IV/10"],tip:"on",tema:"IV. modul — hangos önellenőrzés T1–T10",tipp:1},
  {h:12,d:"aug. 20. (Cs)",m:4,t:[],tip:"un",tema:"aug. 20. — NEMZETI ÜNNEP — Pihenő"},
- {h:12,d:"aug. 21. (P)",m:4,t:["IV/11","IV/12","IV/13","IV/14","IV/15","IV/16","IV/17","IV/18","IV/19"],tip:"on",tema:"IV. modul — hangos önellenőrzés T11–T19"},
+ {h:12,d:"aug. 21. (P)",m:4,t:["IV/11","IV/12","IV/13","IV/14","IV/15","IV/16","IV/17","IV/18","IV/19"],tip:"on",tema:"IV. modul — hangos önellenőrzés T11–T19",tipp:1},
  {h:12,d:"aug. 22. (Szo)",m:4,t:[],tip:"ism",tema:"Ismétlés — IV. modul teljes áttekintése · 19 tétel kompakt",osszef:"h12"},
  {h:13,d:"aug. 24. (H)",m:4,t:[],tip:"vaz",tema:"IV. modul — 10p kérdések (HR-fejezet mélyítése)"},
  {h:13,d:"aug. 25. (K)",m:4,t:[],tip:"vaz",tema:"IV. modul — 5p kérdések begyakorlása"},
  {h:13,d:"aug. 26. (Sze)",m:4,t:[],tip:"pot",tema:"IV. modul — gyenge pontok pótlása"},
- {h:13,d:"aug. 27. (Cs)",m:4,t:[],tip:"on",tema:"IV. modul TELJES önellenőrzés"},
+ {h:13,d:"aug. 27. (Cs)",m:4,t:[],tip:"on",tema:"IV. modul TELJES önellenőrzés",tipp:1},
  {h:13,d:"aug. 28. (P)",m:4,t:[],tip:"pot",tema:"I–IV. modul összefoglaló áttekintés"},
  {h:13,d:"aug. 29. (Szo)",m:4,t:[],tip:"ism",tema:"Ismétlés — I—IV. modul keresztismétlés",osszef:"h13"},
- {h:14,d:"aug. 31. (H)",m:5,t:["V/1"],tip:"tan"},
- {h:14,d:"szept. 1. (K)",m:5,t:["V/2"],tip:"tan"},
- {h:14,d:"szept. 2. (Sze)",m:5,t:["V/3","V/4"],tip:"tan",hosszu:1},
- {h:14,d:"szept. 3. (Cs)",m:5,t:["V/5","V/6"],tip:"tan",hosszu:1},
- {h:14,d:"szept. 4. (P)",m:5,t:["V/7","V/8"],tip:"tan"},
+ {h:14,d:"aug. 31. (H)",m:5,t:["V/1"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
+ {h:14,d:"szept. 1. (K)",m:5,t:["V/2"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
+ {h:14,d:"szept. 2. (Sze)",m:5,t:["V/3","V/4"],tip:"tan",hosszu:1,tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:14,d:"szept. 3. (Cs)",m:5,t:["V/5","V/6"],tip:"tan",hosszu:1,tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
+ {h:14,d:"szept. 4. (P)",m:5,t:["V/7","V/8"],tip:"tan",tipp:1,tippmegj:"Két tétel ma — oszd ketté az időt, kb. <strong>60-75 perc/tétel</strong>. Mindkettőt vidd végig a teljes ritmuson, de a vázlatot és a hangos felidézést végezheted együtt a végén."},
  {h:14,d:"szept. 5. (Szo)",m:5,t:[],tip:"ism",tema:"Ismétlés — V. modul kezdés · V/1—V/8 összefoglaló",osszef:"h14"},
- {h:15,d:"szept. 7. (H)",m:5,t:["V/9"],tip:"tan"},
- {h:15,d:"szept. 8. (K)",m:5,t:["V/10"],tip:"tan"},
+ {h:15,d:"szept. 7. (H)",m:5,t:["V/9"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
+ {h:15,d:"szept. 8. (K)",m:5,t:["V/10"],tip:"tan",tipp:1,tippmegj:"Egyetlen tétel ma — van időd alaposan megérteni a logikai ívét, mielőtt vázlatot készítesz."},
  {h:15,d:"szept. 9. (Sze)",m:5,t:[],tip:"vaz",tema:"V. modul — vázlatok megírása T1–T5"},
  {h:15,d:"szept. 10. (Cs)",m:5,t:[],tip:"vaz",tema:"V. modul — vázlatok megírása T6–T10"},
- {h:15,d:"szept. 11. (P)",m:5,t:["V/1","V/2","V/3","V/4","V/5"],tip:"on",tema:"V. modul — hangos önellenőrzés T1–T5"},
+ {h:15,d:"szept. 11. (P)",m:5,t:["V/1","V/2","V/3","V/4","V/5"],tip:"on",tema:"V. modul — hangos önellenőrzés T1–T5",tipp:1},
  {h:15,d:"szept. 12. (Szo)",m:5,t:[],tip:"ism",tema:"Ismétlés — V. modul befejezés · V/9—V/10 összefoglaló",osszef:"h15"},
- {h:16,d:"szept. 14. (H)",m:5,t:["V/6","V/7","V/8","V/9","V/10"],tip:"on",tema:"V. modul — hangos önellenőrzés T6–T10"},
+ {h:16,d:"szept. 14. (H)",m:5,t:["V/6","V/7","V/8","V/9","V/10"],tip:"on",tema:"V. modul — hangos önellenőrzés T6–T10",tipp:1},
  {h:16,d:"szept. 15. (K)",m:5,t:[],tip:"vaz",tema:"V. modul — 10p kérdések összefoglalása"},
  {h:16,d:"szept. 16. (Sze)",m:5,t:[],tip:"vaz",tema:"V. modul — 5p kérdések begyakorlása"},
  {h:16,d:"szept. 17. (Cs)",m:5,t:[],tip:"pot",tema:"V. modul — gyenge pontok pótlása"},
- {h:16,d:"szept. 18. (P)",m:5,t:[],tip:"on",tema:"V. modul TELJES önellenőrzés"},
+ {h:16,d:"szept. 18. (P)",m:5,t:[],tip:"on",tema:"V. modul TELJES önellenőrzés",tipp:1},
  {h:16,d:"szept. 19. (Szo)",m:5,t:[],tip:"ism",tema:"Ismétlés — V. modul + összes modul áttekintése",osszef:"h16"},
  {h:17,d:"szept. 21. (H)",m:0,t:[],tip:"ism",tema:"ISMÉTLÉS — I. modul T1–T8 visszakérdezés"},
  {h:17,d:"szept. 22. (K)",m:0,t:[],tip:"ism",tema:"ISMÉTLÉS — I. modul T9–T16 visszakérdezés"},
@@ -1163,6 +1251,9 @@ var NAPOK=[
  {h:20,d:"okt. 12. (H)",m:0,t:[],tip:"pot",tema:"ZÁRÓ — Kulcsfogalmak és tételvázlatok utolsó átolvasása, korai lefekvés"},
  {h:20,d:"okt. 13. (K)",m:0,t:[],tip:"viz",tema:"ÍRÁSBELI VIZSGA — Sok sikert!"}
 ];
+
+var ALTRITMUS='<div class="tipp-szakasz-cim">Általános napi ritmus (~2-3 óra)</div><ul class="tipp-lepesek"><li><span class="tipp-lepes-cim">Ráhangolódás<span class="tipp-ido">~10 perc</span></span><br>Nyisd meg a tétel(eke)t, és olvasd át <em>csak a kérdéseket</em> — a 15, 10 és 5 pontosakat is. Így előre látod, hová fut ki a téma.</li><li><span class="tipp-lepes-cim">Megértő átolvasás<span class="tipp-ido">~25-30 perc</span></span><br>Olvasd át a jegyzetet egyszer, végig, <em>jegyzetelés nélkül</em>. A cél nem a rögzítés, hanem a logikai ív és az ok-okozat megértése.</li><li><span class="tipp-lepes-cim">Saját vázlat fejből<span class="tipp-ido">~30 perc</span></span><br>Csukd be a jegyzetet, és <em>fejből</em> vázolj papírra (kulcsszavak, évszámok). Aztán nyisd ki, és egészítsd ki, ami kimaradt. Ez lesz a szombati ismétlés alapanyaga — ne dobd el!</li><li><span class="tipp-lepes-cim">A 10 és 5 pontos kérdések<span class="tipp-ido">~30 perc</span></span><br>Ezek a fő tételhez <em>csatolt</em> kiegészítések. Mindegyikhez elég egy-két mondatos vázlatpont. Figyelj a pontos megnevezésekre, számokra, törvény- és cikkszámokra — írásban ezek értéket érnek.</li><li><span class="tipp-lepes-cim">Hangos önellenőrzés<span class="tipp-ido">~25 perc</span></span><br>Tegyél félre mindent, és mondd el <em>hangosan</em>, mintha vizsgáztatnád magad. Ahol megakadsz — és csak ott — nézz vissza. Ismételd, amíg gördülékenyen megy.</li><li><span class="tipp-lepes-cim">Rövid írásgyakorlás<span class="tipp-ido">~15 perc</span></span><br>Zárd a napot egy mini-próbával: 15 perc alatt írd le vázlatosan a 15 pontos kérdés válaszát, ahogy a vizsgán tennéd. Utána vesd össze a jegyzettel — mi maradt ki?</li></ul><div class="tipp-lab">A 2-3 órát ne egyben told végig: kb. 45-50 percenként tarts 5-10 perc szünetet. A cél a megértés és egy használható vázlat, nem a szó szerinti tudás — azt az ismétlések építik fel.</div>';
+var ONRITMUS='<div class="tipp-szakasz-cim">Önellenőrzés-nap ritmusa (~2 óra)</div><ul class="tipp-lepesek"><li><span class="tipp-lepes-cim">Ne olvass új anyagot</span><br>Ma nem tanulsz, hanem <em>visszakérdezel</em>. Vedd elő a korábban készített saját vázlataidat.</li><li><span class="tipp-lepes-cim">Hangos felidézés tételenként</span><br>Minden tételt mondj el <em>fejből, hangosan</em> — mintha a vizsgáztatónak magyaráznál. Csak akkor lapozz a jegyzethez, ha elakadsz.</li><li><span class="tipp-lepes-cim">A gyenge pontok megjelölése</span><br>Amelyik tételnél akadozol, azt jelöld meg (pl. piros tollal). A következő pótló napon ezekre fókuszálj.</li><li><span class="tipp-lepes-cim">Rövid íráspróba</span><br>Válassz 1-2 tételt, és írd le vázlatosan időre — az írásbeli vizsga gyakorlásaként.</li></ul><div class="tipp-lab">Az önellenőrzés a vizsgahelyzet szimulációja: itt derül ki, mi van valóban a fejedben, és mi az, amit csak felismersz, de előhívni nem tudsz.</div>';
 
 var TN={
   tan:"Új anyag", ism:"Ismétlés", on:"Önellenőrzés",
@@ -1321,6 +1412,19 @@ function show(h){
         osDiv.style.padding="14px 16px";
         osDiv.innerHTML=OSSZEF[nap.osszef];
         body.appendChild(osDiv);
+      }
+
+      // Tanulási tipp panel (tan/on napokon)
+      if(nap.tipp){
+        var tippWrap=document.createElement("div");
+        tippWrap.style.padding="14px 16px 0";
+        var ritmus=(nap.tip==="on")?ONRITMUS:ALTRITMUS;
+        var napiHtml=nap.tippmegj?('<div class="tipp-napi">'+nap.tippmegj+'</div>'):'';
+        tippWrap.innerHTML='<div class="tipp-panel"><div class="tipp-fej"><span class="tipp-fej-cim">📖 Hogyan dolgozd fel ezt a napot?</span><span class="tipp-fej-nyil">▼</span></div><div class="tipp-body">'+napiHtml+ritmus+'</div></div>';
+        var panel=tippWrap.querySelector(".tipp-panel");
+        var pfej=tippWrap.querySelector(".tipp-fej");
+        pfej.onclick=function(e){e.stopPropagation();panel.classList.toggle("nyitva");};
+        body.appendChild(tippWrap);
       }
 
       nap.t.forEach(function(k){
