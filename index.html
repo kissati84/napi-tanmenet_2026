@@ -349,6 +349,18 @@ body {
   margin-bottom: 4px;
   flex-wrap: wrap;
 }
+.nap-hosszu {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #8a5a2a;
+  background: rgba(184, 146, 58, 0.16);
+  border: 1px solid rgba(184, 146, 58, 0.4);
+  padding: 2px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
 .nap-hetnev {
   font-family: 'Inter', sans-serif;
   font-size: 11px;
@@ -1035,7 +1047,7 @@ var T={
 
 var NAPOK=[
  {h:1,d:"jún. 1. (H)",m:1,t:["I/1"],tip:"tan"},
- {h:1,d:"jún. 2. (K)",m:1,t:["I/2"],tip:"tan"},
+ {h:1,d:"jún. 2. (K)",m:1,t:["I/2"],tip:"tan",hosszu:1},
  {h:1,d:"jún. 3. (Sze)",m:1,t:["I/3","I/4","I/5"],tip:"tan"},
  {h:1,d:"jún. 4. (Cs)",m:1,t:["I/6","I/7","I/8"],tip:"tan"},
  {h:1,d:"jún. 5. (P)",m:1,t:["I/9","I/10","I/11"],tip:"tan"},
@@ -1060,7 +1072,7 @@ var NAPOK=[
  {h:4,d:"jún. 27. (Szo)",m:2,t:[],tip:"ism",tema:"Ismétlés — II. modul kezdés · II/1—II/9 összefoglaló",osszef:"h4"},
  {h:5,d:"jún. 29. (H)",m:2,t:["II/10"],tip:"tan"},
  {h:5,d:"jún. 30. (K)",m:2,t:["II/11"],tip:"tan"},
- {h:5,d:"júl. 1. (Sze)",m:2,t:["II/12"],tip:"tan"},
+ {h:5,d:"júl. 1. (Sze)",m:2,t:["II/12"],tip:"tan",hosszu:1},
  {h:5,d:"júl. 2. (Cs)",m:2,t:[],tip:"vaz",tema:"II. modul — vázlatok megírása + nehéz tételek mélyítése"},
  {h:5,d:"júl. 3. (P)",m:2,t:["II/1","II/2","II/3","II/4","II/5","II/6"],tip:"on",tema:"II. modul — hangos önellenőrzés T1–T6"},
  {h:5,d:"júl. 4. (Szo)",m:2,t:[],tip:"ism",tema:"Ismétlés — II. modul befejezés · II/10—II/12 összefoglaló",osszef:"h5"},
@@ -1073,7 +1085,7 @@ var NAPOK=[
  {h:7,d:"júl. 13. (H)",m:3,t:["III/1","III/2"],tip:"tan"},
  {h:7,d:"júl. 14. (K)",m:3,t:["III/3"],tip:"tan"},
  {h:7,d:"júl. 15. (Sze)",m:3,t:["III/4","III/5"],tip:"tan"},
- {h:7,d:"júl. 16. (Cs)",m:3,t:["III/6","III/7"],tip:"tan"},
+ {h:7,d:"júl. 16. (Cs)",m:3,t:["III/6","III/7"],tip:"tan",hosszu:1},
  {h:7,d:"júl. 17. (P)",m:3,t:["III/8","III/9"],tip:"tan"},
  {h:7,d:"júl. 18. (Szo)",m:3,t:[],tip:"ism",tema:"Ismétlés — III. modul · III/1—III/9 összefoglaló",osszef:"h7"},
  {h:8,d:"júl. 20. (H)",m:3,t:[],tip:"vaz",tema:"III. modul — vázlatok megírása + nehéz témák"},
@@ -1098,7 +1110,7 @@ var NAPOK=[
  {h:11,d:"aug. 11. (K)",m:4,t:["IV/11","IV/12"],tip:"tan"},
  {h:11,d:"aug. 12. (Sze)",m:4,t:["IV/13","IV/14","IV/15","IV/16"],tip:"tan"},
  {h:11,d:"aug. 13. (Cs)",m:4,t:["IV/17"],tip:"tan"},
- {h:11,d:"aug. 14. (P)",m:4,t:["IV/18","IV/19"],tip:"tan"},
+ {h:11,d:"aug. 14. (P)",m:4,t:["IV/18","IV/19"],tip:"tan",hosszu:1},
  {h:11,d:"aug. 15. (Szo)",m:4,t:[],tip:"ism",tema:"Ismétlés — IV. modul befejezés · IV/9—IV/19 összefoglaló",osszef:"h11"},
  {h:12,d:"aug. 17. (H)",m:4,t:[],tip:"vaz",tema:"IV. modul — vázlatok megírása T1–T10"},
  {h:12,d:"aug. 18. (K)",m:4,t:[],tip:"vaz",tema:"IV. modul — vázlatok megírása T11–T19"},
@@ -1114,8 +1126,8 @@ var NAPOK=[
  {h:13,d:"aug. 29. (Szo)",m:4,t:[],tip:"ism",tema:"Ismétlés — I—IV. modul keresztismétlés",osszef:"h13"},
  {h:14,d:"aug. 31. (H)",m:5,t:["V/1"],tip:"tan"},
  {h:14,d:"szept. 1. (K)",m:5,t:["V/2"],tip:"tan"},
- {h:14,d:"szept. 2. (Sze)",m:5,t:["V/3","V/4"],tip:"tan"},
- {h:14,d:"szept. 3. (Cs)",m:5,t:["V/5","V/6"],tip:"tan"},
+ {h:14,d:"szept. 2. (Sze)",m:5,t:["V/3","V/4"],tip:"tan",hosszu:1},
+ {h:14,d:"szept. 3. (Cs)",m:5,t:["V/5","V/6"],tip:"tan",hosszu:1},
  {h:14,d:"szept. 4. (P)",m:5,t:["V/7","V/8"],tip:"tan"},
  {h:14,d:"szept. 5. (Szo)",m:5,t:[],tip:"ism",tema:"Ismétlés — V. modul kezdés · V/1—V/8 összefoglaló",osszef:"h14"},
  {h:15,d:"szept. 7. (H)",m:5,t:["V/9"],tip:"tan"},
@@ -1286,6 +1298,7 @@ function show(h){
           '<span class="nap-hetnev">'+teljesNap+'</span>'+
           '<span class="tipus-pill">'+TN[nap.tip]+'</span>'+
           '<span class="nap-stat">'+statTxt+'</span>'+
+          (nap.hosszu?'<span class="nap-hosszu">⚠ hosszú nap — szánjon rá többet vagy ossza két napra</span>':'')+
         '</div>'+
         '<div class="nap-tema">'+tema+'</div>'+
       '</div>'+
