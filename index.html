@@ -992,6 +992,34 @@ body {
   body.nyomtat .os-tanacs { page-break-inside: avoid; }
   @page { margin: 14mm; }
 }
+
+/* ═══════════ GYAKORLÓ MÓD ═══════════ */
+.gyakorlo-gomb {
+  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+  cursor: pointer; padding: 8px 16px; border-radius: 4px; margin-right: 8px;
+  border: 1px solid var(--kek); background: #ffffff; color: var(--kek); transition: all 0.15s;
+}
+.gyakorlo-gomb:hover, .gyakorlo-gomb.aktiv { background: var(--kek); color: #ffffff; }
+.gyakorlo-segito {
+  display: none; margin: 0 0 14px; padding: 9px 13px;
+  background: rgba(44,74,107,0.07); border-left: 3px solid var(--kek); border-radius: 0 3px 3px 0;
+  font-family: 'EB Garamond', serif; font-size: 13.5px; font-style: italic; color: var(--tinta-vilagos);
+}
+.gyakorlo-mod .gyakorlo-segito { display: block; }
+.gyakorlo-mod .gy-valasz { display: none; }
+.gyakorlo-mod .gy-kerdes { cursor: pointer; padding: 3px 6px; border-radius: 3px; transition: background 0.12s; }
+.gyakorlo-mod .gy-kerdes:hover { background: rgba(184,146,58,0.10); }
+.gyakorlo-mod .gy-kerdes:not(.feldve)::after {
+  content: " ▸ felfedés"; color: var(--arany-melyebb);
+  font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+}
+.gyakorlo-mod .gy-kerdes.feldve { background: rgba(58,106,74,0.07); }
+.gyakorlo-mod .gy-kerdes.feldve .gy-valasz { display: inline; }
+@media print {
+  /* nyomtatáskor a válasz mindig látszódjon, a gyakorló gomb ne */
+  body.nyomtat .gy-valasz { display: inline !important; }
+  body.nyomtat .gyakorlo-segito { display: none !important; }
+}
 </style>
 </head>
 <body>
@@ -1623,10 +1651,21 @@ function show(h){
       if(nap.osszef && OSSZEF[nap.osszef]){
         var osDiv=document.createElement("div");
         osDiv.style.padding="14px 16px";
-        osDiv.innerHTML='<div class="nyomtat-gomb-sor"><button type="button" class="nyomtat-gomb">🖨 Nyomtatás / PDF mentés</button></div>'+OSSZEF[nap.osszef];
+        osDiv.innerHTML='<div class="nyomtat-gomb-sor"><button type="button" class="gyakorlo-gomb">🎯 Gyakorló mód</button><button type="button" class="nyomtat-gomb">🖨 Nyomtatás / PDF mentés</button></div>'+
+          '<div class="gyakorlo-segito">Gyakorló mód: előbb próbáld meg fejből (vagy hangosan) megválaszolni a kérdést, majd kattints rá a válasz felfedéséhez.</div>'+
+          OSSZEF[nap.osszef];
         body.appendChild(osDiv);
         var ngomb=osDiv.querySelector(".nyomtat-gomb");
         if(ngomb){ ngomb.onclick=function(e){ e.stopPropagation(); nyomtatOsszefoglalo(napDiv); }; }
+        gyakorloElokeszit(osDiv);
+        var ggomb=osDiv.querySelector(".gyakorlo-gomb");
+        if(ggomb){ ggomb.onclick=function(e){
+          e.stopPropagation();
+          var be=osDiv.classList.toggle("gyakorlo-mod");
+          ggomb.classList.toggle("aktiv", be);
+          ggomb.textContent=be?"🎯 Gyakorló mód: BE":"🎯 Gyakorló mód";
+          if(!be){ osDiv.querySelectorAll(".gy-kerdes.feldve").forEach(function(li){ li.classList.remove("feldve"); }); }
+        }; }
       }
 
       // Tanulási tipp panel (tan/on napokon)
@@ -1728,6 +1767,27 @@ function ugrasNapra(h,idx){
       setTimeout(function(){napok[idx].classList.remove("highlighted");},1400);
     }
   },100);
+}
+
+// ═══════════ Gyakorló mód: kérdés/válasz szétválasztása ═══════════
+function gyakorloElokeszit(container){
+  var szekek=container.querySelectorAll(".os-szek");
+  szekek.forEach(function(szek){
+    var cim=szek.querySelector(".os-szek-cim");
+    if(!cim || cim.textContent.indexOf("pontos kérdések")===-1) return;
+    szek.querySelectorAll("li").forEach(function(li){
+      var html=li.innerHTML;
+      var sv=html.indexOf("</strong>");
+      if(sv===-1) return;
+      var sep=html.indexOf(" \u2014 ", sv);
+      if(sep===-1) return;
+      li.innerHTML=html.substring(0, sep)+'<span class="gy-valasz">'+html.substring(sep)+'</span>';
+      li.classList.add("gy-kerdes");
+      li.addEventListener("click", function(e){
+        if(container.classList.contains("gyakorlo-mod")){ e.stopPropagation(); li.classList.toggle("feldve"); }
+      });
+    });
+  });
 }
 
 // ═══════════ Nyomtatás / PDF ═══════════
