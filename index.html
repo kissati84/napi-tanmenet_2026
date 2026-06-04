@@ -1020,6 +1020,28 @@ body {
   body.nyomtat .gy-valasz { display: inline !important; }
   body.nyomtat .gyakorlo-segito { display: none !important; }
 }
+
+/* ═══════════ KÉRDÉSSOR-INTEGRÁCIÓ ═══════════ */
+.kerdessor-gomb {
+  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+  cursor: pointer; padding: 8px 16px; border-radius: 4px; margin-right: 8px;
+  border: 1px solid #3a6a4a; background: #3a6a4a; color: #ffffff; text-decoration: none;
+  display: inline-block; transition: all 0.15s;
+}
+.kerdessor-gomb:hover { background: #2c5038; border-color: #2c5038; }
+.kulso-wrap { min-width: 200px; }
+.kulso-cim {
+  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+  color: var(--arany-melyebb); margin-bottom: 5px;
+}
+.kulso-linkek { display: flex; flex-wrap: wrap; gap: 6px; }
+.kulso-linkek a {
+  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+  text-decoration: none; color: #3a6a4a; background: #ffffff;
+  border: 1px solid #3a6a4a; border-radius: 12px; padding: 4px 11px; transition: all 0.15s;
+}
+.kulso-linkek a:hover { background: #3a6a4a; color: #ffffff; }
+@media print { body.nyomtat .kerdessor-gomb { display: none !important; } }
 </style>
 </head>
 <body>
@@ -1062,6 +1084,15 @@ body {
   <div class="halado-wrap">
     <div class="halado-szoveg"><span id="haladoSzam">0</span> / <span id="haladoOssz">0</span> nap kész</div>
     <div class="halado-sav"><div id="haladoKitolt" class="halado-kitolt"></div></div>
+  </div>
+  <div class="kulso-wrap">
+    <div class="kulso-cim">🎯 Aktív gyakorlás (kérdéssor)</div>
+    <div class="kulso-linkek">
+      <a href="https://kissati84.github.io/szakvizsga-kerdessor/" target="_blank" rel="noopener">Kérdéssor</a>
+      <a href="https://kissati84.github.io/szakvizsga-kerdessor/probateszt_2026.html" target="_blank" rel="noopener">Próbateszt</a>
+      <a href="https://kissati84.github.io/szakvizsga-kerdessor/fogalomtar.html" target="_blank" rel="noopener">Fogalomtár</a>
+      <a href="https://kissati84.github.io/szakvizsga-kerdessor/statisztika.html" target="_blank" rel="noopener">Statisztika</a>
+    </div>
   </div>
 </div>
 
@@ -1434,6 +1465,9 @@ var NAPOK=[
 var ALTRITMUS='<div class="tipp-szakasz-cim">Általános napi ritmus (~2-3 óra)</div><ul class="tipp-lepesek"><li><span class="tipp-lepes-cim">Ráhangolódás<span class="tipp-ido">~10 perc</span></span><br>Nyisd meg a tétel(eke)t, és olvasd át <em>csak a kérdéseket</em> — a 15, 10 és 5 pontosakat is. Így előre látod, hová fut ki a téma.</li><li><span class="tipp-lepes-cim">Megértő átolvasás<span class="tipp-ido">~25-30 perc</span></span><br>Olvasd át a jegyzetet egyszer, végig, <em>jegyzetelés nélkül</em>. A cél nem a rögzítés, hanem a logikai ív és az ok-okozat megértése.</li><li><span class="tipp-lepes-cim">Saját vázlat fejből<span class="tipp-ido">~30 perc</span></span><br>Csukd be a jegyzetet, és <em>fejből</em> vázolj papírra (kulcsszavak, évszámok). Aztán nyisd ki, és egészítsd ki, ami kimaradt. Ez lesz a szombati ismétlés alapanyaga — ne dobd el!</li><li><span class="tipp-lepes-cim">A 10 és 5 pontos kérdések<span class="tipp-ido">~30 perc</span></span><br>Ezek a fő tételhez <em>csatolt</em> kiegészítések. Mindegyikhez elég egy-két mondatos vázlatpont. Figyelj a pontos megnevezésekre, számokra, törvény- és cikkszámokra — írásban ezek értéket érnek.</li><li><span class="tipp-lepes-cim">Hangos önellenőrzés<span class="tipp-ido">~25 perc</span></span><br>Tegyél félre mindent, és mondd el <em>hangosan</em>, mintha vizsgáztatnád magad. Ahol megakadsz — és csak ott — nézz vissza. Ismételd, amíg gördülékenyen megy.</li><li><span class="tipp-lepes-cim">Rövid írásgyakorlás<span class="tipp-ido">~15 perc</span></span><br>Zárd a napot egy mini-próbával: 15 perc alatt írd le vázlatosan a 15 pontos kérdés válaszát, ahogy a vizsgán tennéd. Utána vesd össze a jegyzettel — mi maradt ki?</li></ul><div class="tipp-lab">A 2-3 órát ne egyben told végig: kb. 45-50 percenként tarts 5-10 perc szünetet. A cél a megértés és egy használható vázlat, nem a szó szerinti tudás — azt az ismétlések építik fel.</div>';
 var ONRITMUS='<div class="tipp-szakasz-cim">Önellenőrzés-nap ritmusa (~2 óra)</div><ul class="tipp-lepesek"><li><span class="tipp-lepes-cim">Ne olvass új anyagot</span><br>Ma nem tanulsz, hanem <em>visszakérdezel</em>. Vedd elő a korábban készített saját vázlataidat.</li><li><span class="tipp-lepes-cim">Hangos felidézés tételenként</span><br>Minden tételt mondj el <em>fejből, hangosan</em> — mintha a vizsgáztatónak magyaráznál. Csak akkor lapozz a jegyzethez, ha elakadsz.</li><li><span class="tipp-lepes-cim">A gyenge pontok megjelölése</span><br>Amelyik tételnél akadozol, azt jelöld meg (pl. piros tollal). A következő pótló napon ezekre fókuszálj.</li><li><span class="tipp-lepes-cim">Rövid íráspróba</span><br>Válassz 1-2 tételt, és írd le vázlatosan időre — az írásbeli vizsga gyakorlásaként.</li></ul><div class="tipp-lab">Az önellenőrzés a vizsgahelyzet szimulációja: itt derül ki, mi van valóban a fejedben, és mi az, amit csak felismersz, de előhívni nem tudsz.</div>';
 
+var KERDESSOR_BASE="https://kissati84.github.io/szakvizsga-kerdessor/";
+var KERDESSOR_MODUL={1:"kerdessor_I_modul_2026.html",2:"kerdessor_II_modul_2026.html",3:"kerdessor_III_modul_2026.html",4:"kerdessor_IV_modul_2026.html",5:"kerdessor_V_modul_2026.html"};
+
 var TN={
   tan:"Új anyag", ism:"Ismétlés", on:"Önellenőrzés",
   vaz:"Vázlat", pot:"Pótlás", pih:"Pihenő",
@@ -1651,7 +1685,20 @@ function show(h){
       if(nap.osszef && OSSZEF[nap.osszef]){
         var osDiv=document.createElement("div");
         osDiv.style.padding="14px 16px";
-        osDiv.innerHTML='<div class="nyomtat-gomb-sor"><button type="button" class="gyakorlo-gomb">🎯 Gyakorló mód</button><button type="button" class="nyomtat-gomb">🖨 Nyomtatás / PDF mentés</button></div>'+
+        var gyengeHet=(nap.osszef==="h9"||nap.osszef==="h13");
+        var kModul=KERDESSOR_MODUL[nap.m];
+        var kUrl, kSzoveg;
+        if(gyengeHet){
+          kUrl=KERDESSOR_BASE+"statisztika.html";
+          kSzoveg="🎯 Gyenge pontok gyakorlása a kérdéssorban →";
+        } else if(kModul){
+          kUrl=KERDESSOR_BASE+kModul;
+          kSzoveg="🎯 Modul gyakorlása a kérdéssorban →";
+        } else {
+          kUrl=KERDESSOR_BASE+"probateszt_2026.html";
+          kSzoveg="🎯 Próbateszt a kérdéssorban →";
+        }
+        osDiv.innerHTML='<div class="nyomtat-gomb-sor"><a href="'+kUrl+'" target="_blank" rel="noopener" class="kerdessor-gomb">'+kSzoveg+'</a><button type="button" class="gyakorlo-gomb">🎯 Gyakorló mód</button><button type="button" class="nyomtat-gomb">🖨 Nyomtatás / PDF mentés</button></div>'+
           '<div class="gyakorlo-segito">Gyakorló mód: előbb próbáld meg fejből (vagy hangosan) megválaszolni a kérdést, majd kattints rá a válasz felfedéséhez.</div>'+
           OSSZEF[nap.osszef];
         body.appendChild(osDiv);
