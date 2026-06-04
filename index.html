@@ -1042,6 +1042,17 @@ body {
 }
 .kulso-linkek a:hover { background: #3a6a4a; color: #ffffff; }
 @media print { body.nyomtat .kerdessor-gomb { display: none !important; } }
+
+/* ═══════════ KÉRDÉSENKÉNTI KÉRDÉSSOR-LINK ═══════════ */
+.qlink {
+  display: inline-block; margin-left: 5px; font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 700; color: #3a6a4a; text-decoration: none;
+  border: 1px solid #3a6a4a; border-radius: 4px; padding: 0 5px; line-height: 1.6;
+  vertical-align: middle; white-space: nowrap;
+}
+.qlink:hover { background: #3a6a4a; color: #ffffff; }
+.os-tetel-cim .qlink { font-size: 11px; }
+@media print { body.nyomtat .qlink { display: none !important; } }
 </style>
 </head>
 <body>
@@ -1705,6 +1716,7 @@ function show(h){
         var ngomb=osDiv.querySelector(".nyomtat-gomb");
         if(ngomb){ ngomb.onclick=function(e){ e.stopPropagation(); nyomtatOsszefoglalo(napDiv); }; }
         gyakorloElokeszit(osDiv);
+        kerdessorHorgonyok(osDiv);
         var ggomb=osDiv.querySelector(".gyakorlo-gomb");
         if(ggomb){ ggomb.onclick=function(e){
           e.stopPropagation();
@@ -1814,6 +1826,44 @@ function ugrasNapra(h,idx){
       setTimeout(function(){napok[idx].classList.remove("highlighted");},1400);
     }
   },100);
+}
+
+// ═══════════ Kérdésenkénti kérdéssor-link ═══════════
+var KERD_BASE="https://kissati84.github.io/szakvizsga-kerdessor/";
+var KERD_PAGE={"I":"kerdessor_I_modul_2026.html","II":"kerdessor_II_modul_2026.html","III":"kerdessor_III_modul_2026.html","IV":"kerdessor_IV_modul_2026.html","V":"kerdessor_V_modul_2026.html"};
+function kerdessorHorgonyok(container){
+  container.querySelectorAll(".os-tetel").forEach(function(cikk){
+    var kodEl=cikk.querySelector(".os-tetel-kod");
+    if(!kodEl) return;
+    var m=kodEl.textContent.match(/(III|II|IV|V|I|Á)\/(\d+)/);
+    if(!m) return;
+    var page=KERD_PAGE[m[1]];
+    if(!page) return;
+    var cimEl=cikk.querySelector(".os-tetel-cim");
+    if(cimEl && !cimEl.querySelector(".qlink")){
+      cimEl.insertAdjacentHTML("beforeend",' <a class="qlink" href="'+KERD_BASE+page+"#q-15-"+m[2]+'" target="_blank" rel="noopener" title="15 pontos kérdés gyakorlása a kérdéssorban">↗ gyakorlás</a>');
+    }
+    cikk.querySelectorAll(".os-szek").forEach(function(szek){
+      var c=szek.querySelector(".os-szek-cim");
+      if(!c) return;
+      var pont = c.textContent.indexOf("10 pontos")>-1 ? "10" : (c.textContent.indexOf("5 pontos")>-1 ? "5" : null);
+      if(!pont) return;
+      szek.querySelectorAll("li").forEach(function(li){
+        if(li.querySelector(".qlink")) return;
+        var st=li.querySelector("strong");
+        if(!st) return;
+        var qn=st.textContent.match(/(\d+)/);
+        if(!qn) return;
+        var a=document.createElement("a");
+        a.className="qlink"; a.href=KERD_BASE+page+"#q-"+pont+"-"+qn[1];
+        a.target="_blank"; a.rel="noopener";
+        a.title=pont+" pontos kérdés gyakorlása a kérdéssorban"; a.textContent="↗";
+        a.onclick=function(e){ e.stopPropagation(); };
+        li.appendChild(document.createTextNode(" "));
+        li.appendChild(a);
+      });
+    });
+  });
 }
 
 // ═══════════ Gyakorló mód: kérdés/válasz szétválasztása ═══════════
