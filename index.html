@@ -1055,6 +1055,15 @@ body {
 .qlink:hover { background: #3a6a4a; color: #ffffff; }
 .os-tetel-cim .qlink { font-size: 11px; }
 @media print { body.nyomtat .qlink { display: none !important; } }
+
+/* ═══════════ NAPI ÖSSZEFOGLALÓ-GOMB ═══════════ */
+.napi-ossz-sor { margin: 4px 0 14px; }
+.napi-ossz-gomb {
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.4px;
+  cursor: pointer; padding: 10px 18px; border-radius: 5px;
+  border: none; background: var(--kek); color: #ffffff; transition: all 0.15s;
+}
+.napi-ossz-gomb:hover { background: #1f3550; }
 </style>
 </head>
 <body>
@@ -1735,10 +1744,13 @@ function show(h){
         tippWrap.style.padding="14px 16px 0";
         var ritmus=(nap.tip==="on")?ONRITMUS:ALTRITMUS;
         var napiHtml=nap.tippmegj?('<div class="tipp-napi">'+nap.tippmegj+'</div>'):'';
-        tippWrap.innerHTML='<div class="tipp-panel"><div class="tipp-fej"><span class="tipp-fej-cim">📖 Hogyan dolgozd fel ezt a napot?</span><span class="tipp-fej-nyil">▼</span></div><div class="tipp-body">'+napiHtml+ritmus+'</div></div>';
+        var napiGomb=(nap.t&&nap.t.length>0)?'<div class="napi-ossz-sor"><button type="button" class="napi-ossz-gomb">📄 Napi összefoglaló + kérdések (PDF)</button></div>':'';
+        tippWrap.innerHTML='<div class="tipp-panel"><div class="tipp-fej"><span class="tipp-fej-cim">📖 Hogyan dolgozd fel ezt a napot?</span><span class="tipp-fej-nyil">▼</span></div><div class="tipp-body">'+napiGomb+napiHtml+ritmus+'</div></div>';
         var panel=tippWrap.querySelector(".tipp-panel");
         var pfej=tippWrap.querySelector(".tipp-fej");
         pfej.onclick=function(e){e.stopPropagation();panel.classList.toggle("nyitva");};
+        var nob=tippWrap.querySelector(".napi-ossz-gomb");
+        if(nob){ nob.onclick=function(e){ e.stopPropagation(); napiOsszefoglalo(nap); }; }
         body.appendChild(tippWrap);
       }
 
@@ -1828,6 +1840,92 @@ function ugrasNapra(h,idx){
       setTimeout(function(){napok[idx].classList.remove("highlighted");},1400);
     }
   },100);
+}
+
+// ═══════════ NAPI ÖSSZEFOGLALÓ-GENERÁTOR ═══════════
+var NAPI_CSS=`<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;600;700&display=swap');
+* { box-sizing: border-box; }
+body { font-family: 'EB Garamond', Georgia, serif; background: #faf6ed; color: #1a1f2e; font-size: 15px; line-height: 1.6; margin: 0; }
+.lap { max-width: 820px; margin: 0 auto; padding: 32px 28px 60px; }
+.fejlec { background: linear-gradient(180deg,#1a1f2e,#2a2f3e); color: #faf6ed; padding: 28px 30px; border-radius: 5px; margin-bottom: 24px; border-top: 4px solid #b8923a; }
+.fejlec .kat { font-family:'Inter',sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#d4b366; margin-bottom:8px; }
+.fejlec h1 { font-family:'Cormorant Garamond',serif; font-weight:500; font-size:34px; margin:0 0 6px; }
+.fejlec .alc { font-family:'EB Garamond',serif; font-style:italic; font-size:15px; color:#c5beac; }
+.os-tetel { background:#fff; border:1px solid #c9b88a; border-radius:4px; margin-bottom:18px; overflow:hidden; position:relative; page-break-inside:avoid; }
+.os-tetel::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:#2c4a6b; }
+.os-tetel-fej { padding:14px 20px 11px; border-bottom:1px solid #ede2c8; background:linear-gradient(180deg,#fdfaf3,#fff); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+.os-tetel-kod { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:600; color:#b8923a; font-style:italic; }
+.os-tetel-cim { font-family:'Cormorant Garamond',serif; font-size:19px; font-weight:500; color:#1a1f2e; line-height:1.25; }
+.os-tetel-body { padding:16px 20px 18px; }
+.os-szek { margin-bottom:15px; }
+.os-szek-cim { font-family:'Inter',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#8a6a1a; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+.os-szek-cim::before { content:''; width:13px; height:1px; background:#b8923a; }
+.os-lista { list-style:none; padding-left:0; margin:0; }
+.os-lista li { padding:4px 0 4px 17px; position:relative; line-height:1.55; font-size:14.5px; }
+.os-lista li::before { content:'◆'; position:absolute; left:0; color:#b8923a; font-size:8px; top:8px; }
+.os-szam { padding-left:22px; margin:0; counter-reset:c; }
+.os-szam li { padding:4px 0 4px 5px; line-height:1.55; font-size:14.5px; list-style:none; counter-increment:c; position:relative; }
+.os-szam li::before { content:counter(c)'.'; position:absolute; left:-20px; width:16px; text-align:right; font-family:'Inter',sans-serif; font-weight:600; color:#8a6a1a; font-size:12px; top:4px; }
+.os-kulcs { font-weight:600; color:#2c4a6b; }
+.os-tul { background:linear-gradient(180deg,transparent 60%,rgba(212,179,102,.4) 60%); font-weight:500; padding:0 2px; }
+.os-ev { font-family:'Inter',sans-serif; font-size:12px; background:#ede2c8; padding:1px 7px; border-radius:3px; font-weight:600; color:#8a6a1a; white-space:nowrap; }
+.os-megj { font-style:italic; font-size:13.5px; color:#4a4f5e; padding:8px 12px; background:#fdfaf3; border-left:3px solid #d4b366; margin-top:8px; border-radius:0 2px 2px 0; }
+.os-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.os-grid > div { background:#fdfaf3; padding:10px 13px; border:1px solid #ede2c8; border-radius:3px; }
+.os-grid .alcim { font-family:'Inter',sans-serif; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:#8a6a1a; font-weight:700; margin-bottom:4px; }
+.eszkoz-sor { text-align:center; margin:26px 0 0; }
+.eszkoz-sor button { font-family:'Inter',sans-serif; font-size:13px; font-weight:700; cursor:pointer; padding:11px 22px; border:none; border-radius:5px; background:#2c4a6b; color:#fff; }
+.lab { margin-top:22px; font-family:'EB Garamond',serif; font-style:italic; font-size:13px; color:#7a7f8e; text-align:center; }
+@media print { body { background:#fff; } .eszkoz-sor { display:none; } .fejlec { background:#fff; color:#1a1f2e; border:1px solid #888; } .fejlec .kat, .fejlec .alc { color:#555; } .os-tetel { page-break-inside:avoid; } @page { margin:14mm; } }
+</style>`;
+
+// Tétel-tartalom kigyűjtése a szombati összefoglalókból (a témaösszefoglaló, kérdések nélkül)
+var TETEL_TARTALOM={};
+(function(){
+  var tmp=document.createElement("div");
+  Object.keys(OSSZEF).forEach(function(hk){
+    tmp.innerHTML=OSSZEF[hk];
+    Array.prototype.forEach.call(tmp.querySelectorAll(".os-tetel"), function(art){
+      var kodEl=art.querySelector(".os-tetel-kod");
+      var cimEl=art.querySelector(".os-tetel-cim");
+      var body=art.querySelector(".os-tetel-body");
+      if(!kodEl || !body) return;
+      var kodTxt=kodEl.textContent.trim().replace(/\.\s*$/,"");
+      if(kodTxt.indexOf("/")===-1) return; // a "▣" áttekintő blokkokat kihagyjuk
+      var ossz="";
+      Array.prototype.forEach.call(body.children, function(sz){
+        ossz+=sz.outerHTML;
+      });
+      var cim=cimEl?cimEl.textContent.replace(/↗.*$/,"").trim():"";
+      kodTxt.split(/\s*—\s*/).forEach(function(k){
+        k=k.trim();
+        if(k && !TETEL_TARTALOM[k]) TETEL_TARTALOM[k]={kod:k, cim:cim, html:ossz};
+      });
+    });
+  });
+})();
+
+function napiOsszefoglalo(nap){
+  var cikkek="", latott={}, talalt=false;
+  (nap.t||[]).forEach(function(k){
+    var t=TETEL_TARTALOM[k];
+    if(!t || latott[t.kod]) return;
+    latott[t.kod]=1; talalt=true;
+    cikkek+='<article class="os-tetel"><div class="os-tetel-fej"><div class="os-tetel-kod">'+t.kod+'.</div><div class="os-tetel-cim">'+t.cim+'</div></div><div class="os-tetel-body">'+t.html+'</div></article>';
+  });
+  if(!talalt){ alert("Ehhez a naphoz nincs összegyűjthető tétel-tartalom."); return; }
+  var temaLista=(nap.t||[]).join(" · ");
+  var doc='<!DOCTYPE html><html lang="hu"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">'+
+    '<title>Napi összefoglaló — '+nap.d+'</title>'+NAPI_CSS+'</head><body><div class="lap">'+
+    '<header class="fejlec"><div class="kat">Napi összefoglaló + kérdések · a jegyzet alapján</div><h1>'+nap.d+'</h1><div class="alc">'+temaLista+'</div></header>'+
+    cikkek+
+    '<div class="eszkoz-sor"><button onclick="window.print()">🖨 Nyomtatás / PDF mentés</button></div>'+
+    '<div class="lab">Az összefoglaló a feltöltött tananyag alapján készült: a témák strukturált áttekintése + a kapcsolódó 15/10/5 pontos kérdések. Aktív felidézéshez előbb fejből válaszolj, majd ellenőrizd.</div>'+
+    '</div></body></html>';
+  var w=window.open("", "_blank");
+  if(!w){ alert("Az összefoglaló megnyitásához engedélyezd a felugró ablakokat ehhez az oldalhoz."); return; }
+  w.document.open(); w.document.write(doc); w.document.close();
 }
 
 // ═══════════ Kérdésenkénti kérdéssor-link ═══════════
