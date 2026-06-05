@@ -11,6 +11,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
+  --kek: #2c4a6b;
   --kremes: #faf6ed;
   --kremes-melyebb: #f3ebd9;
   --pergamen: #ede2c8;
@@ -959,7 +960,8 @@ body {
 }
 
 /* ═══════════ NYOMTATÁS / PDF ═══════════ */
-.nyomtat-gomb-sor { text-align: right; margin-bottom: 12px; }
+.nyomtat-gomb-sor { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+.nyomtat-gomb-sor .nyomtat-gomb { margin-left: auto; }
 .nyomtat-gomb {
   font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
   cursor: pointer; padding: 8px 16px; border-radius: 4px;
