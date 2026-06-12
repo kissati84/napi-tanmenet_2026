@@ -2291,7 +2291,7 @@ function gyengeLista(){
   wrap.className="kulso-wrap";
   var hatra=Math.round((VIZSGA_DATUM-MA)/86400000);
   var sz=hatra>0?('⏳ még <strong>'+hatra+' nap</strong> a vizsgáig'):(hatra===0?'★ <strong>MA van a vizsga</strong> — sok sikert!':'A vizsga lezajlott.');
-  wrap.innerHTML='<div class="visszaszam">'+sz+'</div><div class="kulso-linkek" style="margin-top:6px"><a href="#" class="gyenge-link">⚠ Gyenge kérdéseim</a></div>';
+  wrap.innerHTML='<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="kulso-linkek"><a href="#" class="gyenge-link">⚠ Gyenge kérdéseim</a></div><div class="visszaszam">'+sz+'</div></div>';
   vez.appendChild(wrap);
   wrap.querySelector(".gyenge-link").onclick=function(e){ e.preventDefault(); gyengeLista(); };
 })();
