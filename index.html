@@ -1070,6 +1070,22 @@ body {
 }
 .napi-ossz-gomb:hover { background: #1f3550; }
 
+/* ═══════════ VIZUALIZÁCIÓ (összefoglalókban) ═══════════ */
+.vt-wrap { background:#fdfaf3; border:1px solid #d8c9a0; border-radius:4px; padding:14px 16px; margin:0 0 16px; page-break-inside:avoid; }
+.vt-cim { font-family:'Inter',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#8a6a1a; margin-bottom:10px; }
+.vt-gyoker { display:inline-block; background:var(--kek); color:#fff; font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600; padding:7px 16px; border-radius:18px; margin-bottom:12px; }
+.vt-agak { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; }
+.vt-ag { background:#fff; border:1px solid #e3d6b3; border-left:3px solid var(--arany); border-radius:3px; padding:9px 11px; }
+.vt-ag-cim { font-family:'Inter',sans-serif; font-size:9.5px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--kek); margin-bottom:7px; }
+.vt-chipek { display:flex; flex-wrap:wrap; gap:5px; }
+.vt-chip { font-family:'EB Garamond',serif; font-size:12.5px; background:#f3ecd9; border:1px solid #e0d2ab; color:var(--tinta); padding:2px 9px; border-radius:11px; line-height:1.4; }
+.iv { display:flex; flex-wrap:wrap; gap:16px 18px; padding-top:4px; }
+.iv-elem { position:relative; flex:1 1 150px; max-width:230px; padding-top:13px; border-top:2px solid var(--arany-vil, #d4b366); }
+.iv-pont { position:absolute; top:-6px; left:0; width:10px; height:10px; border-radius:50%; background:var(--arany); border:2px solid #fff; box-shadow:0 0 0 1px var(--arany); }
+.iv-ev { font-family:'Inter',sans-serif; font-weight:700; font-size:12px; color:var(--kek); margin-bottom:3px; }
+.iv-lbl { font-size:12.5px; line-height:1.45; color:var(--tinta-vilagos); }
+body.nyomtat .vt-wrap { page-break-inside:avoid; }
+
 /* ═══════════ NAPCSÚSZTATÁS ═══════════ */
 .nap-atrak-gomb, .atrak-ok, .atrak-megse {
   font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.4px;
@@ -1805,6 +1821,7 @@ function show(h){
         var ngomb=osDiv.querySelector(".nyomtat-gomb");
         if(ngomb){ ngomb.onclick=function(e){ e.stopPropagation(); nyomtatOsszefoglalo(napDiv); }; }
         gyakorloElokeszit(osDiv);
+        vizBeszur(osDiv);
         kerdessorHorgonyok(osDiv);
         var ggomb=osDiv.querySelector(".gyakorlo-gomb");
         if(ggomb){ ggomb.onclick=function(e){
@@ -2004,6 +2021,22 @@ var TETEL_TARTALOM={};
     });
   });
 })();
+
+// ═══════════ VIZUALIZÁCIÓ a szombati összefoglalókban ═══════════
+function vizBeszur(container){
+  Array.prototype.forEach.call(container.querySelectorAll(".os-tetel"), function(cikk){
+    var kodEl=cikk.querySelector(".os-tetel-kod");
+    var cimEl=cikk.querySelector(".os-tetel-cim");
+    var body=cikk.querySelector(".os-tetel-body");
+    if(!kodEl||!body) return;
+    var kod=kodEl.textContent.trim().replace(/\.\s*$/,"");
+    if(kod.indexOf("/")===-1) return;
+    if(body.querySelector(".vt-wrap")) return;
+    var t={kod:kod, cim:cimEl?cimEl.textContent.replace(/↗.*$/,"").trim():""};
+    var viz=fogalomTerkep(t,body)+idovonalHtml(idovonalEsemenyek(body));
+    if(viz) body.insertAdjacentHTML("afterbegin", viz);
+  });
+}
 
 // ═══════════ VIZUALIZÁCIÓ: fogalomtérkép + idővonal ═══════════
 function vEsc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
